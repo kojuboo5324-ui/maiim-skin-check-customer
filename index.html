@@ -101,6 +101,7 @@ body.flow-mode .wrap{padding-bottom:28px}
 .question-voice-btn{flex:0 0 auto;border:1px solid #f2a15f;background:#fff;color:#b85b15;border-radius:999px;padding:8px 11px;font-size:12px;font-weight:850;white-space:nowrap}.question-voice-btn.on{background:#ff7a12;color:#fff;border-color:#ff7a12}.question-voice-btn:disabled{opacity:.55;cursor:default}
 #question .page-title{margin-top:7px}
 @media(max-width:420px){.question-guide{gap:8px;padding:8px 9px}.question-mascot{width:54px;height:54px;flex-basis:54px}.question-guide-copy b{font-size:13px}.question-guide-copy small{font-size:10px}.question-voice-btn{padding:7px 9px;font-size:11px}}
+.question-nav-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.question-nav-row .secondary{margin:0}.question-nav-row button:disabled{opacity:.42;cursor:default}.question-basic-link{margin-top:8px!important;min-height:44px!important;font-size:13px}.basic-resume-note{margin:10px 0 4px;padding:10px 12px;border-radius:13px;background:#f4faf6;border:1px solid #dbe9e0;color:#315246;font-size:12px;font-weight:750}
 
 /* V2.2 final mobile-first landing */
 body.home-mode header{display:none}
@@ -146,7 +147,8 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  <label>마임 제품 경험</label><select id="maiim"><option value="NEW">처음/신규</option><option value="CURRENT">현재 사용 중</option><option value="PAST">과거 사용</option><option value="UNKNOWN">잘 모르겠음</option></select>
  <div id="currentBox" class="hidden"><label>현재 사용하는 마임 제품</label><input id="currentProduct" placeholder="제품명을 적어 주세요"></div>
  <div id="pastBox" class="hidden"><label>과거 사용 제품 또는 중단 이유</label><textarea id="pastProduct" placeholder="기억나는 만큼만 적어 주세요"></textarea></div>
- <button class="cta" onclick="startQuestions()">13문항 피부체크 시작하기 →</button>
+ <p class="basic-resume-note hidden" id="basicResumeNote">피부체크 진행 중입니다. 기본정보를 수정한 뒤 기존 질문 위치로 바로 돌아갈 수 있습니다.</p>
+ <button class="cta" id="basicActionBtn" onclick="handleBasicAction()">13문항 피부체크 시작하기 →</button>
 </section>
 
 <section id="question" class="view">
@@ -162,7 +164,11 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  </div>
  <h2 class="page-title" id="qText"></h2>
  <div id="answersBox"></div>
- <button class="secondary" id="prevBtn" onclick="prevQuestion()">← 이전 질문</button>
+ <div class="question-nav-row">
+  <button class="secondary" id="prevBtn" onclick="prevQuestion()">← 이전 질문</button>
+  <button class="secondary" id="nextBtn" onclick="nextQuestion()">다음 질문 →</button>
+ </div>
+ <button class="secondary question-basic-link" type="button" onclick="openBasicFromQuestion()">✎ 기본정보 수정</button>
 </section>
 
 <section id="result" class="view">
@@ -292,7 +298,7 @@ function storeGet(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catc
 function storeSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch{return false}}
 
 
-/* V2.4.1 13문항 UX 통합정리 + 브라우저 내장 음성 — 미지원 환경에서는 버튼을 깔끔하게 숨김 */
+/* V2.4.3 질문 이동 UX + 브라우저 내장 음성 — 미지원 환경에서는 버튼을 깔끔하게 숨김 */
 const QUESTION_VOICE_KEY='questionVoiceOnV239';
 let questionVoiceOn=storeGet(QUESTION_VOICE_KEY)===true;
 function pickKoreanVoice(){
@@ -345,10 +351,22 @@ function refreshStepNav(){
   if(btns.length<4)return;
   const section=nav.closest('section')?.id||'';
   const canReview=section==='result'||section==='consult';
+  const inQuestion=section==='question';
+  const inBasic=section==='basic';
   btns.forEach(b=>{b.classList.remove('jump','locked');b.onclick=null;b.removeAttribute('aria-disabled');b.title=''});
   const basicBtn=btns[0],skinBtn=btns[1],resultBtn=btns[2],consultBtn=btns[3];
-  basicBtn.textContent='1 기본정보';
-  skinBtn.textContent=canReview?'2 피부체크 ↩':'2 피부체크';
+  basicBtn.textContent=inQuestion?'1 기본정보 ✎':'1 기본정보';
+  skinBtn.textContent=canReview?'2 피부체크 ↩':(inBasic&&questionSessionActive?'2 피부체크 →':'2 피부체크');
+  if(inQuestion){
+   basicBtn.classList.add('jump');
+   basicBtn.onclick=()=>openBasicFromQuestion();
+   basicBtn.title='기본정보를 수정한 뒤 현재 질문으로 돌아오기';
+  }
+  if(inBasic&&questionSessionActive){
+   skinBtn.classList.add('jump');
+   skinBtn.onclick=()=>resumeQuestionsFromBasic();
+   skinBtn.title='기존 피부체크 위치로 돌아가기';
+  }
   if(canReview){
    basicBtn.classList.add('jump');
    basicBtn.onclick=()=>show('basic');
@@ -372,9 +390,15 @@ function refreshStepNav(){
  });
 }
 function updateBottomNav(id){const nav=$('bottomNav');if(!nav)return;const hide=id==='home'||id==='basic'||id==='question';nav.classList.toggle('hidden',hide);nav.style.setProperty('display',hide?'none':'grid','important');nav.setAttribute('aria-hidden',hide?'true':'false')}
-function show(id){if(id!=='question')cancelQuestionSpeech();document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const t=$(id);if(t)t.classList.add('active');document.body.classList.toggle('home-mode',id==='home');document.body.classList.toggle('flow-mode',id==='basic'||id==='question');updateBottomNav(id);refreshStepNav();if(id==='basic')restoreBasicDraft();if(id==='history')renderHistory();if(id==='info')renderInfo();if(id==='admin')renderAdmin();window.scrollTo(0,0)}
+function show(id){if(id!=='question')cancelQuestionSpeech();document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const t=$(id);if(t)t.classList.add('active');document.body.classList.toggle('home-mode',id==='home');document.body.classList.toggle('flow-mode',id==='basic'||id==='question');updateBottomNav(id);if(id==='basic'){restoreBasicDraft();updateBasicActionButton()}refreshStepNav();if(id==='history')renderHistory();if(id==='info')renderInfo();if(id==='admin')renderAdmin();window.scrollTo(0,0)}
 function hasBasic(){return !!($('age').value&&$('gender').value&&$('concern').value)}
-function startQuestions(){saveBasicDraft();if(!hasBasic()){alert('연령대·성별·가장 걱정되는 피부 고민을 선택해 주세요.');return}qi=0;answers=new Array(13);show('question');renderQuestion()}
+let questionSessionActive=false;
+let questionResumeQi=0;
+function updateBasicActionButton(){const btn=$('basicActionBtn'),note=$('basicResumeNote');if(!btn)return;if(questionSessionActive){btn.textContent='수정 저장하고 피부체크로 돌아가기 →';if(note)note.classList.remove('hidden')}else{btn.textContent='13문항 피부체크 시작하기 →';if(note)note.classList.add('hidden')}}
+function startQuestions(){saveBasicDraft();if(!hasBasic()){alert('연령대·성별·가장 걱정되는 피부 고민을 선택해 주세요.');return}questionSessionActive=true;questionResumeQi=0;qi=0;answers=new Array(13);show('question');renderQuestion()}
+function handleBasicAction(){saveBasicDraft();if(!hasBasic()){alert('연령대·성별·가장 걱정되는 피부 고민을 선택해 주세요.');return}if(questionSessionActive){qi=Math.max(0,Math.min(12,questionResumeQi));show('question');renderQuestion();return}startQuestions()}
+function openBasicFromQuestion(){questionSessionActive=true;questionResumeQi=qi;saveBasicDraft();show('basic')}
+function resumeQuestionsFromBasic(){saveBasicDraft();if(!hasBasic()){alert('연령대·성별·가장 걱정되는 피부 고민을 선택해 주세요.');return}qi=Math.max(0,Math.min(12,questionResumeQi));show('question');renderQuestion()}
 let answerTransitioning=false;
 const QUESTION_GUIDES=[
  '수분과 피부결을 가볍게 살펴볼게요 💧','수분과 피부결을 가볍게 살펴볼게요 💧','수분과 피부결을 가볍게 살펴볼게요 💧',
@@ -384,15 +408,16 @@ const QUESTION_GUIDES=[
  '피부톤과 생기도 볼게요 ☀️','피부톤과 생기도 볼게요 ☀️',
  '생활습관도 함께 살펴볼게요 🌙','거의 다 왔어요! 마지막 질문이에요 ✨'
 ];
-function renderQuestion(){answerTransitioning=false;$('qNo').textContent=qi+1;$('qText').textContent=Q[qi][0];$('progressBar').style.width=((qi+1)/13*100)+'%';const box=$('answersBox');box.innerHTML='';OPTIONS.forEach(([t,s])=>{const b=document.createElement('button');b.className='option';b.textContent=t;if(answers[qi]===s)b.classList.add('selected');b.onclick=()=>pick(s,b);box.appendChild(b)});$('prevBtn').style.display=qi===0?'none':'block';const gt=$('qGuideTitle');if(gt)gt.textContent=QUESTION_GUIDES[qi]||'편하게 체크해 주세요 😊';updateQuestionVoiceBtn();if(questionVoiceOn)setTimeout(()=>speakCurrentQuestion(false),80)}
-function pick(score,btn){if(answerTransitioning)return;answerTransitioning=true;cancelQuestionSpeech();answers[qi]=score;const opts=[...document.querySelectorAll('#answersBox .option')];opts.forEach(o=>{o.classList.add('locked');o.classList.remove('selected')});if(btn){btn.classList.add('selected');btn.classList.remove('locked')}setTimeout(()=>{answerTransitioning=false;if(qi<12){qi++;renderQuestion()}else calculate()},320)}
-function prevQuestion(){if(qi>0){qi--;renderQuestion()}}
+function renderQuestion(){answerTransitioning=false;questionSessionActive=true;questionResumeQi=qi;$('qNo').textContent=qi+1;$('qText').textContent=Q[qi][0];$('progressBar').style.width=((qi+1)/13*100)+'%';const box=$('answersBox');box.innerHTML='';OPTIONS.forEach(([t,s])=>{const b=document.createElement('button');b.className='option';b.textContent=t;if(answers[qi]===s)b.classList.add('selected');b.onclick=()=>pick(s,b);box.appendChild(b)});const prev=$('prevBtn'),next=$('nextBtn');if(prev){prev.style.visibility=qi===0?'hidden':'visible';prev.disabled=qi===0}if(next){next.textContent=qi===12?'결과 보기 →':'다음 질문 →';next.disabled=answers[qi]===undefined||answers[qi]===null;next.title=next.disabled?'먼저 현재 질문에 답해 주세요':'이미 답한 다음 문항으로 이동'}const gt=$('qGuideTitle');if(gt)gt.textContent=QUESTION_GUIDES[qi]||'편하게 체크해 주세요 😊';updateQuestionVoiceBtn();refreshStepNav();if(questionVoiceOn)setTimeout(()=>speakCurrentQuestion(false),80)}
+function pick(score,btn){if(answerTransitioning)return;answerTransitioning=true;cancelQuestionSpeech();answers[qi]=score;questionResumeQi=qi;const next=$('nextBtn');if(next)next.disabled=false;const opts=[...document.querySelectorAll('#answersBox .option')];opts.forEach(o=>{o.classList.add('locked');o.classList.remove('selected')});if(btn){btn.classList.add('selected');btn.classList.remove('locked')}setTimeout(()=>{answerTransitioning=false;if(qi<12){qi++;questionResumeQi=qi;renderQuestion()}else calculate()},320)}
+function prevQuestion(){if(qi>0){qi--;questionResumeQi=qi;renderQuestion()}}
+function nextQuestion(){if(answerTransitioning)return;if(answers[qi]===undefined||answers[qi]===null){alert('현재 질문의 답을 먼저 선택해 주세요.');return}cancelQuestionSpeech();if(qi<12){qi++;questionResumeQi=qi;renderQuestion()}else calculate()}
 function norm(indices,max){return Math.round(indices.reduce((a,i)=>a+(answers[i]||0),0)/max*100)}
-function calculate(){const s={hydration:norm([0,1,2],9),pores:norm([3,4],6),sensitive:norm([5,6],6),elasticity:norm([7,8],6),tone:norm([9,10],6),lifestyle:norm([11,12],6)};const order=['hydration','pores','sensitive','elasticity','tone'].sort((a,b)=>s[b]-s[a]);const p=order[0],q=order[1],healthy=order.every(k=>s[k]<=33);const type=healthy?'healthy':(s[p]>=50&&s[q]>=50&&Math.abs(s[p]-s[q])<=15?'composite':p);const concern=s.hydration*.25+s.pores*.15+s.sensitive*.20+s.elasticity*.25+s.tone*.15;const condition=Math.max(0,Math.min(100,Math.round(100-concern*.55-(s.lifestyle>66?5:s.lifestyle>32?2:0))));currentResult={scores:s,primary:p,secondary:q,type,condition};const item={id:'R-'+Date.now(),date:new Date().toISOString(),result:currentResult,answers:[...answers],basic:{age:$('age').value,gender:$('gender').value,concern:$('concern').value,maiim:$('maiim').value,currentProduct:$('currentProduct').value,pastProduct:$('pastProduct').value}};storeSet('latestResult',item);const h=storeGet('history')||[];h.unshift(item);storeSet('history',h.slice(0,10));renderResult();show('result')}
+function calculate(){questionSessionActive=false;questionResumeQi=0;const s={hydration:norm([0,1,2],9),pores:norm([3,4],6),sensitive:norm([5,6],6),elasticity:norm([7,8],6),tone:norm([9,10],6),lifestyle:norm([11,12],6)};const order=['hydration','pores','sensitive','elasticity','tone'].sort((a,b)=>s[b]-s[a]);const p=order[0],q=order[1],healthy=order.every(k=>s[k]<=33);const type=healthy?'healthy':(s[p]>=50&&s[q]>=50&&Math.abs(s[p]-s[q])<=15?'composite':p);const concern=s.hydration*.25+s.pores*.15+s.sensitive*.20+s.elasticity*.25+s.tone*.15;const condition=Math.max(0,Math.min(100,Math.round(100-concern*.55-(s.lifestyle>66?5:s.lifestyle>32?2:0))));currentResult={scores:s,primary:p,secondary:q,type,condition};const item={id:'R-'+Date.now(),date:new Date().toISOString(),result:currentResult,answers:[...answers],basic:{age:$('age').value,gender:$('gender').value,concern:$('concern').value,maiim:$('maiim').value,currentProduct:$('currentProduct').value,pastProduct:$('pastProduct').value}};storeSet('latestResult',item);const h=storeGet('history')||[];h.unshift(item);storeSet('history',h.slice(0,10));renderResult();show('result')}
 function renderResult(){if(!currentResult)return;const t=TYPE[currentResult.type];$('resultTitle').textContent=t[0];$('resultSub').textContent=t[1];$('conditionScore').textContent=currentResult.condition;$('scoreRing').style.setProperty('--scoredeg',(currentResult.condition*3.6)+'deg');$('priorityText').innerHTML='<b>관리 1순위 · '+LABEL[currentResult.primary]+'</b><br>관리 2순위 · '+LABEL[currentResult.secondary];$('signalText').textContent=t[2];$('causeText').textContent=t[3];$('positiveText').textContent=t[4]}
 function restoreLatestBasicForRecheck(){restoreBasicDraft();const x=storeGet('latestResult');if(x?.basic){['age','gender','concern','maiim','currentProduct','pastProduct'].forEach(id=>{const el=$(id);if(el&&x.basic[id]!=null&&!el.value)el.value=x.basic[id]});applyMaiimVisibility()}return x}
-function editSkinCheckAnswers(){const x=restoreLatestBasicForRecheck();if(!hasBasic()){alert('먼저 기본정보를 확인해 주세요.');show('basic');return}if(x?.answers?.length===13){answers=[...x.answers];qi=12}else{answers=new Array(13);qi=0}show('question');renderQuestion()}
-function restartSkinCheck(){restoreLatestBasicForRecheck();if(!hasBasic()){alert('먼저 기본정보를 확인해 주세요.');show('basic');return}answers=new Array(13);qi=0;show('question');renderQuestion()}
+function editSkinCheckAnswers(){const x=restoreLatestBasicForRecheck();if(!hasBasic()){alert('먼저 기본정보를 확인해 주세요.');show('basic');return}if(x?.answers?.length===13){answers=[...x.answers];qi=12}else{answers=new Array(13);qi=0}questionSessionActive=true;questionResumeQi=qi;show('question');renderQuestion()}
+function restartSkinCheck(){restoreLatestBasicForRecheck();if(!hasBasic()){alert('먼저 기본정보를 확인해 주세요.');show('basic');return}answers=new Array(13);qi=0;questionSessionActive=true;questionResumeQi=0;show('question');renderQuestion()}
 function goStep(step){if(step==='question'){if(!hasBasic()){alert('먼저 기본정보를 입력해 주세요.');show('basic')}else{show('question');renderQuestion()}return}if(step==='result'){const x=storeGet('latestResult');if(!x){alert('아직 피부체크 결과가 없습니다.');return}currentResult=x.result;answers=x.answers||[];renderResult();show('result');return}if(step==='consult')openConsult()}
 const CENTER_CONTACT={landline:'041-622-4646',mobile:'010-4923-9989',address:'천안시 동남구 신부 10길 8 남양빌딩 304호'};
 const KAKAO_ID='kojuboo';
