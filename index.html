@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 카운셀러 신청완료형 · V2.6.3</title>
+<title>MAIIM 피부체크 · 카운셀러 호감형·코드등록 · V2.6.4</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -135,7 +135,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 @media(max-width:420px){.info-detail-nav{grid-template-columns:1fr 1fr}.info-detail-box{padding:16px}}
 
 
-/* V2.6.3 카운셀러 신청 후 완료화면 추가 */
+/* V2.6.4 카운셀러 호감형 안내 + 신청 자동저장 + 코드등록 흐름 */
 .ref-card{border:1px solid #cfe7d6;background:linear-gradient(135deg,#f7fff9,#fffaf2);border-radius:20px;padding:16px;margin:12px 0}
 .ref-badge{display:inline-flex;align-items:center;gap:6px;background:#eef8f1;color:#2f7f4f;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900}
 .ref-code{font-weight:900;letter-spacing:.6px;color:#d96d1f}
@@ -207,6 +207,38 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 }
 .next-step-item b{display:block;margin-bottom:3px}
 
+
+/* V2.6.4 */
+.dream-card{
+  border:2px solid #efb56d;border-radius:24px;padding:20px 18px;margin:12px 0 16px;
+  background:linear-gradient(135deg,#fff9ef 0%,#f6fff9 62%,#fff 100%);
+  box-shadow:0 14px 34px rgba(91,77,53,.11)
+}
+.dream-card h3{margin:8px 0 8px;color:#263c32;font-size:21px;line-height:1.35}
+.dream-card p{margin:0;color:#4f5d55;line-height:1.75}
+.soft-points{display:grid;gap:9px;margin:14px 0}
+.soft-point{
+  display:flex;align-items:flex-start;gap:10px;padding:11px 12px;border-radius:15px;
+  background:#fff;border:1px solid #e7eee9
+}
+.soft-point .dot{
+  flex:0 0 28px;width:28px;height:28px;border-radius:50%;display:flex;
+  align-items:center;justify-content:center;background:#edf8f0
+}
+.code-stage{
+  border:2px solid #cfe7d6;border-radius:24px;padding:20px 18px;margin:12px 0;
+  background:linear-gradient(135deg,#f5fff8,#fffaf3)
+}
+.code-stage input{font-size:18px;font-weight:900;letter-spacing:1px;text-transform:uppercase;text-align:center}
+.code-result{
+  display:none;margin-top:14px;padding:14px;border-radius:16px;background:#fff;
+  border:1px dashed #9bc8a7;word-break:break-all
+}
+.code-result.show{display:block}
+.code-big{font-weight:950;font-size:22px;color:#2f7f4f;letter-spacing:1px}
+.mini-link-btns{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+@media(max-width:520px){.mini-link-btns{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body class="home-mode">
@@ -234,7 +266,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
      </div>
    </div>
    <button class="counselor-accent-btn" type="button" onclick="openCounselorApply()">카운셀러 활동 알아보기 →</button>
-   <p class="counselor-note" style="margin:10px 2px 0">먼저 활동 내용을 안내받고, 본인이 원할 때 등록 여부를 결정합니다.</p>
+   <p class="counselor-note" style="margin:10px 2px 0">먼저 부담 없이 이야기를 들어보고, 마음에 들면 그때 시작을 결정하시면 됩니다.</p>
  </div>
 </section>
 
@@ -406,51 +438,85 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 
 <section id="counselorApply" class="view">
  <div class="eyebrow">COUNSELOR ACTIVITY</div>
- <h2 class="page-title">카운셀러 활동 안내 · 신청</h2>
- <p class="lead">현재 신규 카운셀러 활동자를 안내하고 있습니다. 먼저 활동 방식을 충분히 설명받고, 본인이 원할 때 등록을 결정합니다.</p>
- <div class="card">
-   <span class="ref-badge">카운셀러란?</span>
-   <p class="mini" style="margin:9px 0 0">센터에 출근하는 직원이 아니라, 자신의 시간과 SNS·카카오톡 등을 활용해 고객에게 피부체크를 소개하고 제품 안내·판매 활동을 하는 독립적인 판매활동자입니다. 어려운 피부상담은 앞으로 AI 척척 박사의 도움을 받을 수 있도록 연결할 예정입니다.</p>
+ <h2 class="page-title">부담 없이 카운셀러 활동 알아보기</h2>
+
+ <div class="dream-card">
+   <span class="ref-badge new-pulse">NEW · 신규 카운셀러 활동 안내</span>
+   <h3>내 시간에 맞춰 새로운 활동을 시작해 보세요</h3>
+   <p>피부와 제품에 관심이 있다면 카카오톡·SNS로 피부체크를 소개하고 고객과 연결될 수 있습니다. 어려운 피부상담은 앞으로 <b>AI 척척 박사</b>의 도움을 받을 수 있도록 준비하고 있어 처음 시작하는 분도 부담을 줄일 수 있습니다.</p>
  </div>
+
+ <div class="soft-points">
+   <div class="soft-point"><span class="dot">🌿</span><div><b>출근에 얽매이지 않고</b><div class="mini">내 시간과 생활에 맞춰 활동할 수 있습니다.</div></div></div>
+   <div class="soft-point"><span class="dot">📱</span><div><b>SNS·카카오톡을 활용해</b><div class="mini">내 주변 사람에게 피부체크와 제품 정보를 자연스럽게 소개할 수 있습니다.</div></div></div>
+   <div class="soft-point"><span class="dot">✨</span><div><b>좋아하는 경험을 새로운 기회로</b><div class="mini">제품을 사용해 보고 만족한 경험이 있다면 상담·판매 활동으로 이어갈 수 있습니다.</div></div></div>
+ </div>
+
  <div class="card soft">
-   <label>이름 또는 닉네임</label><input id="caName" placeholder="예: 김OO">
-   <label>연락처</label><input id="caPhone" inputmode="tel" placeholder="010-0000-0000">
-   <label>관심 있는 활동</label>
+   <b>한번 이야기를 들어보고 싶으신가요?</b>
+   <p class="mini" style="margin:7px 0 12px">신청한다고 바로 등록되는 것은 아닙니다. 센터에서 편하게 설명을 들은 뒤 본인이 원할 때 결정하시면 됩니다.</p>
+
+   <label>이름 또는 닉네임</label>
+   <input id="caName" autocomplete="name" placeholder="예: 김OO">
+
+   <label>연락처</label>
+   <input id="caPhone" inputmode="tel" autocomplete="tel" placeholder="010-0000-0000">
+
+   <label>가장 관심 있는 활동</label>
    <select id="caInterest">
-     <option value="SNS·카카오톡 홍보">SNS·카카오톡 홍보</option>
-     <option value="제품 안내·판매">제품 안내·판매</option>
-     <option value="고객 피부상담 활동">고객 피부상담 활동</option>
-     <option value="카운셀러 활동 전체 안내">카운셀러 활동 전체 안내</option>
+     <option value="카운셀러 활동 전체 안내">먼저 전체 이야기를 들어보고 싶어요</option>
+     <option value="SNS·카카오톡 홍보">SNS·카카오톡으로 소개해 보고 싶어요</option>
+     <option value="제품 안내·판매">제품 안내·판매에 관심 있어요</option>
+     <option value="고객 피부상담 활동">고객 피부상담 활동에 관심 있어요</option>
    </select>
+
    <label class="checkline"><input type="checkbox" id="caPrivacy"> 카운셀러 활동 안내 및 연락을 위한 개인정보 수집·이용에 동의합니다.</label>
  </div>
- <div class="card">
-   <b>활동 구조</b>
-   <p class="mini">활동 안내 신청 → 센터 설명·확인 → 등록 승인 → 개인 소개코드 발급 → 개인 공유링크로 SNS·카카오톡 활동 → 고객 피부체크·상담 연결 → 제품 안내·판매 활동</p>
-   <p class="counselor-note">카운셀러 등록 자체만으로 수입이 발생하지 않습니다. 수익은 실제 제품 판매실적과 회사·센터 정책에 따라 달라지며, 다른 사람을 모집하는 행위 자체를 수익의 기준으로 안내하지 않습니다. 구체적인 계약·수당 조건은 등록 전 별도 안내를 확인해 주세요.</p>
- </div>
- <button class="cta" onclick="submitCounselorApply()">카운셀러 활동 안내 신청하기 →</button>
+
+ <p class="counselor-note">※ 카운셀러는 독립적인 판매활동 형태를 전제로 합니다. 등록 자체로 수입이 생기는 것은 아니며 실제 판매실적과 회사·센터 정책에 따라 달라질 수 있습니다.</p>
+
+ <button class="cta" onclick="submitCounselorApply()">이 내용으로 활동 안내 신청하기 →</button>
+ <button class="secondary" onclick="openCounselorCode()">이미 카운셀러 코드를 받았어요</button>
  <button class="secondary" onclick="goBackFromCounselorApply()">돌아가기</button>
 </section>
 
-<section id="counselorApplyDone" class="view">
- <div class="eyebrow">COUNSELOR APPLICATION</div>
- <div class="apply-done-hero">
+<section id="counselorCode" class="view">
+ <div class="eyebrow">COUNSELOR CODE</div>
+ <div class="apply-done-hero" id="caSavedHero">
    <div class="apply-done-icon">✓</div>
-   <h2 class="page-title" style="margin-bottom:8px">카운셀러 활동 안내 신청이<br>저장되었습니다.</h2>
-   <p class="lead" id="caDoneLead" style="margin-bottom:0">신청 내용을 확인한 뒤 다음 절차를 안내할 수 있습니다.</p>
+   <h2 class="page-title" style="margin-bottom:8px">활동 안내 신청이 저장되었습니다</h2>
+   <p class="lead" style="margin-bottom:0">이제 센터에서 활동 설명을 듣고, 등록이 결정되면 개인 카운셀러 코드를 받게 됩니다.</p>
  </div>
- <div class="card">
-   <b>앞으로의 진행</b>
-   <div class="next-step-list">
-     <div class="next-step-item"><span class="next-step-num">1</span><div><b>센터 확인</b><span class="mini">신청 내용과 활동 관심 분야를 확인합니다.</span></div></div>
-     <div class="next-step-item"><span class="next-step-num">2</span><div><b>활동 안내</b><span class="mini">제품·상담·SNS 활동 방법과 운영 기준을 설명합니다.</span></div></div>
-     <div class="next-step-item"><span class="next-step-num">3</span><div><b>등록 결정</b><span class="mini">설명을 충분히 들은 뒤 본인이 활동 여부를 결정합니다.</span></div></div>
-     <div class="next-step-item"><span class="next-step-num">4</span><div><b>개인 코드 발급</b><span class="mini">승인된 카운셀러는 자신의 피부체크 공유링크를 사용할 수 있습니다.</span></div></div>
+
+ <div class="dream-card">
+   <h3 style="margin-top:0">아직 코드가 없어도 괜찮습니다</h3>
+   <p>먼저 센터에서 편하게 상담을 받아보세요. 활동이 마음에 들고 등록을 결정하면 <b>나만의 코드</b>를 받아 SNS·카카오톡에 사용할 개인 피부체크 링크를 만들 수 있습니다.</p>
+   <div class="mini-link-btns">
+     <button class="secondary" onclick="location.href='https://pf.kakao.com/_KqkxaX/chat'">카카오로 활동 문의하기</button>
+     <button class="secondary" onclick="location.href='tel:0416224646'">센터에 전화하기</button>
    </div>
  </div>
- <div class="card soft" id="caDoneSummary"></div>
- <button class="cta" onclick="show('counselorApply')">카운셀러 활동 내용 다시 보기</button>
+
+ <div class="code-stage">
+   <span class="ref-badge">코드를 이미 받으셨나요?</span>
+   <h3 style="margin:10px 0 6px">내 카운셀러 코드 등록</h3>
+   <p class="mini">센터에서 발급받은 승인 코드를 입력해 주세요.</p>
+   <label>카운셀러 코드</label>
+   <input id="myCounselorCodeInput" placeholder="예: C001" maxlength="20">
+   <button class="cta" onclick="activateCounselorCode()">내 코드 등록하고 공유링크 만들기 →</button>
+
+   <div class="code-result" id="myCounselorCodeResult">
+     <div class="mini">등록한 코드</div>
+     <div class="code-big" id="myCounselorCodeText"></div>
+     <div class="mini" style="margin-top:8px">나의 피부체크 공유링크</div>
+     <div class="share-link-box" id="myCounselorShareLink"></div>
+     <button class="secondary" onclick="copyMyCounselorLink()">내 공유링크 복사하기</button>
+   </div>
+
+   <p class="counselor-note">※ 현재 테스트 단계에서는 입력한 코드를 이 기기에 저장해 개인 공유링크를 만듭니다. 정식 운영 전에는 센터 승인코드 확인 기능을 중앙 시스템과 연결할 예정입니다.</p>
+ </div>
+
+ <button class="secondary" onclick="show('counselorApply')">카운셀러 활동 안내 다시 보기</button>
  <button class="secondary" onclick="show('home')">홈으로</button>
 </section>
 
@@ -529,39 +595,113 @@ function renderCounselorRef(){
    : '소개 카운셀러가 없는 경우 센터 공용 상담으로 연결됩니다.';
 }
 let counselorApplyReturnView='home';
+const COUNSELOR_APPLY_DRAFT_KEY='counselorApplyDraftV264';
+const MY_COUNSELOR_CODE_KEY='myCounselorCodeV264';
+
+function getCounselorApplyDraft(){
+ return{
+   name:$('caName')?.value||'',
+   phone:$('caPhone')?.value||'',
+   interest:$('caInterest')?.value||'카운셀러 활동 전체 안내',
+   privacy:!!$('caPrivacy')?.checked
+ };
+}
+function saveCounselorApplyDraft(){storeSet(COUNSELOR_APPLY_DRAFT_KEY,getCounselorApplyDraft())}
+function restoreCounselorApplyDraft(){
+ const d=storeGet(COUNSELOR_APPLY_DRAFT_KEY)||{};
+ if($('caName')&&d.name!=null)$('caName').value=d.name;
+ if($('caPhone')&&d.phone!=null)$('caPhone').value=d.phone;
+ if($('caInterest')&&d.interest)$('caInterest').value=d.interest;
+ if($('caPrivacy'))$('caPrivacy').checked=!!d.privacy;
+}
+function bindCounselorApplyAutosave(){
+ ['caName','caPhone'].forEach(id=>{
+   const el=$(id);if(!el)return;
+   el.addEventListener('input',saveCounselorApplyDraft);
+   el.addEventListener('change',saveCounselorApplyDraft);
+ });
+ ['caInterest','caPrivacy'].forEach(id=>{
+   const el=$(id);if(el)el.addEventListener('change',saveCounselorApplyDraft);
+ });
+}
 function openCounselorApply(){
  const current=document.querySelector('.view.active')?.id||'home';
- if(current!=='counselorApply'&&current!=='counselorApplyDone')counselorApplyReturnView=current;
+ if(current!=='counselorApply'&&current!=='counselorCode')counselorApplyReturnView=current;
+ restoreCounselorApplyDraft();
+
+ const saved=storeGet(COUNSELOR_APPLY_DRAFT_KEY)||{};
  const n=$('consultName')?.value?.trim()||'';
  const p=$('consultPhone')?.value?.trim()||'';
+ if(n&&!saved.name){$('caName').value=n;saveCounselorApplyDraft()}
+ if(p&&!saved.phone){$('caPhone').value=p;saveCounselorApplyDraft()}
  show('counselorApply');
- if(n&&!$('caName').value)$('caName').value=n;
- if(p&&!$('caPhone').value)$('caPhone').value=p;
 }
 function goBackFromCounselorApply(){show(counselorApplyReturnView||'home')}
-function renderCounselorApplyDone(item,sent){
- const lead=$('caDoneLead'),box=$('caDoneSummary');
- if(lead)lead.textContent=sent
-   ? '신청 내용을 저장하고 중앙접수로 전송을 시도했습니다. 센터에서 확인 후 활동 안내를 진행합니다.'
-   : '신청 내용이 이 기기에 저장되었습니다. 현재 테스트 단계에서는 센터에서 신청 내용을 별도로 확인할 수 있습니다.';
- if(box){
-   const ref=item.referrerCode?'<br>소개 카운셀러 코드: <b>'+escapeHtml(item.referrerCode)+'</b>':'';
-   box.innerHTML='<b>'+escapeHtml(item.name)+' 님의 신청 내용</b><p class="mini" style="margin:7px 0 0">관심 활동: '+escapeHtml(item.interest)+ref+'</p>';
- }
+
+function openCounselorCode(){
+ show('counselorCode');
+ restoreMyCounselorCode();
 }
+function restoreMyCounselorCode(){
+ const code=normalizeCounselorCode(storeGet(MY_COUNSELOR_CODE_KEY)||'');
+ if($('myCounselorCodeInput'))$('myCounselorCodeInput').value=code;
+ if(code)showMyCounselorLink(code);
+}
+function showMyCounselorLink(code){
+ const u=new URL('https://kojuboo5324-ui.github.io/maiim-skin-check-customer/');
+ u.searchParams.set('ref',code);
+ if($('myCounselorCodeText'))$('myCounselorCodeText').textContent=code;
+ if($('myCounselorShareLink'))$('myCounselorShareLink').textContent=u.toString();
+ if($('myCounselorCodeResult'))$('myCounselorCodeResult').classList.add('show');
+}
+function activateCounselorCode(){
+ const code=normalizeCounselorCode($('myCounselorCodeInput')?.value||'');
+ if(!code){alert('센터에서 발급받은 카운셀러 코드를 입력해 주세요.');return}
+ if(code.length<2){alert('카운셀러 코드를 다시 확인해 주세요.');return}
+ storeSet(MY_COUNSELOR_CODE_KEY,code);
+ showMyCounselorLink(code);
+}
+async function copyMyCounselorLink(){
+ const text=$('myCounselorShareLink')?.textContent?.trim()||'';
+ if(!text)return;
+ try{await navigator.clipboard.writeText(text);alert('내 피부체크 공유링크를 복사했습니다.')}catch{alert('링크를 길게 눌러 복사해 주세요.')}
+}
+
 async function submitCounselorApply(){
- const name=$('caName').value.trim(),phone=$('caPhone').value.trim(),interest=$('caInterest').value;
- if(!name){alert('이름 또는 닉네임을 입력해 주세요.');return}
- if(!phone){alert('연락처를 입력해 주세요.');return}
- if(!$('caPrivacy').checked){alert('개인정보 수집·이용 동의가 필요합니다.');return}
- const item={id:'CA-'+Date.now(),date:new Date().toISOString(),name,phone,interest,referrerCode:getCounselorRef()||null,status:'신규 신청'};
- const arr=storeGet('counselorApplications')||[];arr.unshift(item);storeSet('counselorApplications',arr);
- let sent=false;const c=getGoogleConfig();
- if(c.url&&c.key){try{await fetch(c.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:c.key,action:'counselor_application',data:item})});sent=true}catch{}}
+ saveCounselorApplyDraft();
+ const d=storeGet(COUNSELOR_APPLY_DRAFT_KEY)||{};
+ const name=String(d.name||'').trim();
+ const phone=String(d.phone||'').trim();
+ const interest=String(d.interest||'카운셀러 활동 전체 안내');
+
+ if(!name){restoreCounselorApplyDraft();alert('이름 또는 닉네임을 입력해 주세요.');$('caName')?.focus();return}
+ if(!phone){restoreCounselorApplyDraft();alert('연락처를 입력해 주세요.');$('caPhone')?.focus();return}
+ if(!d.privacy){restoreCounselorApplyDraft();alert('개인정보 수집·이용 동의가 필요합니다.');return}
+
+ const item={
+   id:'CA-'+Date.now(),date:new Date().toISOString(),name,phone,interest,
+   referrerCode:getCounselorRef()||null,status:'활동 안내 신청'
+ };
+ const arr=storeGet('counselorApplications')||[];
+ arr.unshift(item);
+ storeSet('counselorApplications',arr);
  storeSet('latestCounselorApplication',item);
- renderCounselorApplyDone(item,sent);
- show('counselorApplyDone');
+
+ let sent=false;const c=getGoogleConfig();
+ if(c.url&&c.key){
+   try{
+     await fetch(c.url,{
+       method:'POST',mode:'no-cors',
+       headers:{'Content-Type':'text/plain;charset=utf-8'},
+       body:JSON.stringify({key:c.key,action:'counselor_application',data:item})
+     });
+     sent=true
+   }catch{}
+ }
+
+ openCounselorCode();
 }
+
 async function makeCounselorShareLink(){
  const code=normalizeCounselorCode($('counselorCodeInput').value);
  if(!code){alert('카운셀러 코드를 입력해 주세요.');return}
@@ -663,8 +803,8 @@ function refreshStepNav(){
   consultBtn.title='피부체크를 다시 하지 않고 바로 상담하기';
  });
 }
-function updateBottomNav(id){const nav=$('bottomNav');if(!nav)return;const hide=id==='home'||id==='basic'||id==='question'||id==='counselorApply'||id==='counselorApplyDone';nav.classList.toggle('hidden',hide);nav.style.setProperty('display',hide?'none':'grid','important');nav.setAttribute('aria-hidden',hide?'true':'false')}
-function show(id){if(id!=='question')cancelQuestionSpeech();document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const t=$(id);if(t)t.classList.add('active');document.body.classList.toggle('home-mode',id==='home');document.body.classList.toggle('flow-mode',id==='basic'||id==='question');updateBottomNav(id);if(id==='basic'){restoreBasicDraft();updateBasicActionButton()}refreshStepNav();if(id==='history')renderHistory();if(id==='info')renderInfo();if(id==='infoDetail')renderInfoDetail();if(id==='consult')renderCounselorRef();if(id==='counselorApplyDone'){const ca=storeGet('latestCounselorApplication');if(ca)renderCounselorApplyDone(ca,false)}if(id==='admin')renderAdmin();window.scrollTo(0,0)}
+function updateBottomNav(id){const nav=$('bottomNav');if(!nav)return;const hide=id==='home'||id==='basic'||id==='question'||id==='counselorApply'||id==='counselorCode';nav.classList.toggle('hidden',hide);nav.style.setProperty('display',hide?'none':'grid','important');nav.setAttribute('aria-hidden',hide?'true':'false')}
+function show(id){if(id!=='question')cancelQuestionSpeech();document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const t=$(id);if(t)t.classList.add('active');document.body.classList.toggle('home-mode',id==='home');document.body.classList.toggle('flow-mode',id==='basic'||id==='question');updateBottomNav(id);if(id==='basic'){restoreBasicDraft();updateBasicActionButton()}refreshStepNav();if(id==='history')renderHistory();if(id==='info')renderInfo();if(id==='infoDetail')renderInfoDetail();if(id==='consult')renderCounselorRef();if(id==='counselorApply')restoreCounselorApplyDraft();if(id==='counselorCode')restoreMyCounselorCode();if(id==='admin')renderAdmin();window.scrollTo(0,0)}
 function hasBasic(){return !!($('age').value&&$('gender').value&&$('concern').value)}
 let questionSessionActive=false;
 let questionResumeQi=0;
@@ -752,7 +892,7 @@ function endAiCall(){try{dc?.close()}catch{}try{pc?.close()}catch{}try{localStre
 async function sendAiText(){const input=$('aiText'),text=input.value.trim();if(!text)return;input.value='';addBubble('user',text);if(dc&&dc.readyState==='open'){dc.send(JSON.stringify({type:'conversation.item.create',item:{type:'message',role:'user',content:[{type:'input_text',text}]}}));dc.send(JSON.stringify({type:'response.create'}));return}const cfg=getAiConfig();if(!cfg.url||!cfg.key){addBubble('system','AI 상담 서버가 아직 연결되지 않았습니다.');return}try{setCallStatus('답변 작성 중…',true);const res=await fetch(cfg.url.replace(/\/$/,'')+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json','X-MAIIM-CLIENT':cfg.key},body:JSON.stringify({message:text,skinContext:buildSkinContext(),history:getTextHistory()})});const data=await res.json();if(!res.ok)throw new Error(data.error||'AI 오류');addBubble('ai',data.answer||'답변을 받지 못했습니다.');saveAiSummary();setCallStatus('글자 상담 가능',false)}catch(err){console.error(err);addBubble('system','AI 글자상담 연결에 실패했습니다.');setCallStatus('연결 오류',false)}}
 function getTextHistory(){return Array.from(document.querySelectorAll('#aiChat .bubble')).filter(b=>b.classList.contains('user')||b.classList.contains('ai')).slice(-8).map(b=>({role:b.classList.contains('user')?'user':'assistant',text:b.textContent}))}
 function saveAiSummary(){const hist=getTextHistory();storeSet('aiTranscriptSummary',hist.slice(-6))}
-function init(){importConfigFromQuery();bindBasicAutosave();restoreBasicDraft();renderInfo();show('home');const p=new URLSearchParams(location.search);if(p.get('view')==='ai'){const demo=storeGet('latestResult');if(demo){currentResult=demo.result;renderAiChips();show('ai')}}}
+function init(){importCounselorRef();importConfigFromQuery();bindBasicAutosave();bindCounselorApplyAutosave();restoreBasicDraft();restoreCounselorApplyDraft();renderInfo();show('home');const p=new URLSearchParams(location.search);if(p.get('view')==='ai'){const demo=storeGet('latestResult');if(demo){currentResult=demo.result;renderAiChips();show('ai')}}}
 document.addEventListener('DOMContentLoaded',init);window.addEventListener('beforeunload',endAiCall);
 </script>
 </body>
