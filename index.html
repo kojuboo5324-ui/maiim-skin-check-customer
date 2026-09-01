@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 2분 피부신호 확인 · V2.4.0</title>
+<title>MAIIM 피부체크 · 2분 피부신호 확인 · V2.4.1</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -94,7 +94,7 @@ body.flow-mode .bottom-nav{display:none!important}
 body.flow-mode .wrap{padding-bottom:28px}
 
 
-/* V2.4.0 질문 안내 마스코트 + 13문항 UX 통합정리 + 간단 음성 읽기 */
+/* V2.4.1 질문 안내 마스코트 + 13문항 UX 통합정리 + 모바일 음성표시 개선 */
 .question-guide{display:flex;align-items:center;gap:10px;margin:12px 0 10px;padding:9px 11px;border:1px solid #dfe9e3;border-radius:18px;background:linear-gradient(135deg,#fffdf8,#f1f8f3);box-shadow:0 7px 20px rgba(31,62,50,.07)}
 .question-mascot{width:64px;height:64px;flex:0 0 64px;object-fit:contain;filter:drop-shadow(0 4px 7px rgba(31,62,50,.10))}
 .question-guide-copy{min-width:0;flex:1;line-height:1.35}.question-guide-copy b{display:block;font-size:14px;color:#214c40}.question-guide-copy small{display:block;margin-top:3px;font-size:11px;color:#6e7772}
@@ -291,7 +291,7 @@ function storeGet(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catc
 function storeSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch{return false}}
 
 
-/* V2.4.0 13문항 UX 통합정리 + 브라우저 내장 음성 — 별도 API/비용 없음 */
+/* V2.4.1 13문항 UX 통합정리 + 브라우저 내장 음성 — 미지원 환경에서는 버튼을 깔끔하게 숨김 */
 const QUESTION_VOICE_KEY='questionVoiceOnV239';
 let questionVoiceOn=storeGet(QUESTION_VOICE_KEY)===true;
 function pickKoreanVoice(){
@@ -304,10 +304,14 @@ function pickKoreanVoice(){
 function updateQuestionVoiceBtn(){
  const b=$('qVoiceBtn');if(!b)return;
  const supported=('speechSynthesis' in window)&&('SpeechSynthesisUtterance' in window);
- b.disabled=!supported;
+ // 모바일 인앱브라우저 등 음성 미지원 환경에서는 '미지원' 문구를 노출하지 않고
+ // 버튼 자체를 숨겨 질문 화면을 깔끔하게 유지합니다.
+ b.style.display=supported?'':'none';
+ b.disabled=false;
  b.classList.toggle('on',supported&&questionVoiceOn);
- b.textContent=!supported?'🔇 음성 미지원':(questionVoiceOn?'🔊 음성 ON':'🔊 음성 켜기');
- const t=$('qGuideText');if(t)t.textContent=!supported?'이 기기에서는 화면의 질문을 읽어 주세요.':(questionVoiceOn?'답을 고르면 다음 질문도 자동으로 읽어드려요.':'원하시면 질문을 음성으로 읽어드려요.');
+ if(supported)b.textContent=questionVoiceOn?'🔊 음성 ON':'🔊 음성 켜기';
+ const t=$('qGuideText');
+ if(t)t.textContent=!supported?'답을 고르면 다음 질문으로 자연스럽게 넘어가요.':(questionVoiceOn?'답을 고르면 다음 질문도 자동으로 읽어드려요.':'원하시면 질문을 음성으로 읽어드려요.');
 }
 function cancelQuestionSpeech(){try{if('speechSynthesis' in window)window.speechSynthesis.cancel()}catch(e){}}
 function speakCurrentQuestion(force=false){
