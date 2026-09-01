@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 2분 피부신호 확인 · V2.4.1</title>
+<title>MAIIM 피부체크 · 2분 피부신호 확인 · V2.4.2</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -170,6 +170,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  <div class="stepnav" aria-label="피부체크 진행 단계"><button type="button" tabindex="-1">1 기본정보</button><button type="button" tabindex="-1">2 피부체크</button><button class="on" type="button" tabindex="-1">3 결과</button><button type="button" tabindex="-1">4 상담</button></div>
  <h2 class="page-title" id="resultTitle"></h2><p class="lead" id="resultSub"></p>
  <div class="card soft score-card"><div class="score-ring" id="scoreRing"><div class="score-number"><span id="conditionScore">-</span><small>점</small></div></div><div><b>오늘의 피부 컨디션</b><p id="priorityText"></p></div></div>
+ <div class="card soft"><h3>답변을 다시 확인하고 싶으신가요?</h3><p>기본정보는 그대로 두고, 마지막 질문으로 돌아가 답변을 고치거나 피부체크를 처음부터 다시 할 수 있습니다.</p><button class="secondary" onclick="editSkinCheckAnswers()">← 마지막 질문으로 돌아가기</button><button class="secondary" onclick="restartSkinCheck()">↻ 피부체크 처음부터 다시 하기</button></div>
  <div class="card"><h3>지금 피부가 보내는 신호</h3><p id="signalText"></p></div>
  <div class="card"><h3>이 상태는 어떻게 만들어졌을까요?</h3><p id="causeText"></p></div>
  <div class="card soft"><h3>지금부터 관리한다면</h3><p id="positiveText"></p></div>
@@ -342,8 +343,20 @@ function refreshStepNav(){
  document.querySelectorAll('.stepnav').forEach(nav=>{
   const btns=[...nav.querySelectorAll('button')];
   if(btns.length<4)return;
+  const section=nav.closest('section')?.id||'';
+  const canReview=section==='result'||section==='consult';
   btns.forEach(b=>{b.classList.remove('jump','locked');b.onclick=null;b.removeAttribute('aria-disabled');b.title=''});
-  const resultBtn=btns[2],consultBtn=btns[3];
+  const basicBtn=btns[0],skinBtn=btns[1],resultBtn=btns[2],consultBtn=btns[3];
+  basicBtn.textContent='1 기본정보';
+  skinBtn.textContent=canReview?'2 피부체크 ↩':'2 피부체크';
+  if(canReview){
+   basicBtn.classList.add('jump');
+   basicBtn.onclick=()=>show('basic');
+   basicBtn.title='기본정보 확인·수정';
+   skinBtn.classList.add('jump');
+   skinBtn.onclick=()=>editSkinCheckAnswers();
+   skinBtn.title='마지막 질문으로 돌아가 답변 다시 보기';
+  }
   if(hasResult){
    resultBtn.classList.add('jump');
    resultBtn.onclick=()=>goStep('result');
@@ -377,6 +390,9 @@ function prevQuestion(){if(qi>0){qi--;renderQuestion()}}
 function norm(indices,max){return Math.round(indices.reduce((a,i)=>a+(answers[i]||0),0)/max*100)}
 function calculate(){const s={hydration:norm([0,1,2],9),pores:norm([3,4],6),sensitive:norm([5,6],6),elasticity:norm([7,8],6),tone:norm([9,10],6),lifestyle:norm([11,12],6)};const order=['hydration','pores','sensitive','elasticity','tone'].sort((a,b)=>s[b]-s[a]);const p=order[0],q=order[1],healthy=order.every(k=>s[k]<=33);const type=healthy?'healthy':(s[p]>=50&&s[q]>=50&&Math.abs(s[p]-s[q])<=15?'composite':p);const concern=s.hydration*.25+s.pores*.15+s.sensitive*.20+s.elasticity*.25+s.tone*.15;const condition=Math.max(0,Math.min(100,Math.round(100-concern*.55-(s.lifestyle>66?5:s.lifestyle>32?2:0))));currentResult={scores:s,primary:p,secondary:q,type,condition};const item={id:'R-'+Date.now(),date:new Date().toISOString(),result:currentResult,answers:[...answers],basic:{age:$('age').value,gender:$('gender').value,concern:$('concern').value,maiim:$('maiim').value,currentProduct:$('currentProduct').value,pastProduct:$('pastProduct').value}};storeSet('latestResult',item);const h=storeGet('history')||[];h.unshift(item);storeSet('history',h.slice(0,10));renderResult();show('result')}
 function renderResult(){if(!currentResult)return;const t=TYPE[currentResult.type];$('resultTitle').textContent=t[0];$('resultSub').textContent=t[1];$('conditionScore').textContent=currentResult.condition;$('scoreRing').style.setProperty('--scoredeg',(currentResult.condition*3.6)+'deg');$('priorityText').innerHTML='<b>관리 1순위 · '+LABEL[currentResult.primary]+'</b><br>관리 2순위 · '+LABEL[currentResult.secondary];$('signalText').textContent=t[2];$('causeText').textContent=t[3];$('positiveText').textContent=t[4]}
+function restoreLatestBasicForRecheck(){restoreBasicDraft();const x=storeGet('latestResult');if(x?.basic){['age','gender','concern','maiim','currentProduct','pastProduct'].forEach(id=>{const el=$(id);if(el&&x.basic[id]!=null&&!el.value)el.value=x.basic[id]});applyMaiimVisibility()}return x}
+function editSkinCheckAnswers(){const x=restoreLatestBasicForRecheck();if(!hasBasic()){alert('먼저 기본정보를 확인해 주세요.');show('basic');return}if(x?.answers?.length===13){answers=[...x.answers];qi=12}else{answers=new Array(13);qi=0}show('question');renderQuestion()}
+function restartSkinCheck(){restoreLatestBasicForRecheck();if(!hasBasic()){alert('먼저 기본정보를 확인해 주세요.');show('basic');return}answers=new Array(13);qi=0;show('question');renderQuestion()}
 function goStep(step){if(step==='question'){if(!hasBasic()){alert('먼저 기본정보를 입력해 주세요.');show('basic')}else{show('question');renderQuestion()}return}if(step==='result'){const x=storeGet('latestResult');if(!x){alert('아직 피부체크 결과가 없습니다.');return}currentResult=x.result;answers=x.answers||[];renderResult();show('result');return}if(step==='consult')openConsult()}
 const CENTER_CONTACT={landline:'041-622-4646',mobile:'010-4923-9989',address:'천안시 동남구 신부 10길 8 남양빌딩 304호'};
 const KAKAO_ID='kojuboo';
