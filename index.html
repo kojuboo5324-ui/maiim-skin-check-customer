@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 카운셀러 활동 강조형 · V2.6.2</title>
+<title>MAIIM 피부체크 · 카운셀러 신청완료형 · V2.6.3</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -135,7 +135,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 @media(max-width:420px){.info-detail-nav{grid-template-columns:1fr 1fr}.info-detail-box{padding:16px}}
 
 
-/* V2.6.2 카운셀러 활동 안내 강조 */
+/* V2.6.3 카운셀러 신청 후 완료화면 추가 */
 .ref-card{border:1px solid #cfe7d6;background:linear-gradient(135deg,#f7fff9,#fffaf2);border-radius:20px;padding:16px;margin:12px 0}
 .ref-badge{display:inline-flex;align-items:center;gap:6px;background:#eef8f1;color:#2f7f4f;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900}
 .ref-code{font-weight:900;letter-spacing:.6px;color:#d96d1f}
@@ -185,6 +185,27 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
   .home-counselor-card{margin:12px 14px 20px;padding:16px}
   .home-counselor-copy h3{font-size:18px}
 }
+
+
+.apply-done-hero{
+  border:2px solid #cfe7d6;border-radius:24px;padding:22px 18px;margin:12px 0 16px;
+  background:linear-gradient(135deg,#f4fff7,#fffaf2);text-align:center;
+  box-shadow:0 14px 34px rgba(54,91,70,.10)
+}
+.apply-done-icon{
+  width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  margin:0 auto 12px;background:#e9f7ee;font-size:31px;border:1px solid #cfe7d6
+}
+.next-step-list{display:grid;gap:10px;margin:12px 0}
+.next-step-item{
+  display:flex;gap:11px;align-items:flex-start;padding:12px;border:1px solid var(--line);
+  border-radius:16px;background:#fff
+}
+.next-step-num{
+  flex:0 0 28px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;background:#2f7f4f;color:#fff;font-weight:900;font-size:13px
+}
+.next-step-item b{display:block;margin-bottom:3px}
 
 </style>
 </head>
@@ -409,7 +430,28 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
    <p class="counselor-note">카운셀러 등록 자체만으로 수입이 발생하지 않습니다. 수익은 실제 제품 판매실적과 회사·센터 정책에 따라 달라지며, 다른 사람을 모집하는 행위 자체를 수익의 기준으로 안내하지 않습니다. 구체적인 계약·수당 조건은 등록 전 별도 안내를 확인해 주세요.</p>
  </div>
  <button class="cta" onclick="submitCounselorApply()">카운셀러 활동 안내 신청하기 →</button>
- <button class="secondary" onclick="show('complete')">돌아가기</button>
+ <button class="secondary" onclick="goBackFromCounselorApply()">돌아가기</button>
+</section>
+
+<section id="counselorApplyDone" class="view">
+ <div class="eyebrow">COUNSELOR APPLICATION</div>
+ <div class="apply-done-hero">
+   <div class="apply-done-icon">✓</div>
+   <h2 class="page-title" style="margin-bottom:8px">카운셀러 활동 안내 신청이<br>저장되었습니다.</h2>
+   <p class="lead" id="caDoneLead" style="margin-bottom:0">신청 내용을 확인한 뒤 다음 절차를 안내할 수 있습니다.</p>
+ </div>
+ <div class="card">
+   <b>앞으로의 진행</b>
+   <div class="next-step-list">
+     <div class="next-step-item"><span class="next-step-num">1</span><div><b>센터 확인</b><span class="mini">신청 내용과 활동 관심 분야를 확인합니다.</span></div></div>
+     <div class="next-step-item"><span class="next-step-num">2</span><div><b>활동 안내</b><span class="mini">제품·상담·SNS 활동 방법과 운영 기준을 설명합니다.</span></div></div>
+     <div class="next-step-item"><span class="next-step-num">3</span><div><b>등록 결정</b><span class="mini">설명을 충분히 들은 뒤 본인이 활동 여부를 결정합니다.</span></div></div>
+     <div class="next-step-item"><span class="next-step-num">4</span><div><b>개인 코드 발급</b><span class="mini">승인된 카운셀러는 자신의 피부체크 공유링크를 사용할 수 있습니다.</span></div></div>
+   </div>
+ </div>
+ <div class="card soft" id="caDoneSummary"></div>
+ <button class="cta" onclick="show('counselorApply')">카운셀러 활동 내용 다시 보기</button>
+ <button class="secondary" onclick="show('home')">홈으로</button>
 </section>
 
 <section id="admin" class="view">
@@ -486,12 +528,26 @@ function renderCounselorRef(){
    ? '이 고객은 <span class="ref-code">'+escapeHtml(code)+'</span> 카운셀러의 공유링크로 들어왔습니다. 상담 신청 시 해당 카운셀러 코드가 함께 저장됩니다.'
    : '소개 카운셀러가 없는 경우 센터 공용 상담으로 연결됩니다.';
 }
+let counselorApplyReturnView='home';
 function openCounselorApply(){
+ const current=document.querySelector('.view.active')?.id||'home';
+ if(current!=='counselorApply'&&current!=='counselorApplyDone')counselorApplyReturnView=current;
  const n=$('consultName')?.value?.trim()||'';
  const p=$('consultPhone')?.value?.trim()||'';
  show('counselorApply');
  if(n&&!$('caName').value)$('caName').value=n;
  if(p&&!$('caPhone').value)$('caPhone').value=p;
+}
+function goBackFromCounselorApply(){show(counselorApplyReturnView||'home')}
+function renderCounselorApplyDone(item,sent){
+ const lead=$('caDoneLead'),box=$('caDoneSummary');
+ if(lead)lead.textContent=sent
+   ? '신청 내용을 저장하고 중앙접수로 전송을 시도했습니다. 센터에서 확인 후 활동 안내를 진행합니다.'
+   : '신청 내용이 이 기기에 저장되었습니다. 현재 테스트 단계에서는 센터에서 신청 내용을 별도로 확인할 수 있습니다.';
+ if(box){
+   const ref=item.referrerCode?'<br>소개 카운셀러 코드: <b>'+escapeHtml(item.referrerCode)+'</b>':'';
+   box.innerHTML='<b>'+escapeHtml(item.name)+' 님의 신청 내용</b><p class="mini" style="margin:7px 0 0">관심 활동: '+escapeHtml(item.interest)+ref+'</p>';
+ }
 }
 async function submitCounselorApply(){
  const name=$('caName').value.trim(),phone=$('caPhone').value.trim(),interest=$('caInterest').value;
@@ -502,8 +558,9 @@ async function submitCounselorApply(){
  const arr=storeGet('counselorApplications')||[];arr.unshift(item);storeSet('counselorApplications',arr);
  let sent=false;const c=getGoogleConfig();
  if(c.url&&c.key){try{await fetch(c.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:c.key,action:'counselor_application',data:item})});sent=true}catch{}}
- alert(sent?'카운셀러 활동 안내 신청이 접수되었습니다. 센터에서 확인 후 안내드립니다.':'신청이 이 기기에 저장되었습니다. 중앙저장 연결 후 함께 전송할 수 있습니다.');
- show('home');
+ storeSet('latestCounselorApplication',item);
+ renderCounselorApplyDone(item,sent);
+ show('counselorApplyDone');
 }
 async function makeCounselorShareLink(){
  const code=normalizeCounselorCode($('counselorCodeInput').value);
@@ -606,8 +663,8 @@ function refreshStepNav(){
   consultBtn.title='피부체크를 다시 하지 않고 바로 상담하기';
  });
 }
-function updateBottomNav(id){const nav=$('bottomNav');if(!nav)return;const hide=id==='home'||id==='basic'||id==='question';nav.classList.toggle('hidden',hide);nav.style.setProperty('display',hide?'none':'grid','important');nav.setAttribute('aria-hidden',hide?'true':'false')}
-function show(id){if(id!=='question')cancelQuestionSpeech();document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const t=$(id);if(t)t.classList.add('active');document.body.classList.toggle('home-mode',id==='home');document.body.classList.toggle('flow-mode',id==='basic'||id==='question');updateBottomNav(id);if(id==='basic'){restoreBasicDraft();updateBasicActionButton()}refreshStepNav();if(id==='history')renderHistory();if(id==='info')renderInfo();if(id==='infoDetail')renderInfoDetail();if(id==='consult')renderCounselorRef();if(id==='admin')renderAdmin();window.scrollTo(0,0)}
+function updateBottomNav(id){const nav=$('bottomNav');if(!nav)return;const hide=id==='home'||id==='basic'||id==='question'||id==='counselorApply'||id==='counselorApplyDone';nav.classList.toggle('hidden',hide);nav.style.setProperty('display',hide?'none':'grid','important');nav.setAttribute('aria-hidden',hide?'true':'false')}
+function show(id){if(id!=='question')cancelQuestionSpeech();document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const t=$(id);if(t)t.classList.add('active');document.body.classList.toggle('home-mode',id==='home');document.body.classList.toggle('flow-mode',id==='basic'||id==='question');updateBottomNav(id);if(id==='basic'){restoreBasicDraft();updateBasicActionButton()}refreshStepNav();if(id==='history')renderHistory();if(id==='info')renderInfo();if(id==='infoDetail')renderInfoDetail();if(id==='consult')renderCounselorRef();if(id==='counselorApplyDone'){const ca=storeGet('latestCounselorApplication');if(ca)renderCounselorApplyDone(ca,false)}if(id==='admin')renderAdmin();window.scrollTo(0,0)}
 function hasBasic(){return !!($('age').value&&$('gender').value&&$('concern').value)}
 let questionSessionActive=false;
 let questionResumeQi=0;
