@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 전화연결 개선 · V2.6.6</title>
+<title>MAIIM 피부체크 · 상담→제품 연결 · V2.7.0</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -135,7 +135,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 @media(max-width:420px){.info-detail-nav{grid-template-columns:1fr 1fr}.info-detail-box{padding:16px}}
 
 
-/* V2.6.6 센터 일반전화 + 휴대폰 전화연결 개선 */
+/* V2.7.0 상담 결과와 제품 안내 연결 */
 .ref-card{border:1px solid #cfe7d6;background:linear-gradient(135deg,#f7fff9,#fffaf2);border-radius:20px;padding:16px;margin:12px 0}
 .ref-badge{display:inline-flex;align-items:center;gap:6px;background:#eef8f1;color:#2f7f4f;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900}
 .ref-code{font-weight:900;letter-spacing:.6px;color:#d96d1f}
@@ -255,6 +255,39 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
   font-size:12px;line-height:1.6
 }
 
+
+/* V2.7.0 상담→제품 연결 */
+.product-bridge{
+  border:2px solid #d9c8a6;border-radius:24px;padding:18px;margin:14px 0;
+  background:linear-gradient(135deg,#fffdf8,#f7fff9);
+  box-shadow:0 12px 28px rgba(80,70,50,.09)
+}
+.product-bridge h3{margin:8px 0 6px;color:#293d34}
+.product-guide-top{
+  border:2px solid #cfe7d6;border-radius:24px;padding:20px 18px;
+  background:linear-gradient(135deg,#f3fff7,#fffaf2);margin-bottom:14px
+}
+.product-result-chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.product-result-chips span{
+  border:1px solid #cfe0d7;background:#f4faf6;color:#315247;
+  border-radius:999px;padding:7px 10px;font-size:12px;font-weight:850
+}
+.product-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.product-card{
+  border:1px solid #dde8e0;border-radius:20px;padding:16px;background:#fff
+}
+.product-card .time{
+  display:inline-flex;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:900;
+  background:#eef8f1;color:#2f7f4f;margin-bottom:8px
+}
+.product-card h3{font-size:18px;margin:3px 0 7px}
+.product-card p{font-size:13px;line-height:1.65;color:#56635c;margin:0}
+.product-caution{
+  border-left:4px solid #efb56d;background:#fff9ef;border-radius:12px;
+  padding:12px 13px;font-size:12px;line-height:1.7;color:#695a45;margin:14px 0
+}
+@media(max-width:560px){.product-pair{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body class="home-mode">
@@ -331,7 +364,12 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  <div class="card"><h3>이 상태는 어떻게 만들어졌을까요?</h3><p id="causeText"></p></div>
  <div class="card soft"><h3>지금부터 관리한다면</h3><p id="positiveText"></p></div>
  <div class="ai-highlight"><div class="eyebrow" style="color:#cdeadd">AI VOICE CONSULTATION</div><h3>결과가 궁금하면 바로 물어보세요.</h3><p>AI 피부박사가 방금 나온 피부결과를 알고 있습니다. 전화하듯 말하면 음성으로 답하고, 이어서 다시 질문할 수 있습니다.</p><button class="ai-start" onclick="openAiConsult()">🎙 AI 피부박사와 음성상담 시작 →</button></div>
- <button class="cta" onclick="openConsult()">전화·카카오·센터 상담 신청하기 →</button>
+ <div class="product-bridge">
+   <span class="ref-badge">상담 후 제품 연결</span>
+   <h3>내 피부결과에 맞는 제품은 상담 뒤에 안내받으세요</h3>
+   <p class="mini">피부체크만 보고 제품을 바로 고르기보다, 현재 사용하는 제품과 민감 반응을 함께 확인한 뒤 필요한 제품으로 연결하는 방식입니다.</p>
+ </div>
+ <button class="cta" onclick="openConsult()">상담하고 제품 안내받기 →</button>
  <button class="secondary" onclick="show('history')">지난 피부결과 보기</button>
 </section>
 
@@ -382,6 +420,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
   <label class="checkline"><input type="checkbox" id="privacyAgree"><span>개인정보 수집·이용 동의 (필수)</span></label>
   <label class="checkline" id="skinAgreeRow"><input type="checkbox" id="skinAgree"><span>피부체크 결과 상담 활용 동의 (필수)</span></label>
   <label class="checkline"><input type="checkbox" id="marketingAgree"><span>마케팅 안내 동의 (선택)</span></label>
+  <label class="checkline"><input type="checkbox" id="productGuideAgree" checked><span>상담 후 내 피부결과에 맞는 제품 안내도 받고 싶어요 (선택)</span></label>
  </div>
  <button class="cta" onclick="submitConsult()">상담 신청 접수하기 →</button>
  <button class="secondary" onclick="openAiConsult()">AI 피부박사와 먼저 대화하기</button>
@@ -403,7 +442,13 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  <div class="eyebrow">CONSULTATION RECEIVED</div><div class="ok">✓</div>
  <h2 class="page-title" style="text-align:center">상담 신청이 접수되었습니다.</h2>
  <div class="card soft"><b>신청 완료</b><p id="completeText"></p></div>
- <div class="card"><h3>이후 진행 순서</h3><p>① 담당자가 피부체크 결과 확인</p><p>② 선택한 방법으로 상담 진행</p><p>③ 필요한 피부관리 방법 안내</p><p>④ 필요할 경우 샘플·제품 상담</p><p class="mini">제품 구매 의무는 없습니다.</p></div>
+ <div class="card"><h3>이후 진행 순서</h3><p>① 담당자가 피부체크 결과 확인</p><p>② 전화·카카오·방문 또는 AI로 상담 진행</p><p>③ 현재 피부상태와 사용 중인 제품을 함께 확인</p><p>④ 상담 결과에 따라 필요한 관리와 제품을 연결</p><p class="mini">제품 구매 의무는 없습니다. 제품 안내는 피부체크 결과만으로 확정하지 않습니다.</p></div>
+ <div class="product-bridge" id="completeProductBridge">
+   <span class="ref-badge">PRODUCT GUIDE</span>
+   <h3>상담 결과를 제품 안내로 이어갑니다</h3>
+   <p class="mini" id="completeProductText">피부결과를 바탕으로 상담에서 우선 확인할 제품을 정리해 드립니다.</p>
+   <button class="cta" type="button" onclick="openProductGuide()">상담 결과로 제품 안내 보기 →</button>
+ </div>
  <div class="card soft"><b>천안 신부센터</b><p style="margin:8px 0 4px">일반전화 041-622-4646 · 휴대전화 010-4923-9989</p><p style="margin:4px 0">카카오톡 ID <b>kojuboo</b></p><p class="mini" style="margin:0">천안시 동남구 신부 10길 8 남양빌딩 304호</p></div>
  <div class="counselor-apply-box">
    <span class="ref-badge new-pulse">NEW · 신규 카운셀러 활동 안내</span>
@@ -414,6 +459,51 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  </div>
  <button class="cta" onclick="show('history')">내 피부결과 다시 보기</button><button class="secondary" onclick="show('home')">홈으로</button>
   <p class="mini" style="text-align:center;margin-top:10px">피부정보 확장본 V2.4.6 · 24개 항목</p>
+</section>
+
+<section id="productGuide" class="view">
+ <div class="eyebrow">AFTER CONSULTATION · PRODUCT GUIDE</div>
+ <h2 class="page-title">내 피부결과에서<br>제품 안내로 연결</h2>
+ <p class="lead">상담에서 확인할 핵심을 먼저 정리해 드립니다. 제품은 피부체크 결과만으로 확정하지 않습니다.</p>
+
+ <div class="product-guide-top">
+   <span class="ref-badge">내 피부결과</span>
+   <div class="product-result-chips" id="productResultChips"></div>
+   <p id="productGuideReason" style="margin:8px 0 0"></p>
+ </div>
+
+ <div class="card">
+   <h3>상담에서 먼저 확인할 기초 제품</h3>
+   <p class="mini">현재 앱의 1차 제품 연결은 라헬 데이케어·나이트케어 수분젤을 중심으로 구성했습니다. 최종 선택은 상담에서 피부 반응과 현재 사용 제품을 확인한 뒤 안내합니다.</p>
+   <div class="product-pair">
+     <div class="product-card">
+       <span class="time">DAY · 낮 관리</span>
+       <h3>라헬 데이케어 수분젤</h3>
+       <p>낮 시간의 기초 보습 루틴에서 상담 시 먼저 확인해 볼 제품입니다. 사용량과 함께 사용할 제품은 피부상태에 따라 조정합니다.</p>
+     </div>
+     <div class="product-card">
+       <span class="time">NIGHT · 저녁 관리</span>
+       <h3>라헬 나이트케어 수분젤</h3>
+       <p>저녁 기초 보습 루틴에서 상담 시 확인해 볼 제품입니다. 피부가 예민한 날에는 새 제품을 한꺼번에 늘리지 않도록 안내합니다.</p>
+     </div>
+   </div>
+ </div>
+
+ <div class="product-caution">
+   <b>왜 바로 구매 버튼을 두지 않았나요?</b><br>
+   피부결과만 보고 제품을 단정하기보다 상담에서 현재 사용 중인 제품, 과거 불편 반응, 생활습관을 함께 확인한 뒤 안내하기 위해서입니다.
+ </div>
+
+ <div class="card soft">
+   <b>제품을 더 자세히 안내받고 싶다면</b>
+   <p class="mini">담당 카운셀러 또는 센터에 “내 피부결과에 맞는 제품을 알려주세요”라고 말씀해 주세요.</p>
+   <a class="cta" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="https://pf.kakao.com/_KqkxaX/chat" target="_blank" rel="noopener noreferrer">💬 카카오로 제품 문의하기 →</a>
+   <a class="secondary" style="display:block;text-align:center;text-decoration:none;margin-top:8px" href="tel:01049239989">📱 휴대폰으로 제품 문의하기 · 010-4923-9989</a>
+   <a class="secondary" style="display:block;text-align:center;text-decoration:none;margin-top:8px" href="tel:0416224646">☎ 센터 일반전화 · 041-622-4646</a>
+ </div>
+
+ <button class="secondary" onclick="openConsult()">상담 화면으로 돌아가기</button>
+ <button class="secondary" onclick="goStep('result')">내 피부결과 다시 보기</button>
 </section>
 
 <section id="history" class="view"><div class="eyebrow">MY SKIN HISTORY</div><h2 class="page-title">지난 피부결과</h2><p class="lead">이 기기에 저장된 최근 결과입니다.</p><div id="historyList"></div><button class="secondary" onclick="show('home')">홈으로</button></section>
@@ -839,7 +929,7 @@ function refreshStepNav(){
  });
 }
 function updateBottomNav(id){const nav=$('bottomNav');if(!nav)return;const hide=id==='home'||id==='basic'||id==='question'||id==='counselorApply'||id==='counselorCode';nav.classList.toggle('hidden',hide);nav.style.setProperty('display',hide?'none':'grid','important');nav.setAttribute('aria-hidden',hide?'true':'false')}
-function show(id){if(id!=='question')cancelQuestionSpeech();document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const t=$(id);if(t)t.classList.add('active');document.body.classList.toggle('home-mode',id==='home');document.body.classList.toggle('flow-mode',id==='basic'||id==='question');updateBottomNav(id);if(id==='basic'){restoreBasicDraft();updateBasicActionButton()}refreshStepNav();if(id==='history')renderHistory();if(id==='info')renderInfo();if(id==='infoDetail')renderInfoDetail();if(id==='consult')renderCounselorRef();if(id==='counselorApply')restoreCounselorApplyDraft();if(id==='counselorCode'){restoreMyCounselorCode();renderCounselorTestNote();}if(id==='admin')renderAdmin();window.scrollTo(0,0)}
+function show(id){if(id!=='question')cancelQuestionSpeech();document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const t=$(id);if(t)t.classList.add('active');document.body.classList.toggle('home-mode',id==='home');document.body.classList.toggle('flow-mode',id==='basic'||id==='question');updateBottomNav(id);if(id==='basic'){restoreBasicDraft();updateBasicActionButton()}refreshStepNav();if(id==='history')renderHistory();if(id==='info')renderInfo();if(id==='infoDetail')renderInfoDetail();if(id==='consult')renderCounselorRef();if(id==='productGuide')renderProductGuide();if(id==='complete'){const lc=storeGet('latestConsultation');if(lc)renderCompleteProductBridge(lc)}if(id==='counselorApply')restoreCounselorApplyDraft();if(id==='counselorCode'){restoreMyCounselorCode();renderCounselorTestNote();}if(id==='admin')renderAdmin();window.scrollTo(0,0)}
 function hasBasic(){return !!($('age').value&&$('gender').value&&$('concern').value)}
 let questionSessionActive=false;
 let questionResumeQi=0;
@@ -895,7 +985,60 @@ function telHref(v){return 'tel:'+String(v).replace(/[^0-9+]/g,'')}
 function mapHref(provider){const q=encodeURIComponent(CENTER_CONTACT.address);return provider==='kakao'?'https://map.kakao.com/link/search/'+q:'https://map.naver.com/p/search/'+q}
 function renderDirectContact(){const box=$('directContactPanel');if(!box)return;const method=$('consultMethod').value||'전화';if(method==='전화'){box.innerHTML='<b>지금 바로 전화하기</b><p class="mini">스마트폰에서는 아래 번호를 누르면 전화 화면이 열립니다.</p><a class="cta" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="'+telHref(CENTER_CONTACT.mobile)+'">📱 휴대전화 010-4923-9989</a><a class="secondary" style="display:block;text-align:center;text-decoration:none;margin-top:8px" href="'+telHref(CENTER_CONTACT.landline)+'">☎ 일반전화 041-622-4646</a>';return}if(method==='카카오톡'){const k=getKakaoConfig();box.innerHTML='<b>꿀광피부 카카오 1:1 상담</b><p class="mini">아래 버튼을 누르면 카카오톡 꿀광피부 채널의 1:1 채팅으로 바로 이동합니다.</p><a class="cta" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="'+escapeHtml(k.url)+'" target="_blank" rel="noopener">💬 카카오 상담 시작하기 →</a><p class="mini" style="margin-top:10px">검색용 아이디: <b>'+KAKAO_ID+'</b></p>';return}if(method==='센터 방문'){box.innerHTML='<b>천안 신부센터 방문</b><p style="margin:8px 0 4px">'+escapeHtml(CENTER_CONTACT.address)+'</p><p class="mini">지도에서 위치를 확인한 뒤 방문상담을 신청해 주세요.</p><a class="cta" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="'+mapHref('naver')+'" target="_blank" rel="noopener">🗺 네이버지도에서 보기 →</a><a class="secondary" style="display:block;text-align:center;text-decoration:none;margin-top:8px" href="'+mapHref('kakao')+'" target="_blank" rel="noopener">카카오맵에서 보기</a>';return}box.innerHTML='<b>AI 후 사람상담</b><p class="mini">AI 척척 박사 음성상담 서버 연결이 완료되면 AI 상담 내용 요약을 참고해 전화·카카오·센터 방문 상담으로 자연스럽게 이어지도록 연결합니다. 현재는 사람 상담 신청을 먼저 접수할 수 있습니다.</p>'}
 async function sendGoogle(item){const c=getGoogleConfig();if(!c.url||!c.key)return false;try{await fetch(c.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:c.key,action:'consultation',data:item})});return true}catch{return false}}
-async function submitConsult(){const name=$('consultName').value.trim(),phone=$('consultPhone').value.trim();if(!name){alert('이름 또는 닉네임을 입력해 주세요.');return}if(!phone){alert('전화번호를 입력해 주세요.');return}const latest=storeGet('latestResult');if(!$('privacyAgree').checked){alert('개인정보 수집·이용 동의가 필요합니다.');return}if(latest&&!$('skinAgree').checked){alert('저장된 피부체크 결과를 상담에 활용하려면 피부결과 상담 활용 동의가 필요합니다.');return}const item={id:'C-'+Date.now(),date:new Date().toISOString(),name,phone,method:$('consultMethod').value,marketing:$('marketingAgree').checked,result:latest||null,aiSummary:storeGet('aiTranscriptSummary')||null,referrerCode:getCounselorRef()||null};const arr=storeGet('consultations')||[];arr.unshift(item);storeSet('consultations',arr);const sent=await sendGoogle(item);$('completeText').textContent=$('consultMethod').value+' 상담 신청이 접수되었습니다.'+(sent?' 중앙저장 전송도 요청했습니다.':' 이 기기에 먼저 저장했습니다.');show('complete')}
+async function submitConsult(){const name=$('consultName').value.trim(),phone=$('consultPhone').value.trim();if(!name){alert('이름 또는 닉네임을 입력해 주세요.');return}if(!phone){alert('전화번호를 입력해 주세요.');return}const latest=storeGet('latestResult');if(!$('privacyAgree').checked){alert('개인정보 수집·이용 동의가 필요합니다.');return}if(latest&&!$('skinAgree').checked){alert('저장된 피부체크 결과를 상담에 활용하려면 피부결과 상담 활용 동의가 필요합니다.');return}const item={id:'C-'+Date.now(),date:new Date().toISOString(),name,phone,method:$('consultMethod').value,marketing:$('marketingAgree').checked,productGuideWanted:$('productGuideAgree')?.checked!==false,result:latest||null,aiSummary:storeGet('aiTranscriptSummary')||null,referrerCode:getCounselorRef()||null};const arr=storeGet('consultations')||[];arr.unshift(item);storeSet('consultations',arr);storeSet('latestConsultation',item);const sent=await sendGoogle(item);$('completeText').textContent=$('consultMethod').value+' 상담 신청이 접수되었습니다.'+(sent?' 중앙저장 전송도 요청했습니다.':' 이 기기에 먼저 저장했습니다.');renderCompleteProductBridge(item);show('complete')}
+
+function renderCompleteProductBridge(item){
+ const box=$('completeProductBridge'),txt=$('completeProductText');
+ if(!box||!txt)return;
+ const hasResult=!!item?.result?.result;
+ if(!item?.productGuideWanted){
+   box.style.display='none';
+   return;
+ }
+ box.style.display='block';
+ txt.textContent=hasResult
+   ? '저장된 피부결과와 상담 내용을 바탕으로, 상담에서 우선 확인할 제품 안내 화면을 볼 수 있습니다.'
+   : '피부체크 결과가 없는 상담입니다. 제품 선택은 담당자 상담에서 먼저 확인해 주세요.';
+}
+function productGuideSummary(){
+ const x=storeGet('latestResult');
+ if(!x?.result)return null;
+ const r=x.result;
+ return{
+   type:TYPE[r.type]?.[0]||r.type||'피부결과',
+   condition:r.condition,
+   primary:LABEL[r.primary]||r.primary||'',
+   secondary:LABEL[r.secondary]||r.secondary||''
+ };
+}
+function renderProductGuide(){
+ const s=productGuideSummary(),chips=$('productResultChips'),reason=$('productGuideReason');
+ if(chips)chips.innerHTML='';
+ if(!s){
+   if(reason)reason.textContent='최근 피부체크 결과가 없습니다. 먼저 피부체크를 하거나 담당자에게 현재 피부상태를 알려 주세요.';
+   return;
+ }
+ [s.type,'컨디션 '+s.condition+'점','관리 1순위 '+s.primary,'관리 2순위 '+s.secondary].forEach(t=>{
+   const el=document.createElement('span');el.textContent=t;chips.appendChild(el);
+ });
+ if(reason){
+   if(s.primary==='수분·건조') reason.textContent='현재 결과에서는 수분·보습 관리가 우선으로 나타났습니다. 상담에서는 낮·저녁 기초 보습 루틴과 현재 사용 제품을 함께 확인하는 것이 좋습니다.';
+   else if(s.primary==='민감·붉음') reason.textContent='현재 결과에서는 민감 신호를 먼저 살펴볼 필요가 있습니다. 제품을 많이 추가하기보다 현재 사용 제품과 최근 자극 반응을 확인한 뒤 단순한 루틴부터 안내하는 것이 좋습니다.';
+   else if(s.primary==='탄력·주름') reason.textContent='현재 결과에서는 탄력 관련 관리가 우선으로 나타났습니다. 상담에서는 보습과 자외선 관리 등 기본 루틴을 먼저 확인하고 필요한 제품을 연결합니다.';
+   else reason.textContent='현재 피부결과의 관리 1순위를 기준으로 상담에서 필요한 기초관리와 제품을 함께 확인합니다.';
+ }
+}
+function openProductGuide(){
+ const latestConsult=storeGet('latestConsultation');
+ if(!latestConsult){
+   alert('제품 안내는 상담 신청 후 연결됩니다. 먼저 상담을 신청해 주세요.');
+   openConsult();
+   return;
+ }
+ renderProductGuide();
+ show('productGuide');
+}
+
 function renderHistory(){const box=$('historyList'),h=storeGet('history')||[];box.innerHTML='';if(!h.length){box.innerHTML='<div class="card soft">아직 저장된 피부결과가 없습니다.</div>';return}h.forEach(x=>{const b=document.createElement('button');b.className='history-item';b.innerHTML='<b>'+TYPE[x.result.type][0]+'</b><div>피부 컨디션 '+x.result.condition+'점</div><div class="mini">'+new Date(x.date).toLocaleString('ko-KR')+'</div>';b.onclick=()=>{currentResult=x.result;answers=x.answers||[];storeSet('latestResult',x);renderResult();show('result')};box.appendChild(b)})}
 function renderInfo(){const box=$('infoList');box.innerHTML='';ARTICLES.forEach((a,i)=>{const d=document.createElement('button');d.className='info-card';d.type='button';const badge=i>=18?' <em style="font-style:normal;font-size:11px;color:#d96d1f;background:#fff3e8;border-radius:999px;padding:3px 6px;margin-left:5px">NEW</em>':'';d.innerHTML='<b>'+(i+1)+'. '+a[0]+badge+'</b><span>'+a[1]+'</span>';d.onclick=()=>openInfoDetail(i);box.appendChild(d)})}
 function openInfoDetail(i){infoDetailIndex=Math.max(0,Math.min(ARTICLE_DETAILS.length-1,i));show('infoDetail')}
