@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 제품 상세연결 · V2.7.1</title>
+<title>MAIIM 피부체크 · 제품 미리보기 연결 · V2.7.2</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -135,7 +135,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 @media(max-width:420px){.info-detail-nav{grid-template-columns:1fr 1fr}.info-detail-box{padding:16px}}
 
 
-/* V2.7.1 공식 제품 이미지·상세설명 연결 */
+/* V2.7.2 결과화면 제품 미리보기 + 상담 후 상세보기 */
 .ref-card{border:1px solid #cfe7d6;background:linear-gradient(135deg,#f7fff9,#fffaf2);border-radius:20px;padding:16px;margin:12px 0}
 .ref-badge{display:inline-flex;align-items:center;gap:6px;background:#eef8f1;color:#2f7f4f;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900}
 .ref-code{font-weight:900;letter-spacing:.6px;color:#d96d1f}
@@ -298,6 +298,33 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
   margin-top:7px;font-size:11px;line-height:1.55;color:#6a756e
 }
 
+
+/* V2.7.2 결과화면 제품 미리보기 */
+.product-preview-wrap{
+  border:2px solid #e4d6b8;border-radius:24px;padding:18px;margin:14px 0;
+  background:linear-gradient(135deg,#fffdf7,#f7fff9);
+  box-shadow:0 12px 28px rgba(77,69,51,.08)
+}
+.product-preview-title{margin:8px 0 6px;font-size:20px;color:#293d34}
+.product-preview-sub{margin:0 0 12px;color:#5b665f;font-size:13px;line-height:1.65}
+.product-preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.product-preview-item{
+  border:1px solid #dfe9e2;border-radius:17px;padding:14px;background:#fff;
+  min-height:114px
+}
+.product-preview-item .label{
+  display:inline-flex;border-radius:999px;padding:5px 9px;font-size:11px;
+  font-weight:900;background:#eef8f1;color:#2f7f4f;margin-bottom:7px
+}
+.product-preview-item h4{margin:2px 0 6px;font-size:16px;line-height:1.35}
+.product-preview-item p{margin:0;color:#667168;font-size:12px;line-height:1.55}
+.product-lock-note{
+  margin-top:11px;padding:10px 12px;border-radius:14px;
+  background:#fff7ec;border:1px solid #f0d3ad;color:#70573a;
+  font-size:12px;line-height:1.6
+}
+@media(max-width:560px){.product-preview-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body class="home-mode">
@@ -374,12 +401,27 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  <div class="card"><h3>이 상태는 어떻게 만들어졌을까요?</h3><p id="causeText"></p></div>
  <div class="card soft"><h3>지금부터 관리한다면</h3><p id="positiveText"></p></div>
  <div class="ai-highlight"><div class="eyebrow" style="color:#cdeadd">AI VOICE CONSULTATION</div><h3>결과가 궁금하면 바로 물어보세요.</h3><p>AI 피부박사가 방금 나온 피부결과를 알고 있습니다. 전화하듯 말하면 음성으로 답하고, 이어서 다시 질문할 수 있습니다.</p><button class="ai-start" onclick="openAiConsult()">🎙 AI 피부박사와 음성상담 시작 →</button></div>
- <div class="product-bridge">
-   <span class="ref-badge">상담 후 제품 연결</span>
-   <h3>내 피부결과에 맞는 제품은 상담 뒤에 안내받으세요</h3>
-   <p class="mini">피부체크만 보고 제품을 바로 고르기보다, 현재 사용하는 제품과 민감 반응을 함께 확인한 뒤 필요한 제품으로 연결하는 방식입니다.</p>
+ <div class="product-preview-wrap">
+   <span class="ref-badge">상담 후 안내 예정 제품</span>
+   <h3 class="product-preview-title">내 피부결과와 연결해 볼 기초 제품</h3>
+   <p class="product-preview-sub">지금은 제품 이름만 먼저 보여드립니다. 상담에서 현재 사용 제품과 피부 반응을 확인한 뒤 상세 설명을 확인할 수 있습니다.</p>
+
+   <div class="product-preview-grid">
+     <div class="product-preview-item">
+       <span class="label">DAY · 낮 관리</span>
+       <h4>라헬 데이케어 수분젤</h4>
+       <p>낮 시간 기초 보습 루틴에서 상담 후 확인할 수 있는 제품입니다.</p>
+     </div>
+     <div class="product-preview-item">
+       <span class="label">NIGHT · 저녁 관리</span>
+       <h4>라헬 나이트케어 보습젤</h4>
+       <p>저녁 시간 기초 보습 루틴에서 상담 후 확인할 수 있는 제품입니다.</p>
+     </div>
+   </div>
+
+   <div class="product-lock-note">🔒 제품 이미지·상세설명은 상담 신청 후 확인할 수 있습니다.</div>
  </div>
- <button class="cta" onclick="openConsult()">상담하고 제품 안내받기 →</button>
+ <button class="cta" onclick="openConsult()">상담하고 내게 맞는 제품 확인하기 →</button>
  <button class="secondary" onclick="show('history')">지난 피부결과 보기</button>
 </section>
 
@@ -430,7 +472,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
   <label class="checkline"><input type="checkbox" id="privacyAgree"><span>개인정보 수집·이용 동의 (필수)</span></label>
   <label class="checkline" id="skinAgreeRow"><input type="checkbox" id="skinAgree"><span>피부체크 결과 상담 활용 동의 (필수)</span></label>
   <label class="checkline"><input type="checkbox" id="marketingAgree"><span>마케팅 안내 동의 (선택)</span></label>
-  <label class="checkline"><input type="checkbox" id="productGuideAgree" checked><span>상담 후 내 피부결과에 맞는 제품 안내도 받고 싶어요 (선택)</span></label>
+  <label class="checkline"><input type="checkbox" id="productGuideAgree" checked><span>상담 후 내 피부결과에 맞는 제품 상세 안내도 받고 싶어요 (선택)</span></label>
  </div>
  <button class="cta" onclick="submitConsult()">상담 신청 접수하기 →</button>
  <button class="secondary" onclick="openAiConsult()">AI 피부박사와 먼저 대화하기</button>
@@ -457,7 +499,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
    <span class="ref-badge">PRODUCT GUIDE</span>
    <h3>상담 결과를 제품 안내로 이어갑니다</h3>
    <p class="mini" id="completeProductText">피부결과를 바탕으로 상담에서 우선 확인할 제품을 정리해 드립니다.</p>
-   <button class="cta" type="button" onclick="openProductGuide()">상담 결과로 제품 안내 보기 →</button>
+   <button class="cta" type="button" onclick="openProductGuide()">상담 결과로 제품 상세보기 →</button>
  </div>
  <div class="card soft"><b>천안 신부센터</b><p style="margin:8px 0 4px">일반전화 041-622-4646 · 휴대전화 010-4923-9989</p><p style="margin:4px 0">카카오톡 ID <b>kojuboo</b></p><p class="mini" style="margin:0">천안시 동남구 신부 10길 8 남양빌딩 304호</p></div>
  <div class="counselor-apply-box">
@@ -473,7 +515,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 
 <section id="productGuide" class="view">
  <div class="eyebrow">AFTER CONSULTATION · PRODUCT GUIDE</div>
- <h2 class="page-title">내 피부결과에서<br>제품 안내로 연결</h2>
+ <h2 class="page-title">상담 결과에서<br>제품 상세보기로 연결</h2>
  <p class="lead">상담에서 확인할 핵심을 먼저 정리해 드립니다. 제품은 피부체크 결과만으로 확정하지 않습니다.</p>
 
  <div class="product-guide-top">
