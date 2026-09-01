@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 2분 피부신호 확인 · V2.3.9</title>
+<title>MAIIM 피부체크 · 2분 피부신호 확인 · V2.4.0</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -63,7 +63,7 @@ header{position:sticky;top:0;z-index:40;background:rgba(249,247,241,.88);backdro
 .eyebrow{font-size:11px;font-weight:950;letter-spacing:.11em;color:var(--brand);text-transform:uppercase}.page-title{font-size:31px;line-height:1.22;margin:8px 0 8px;letter-spacing:-.035em}.lead{font-size:16px;color:#4f5e57}.mini{font-size:11px;color:var(--muted)}
 .card{background:var(--paper);border:1px solid var(--line);border-radius:19px;padding:17px;margin:13px 0;box-shadow:0 8px 28px rgba(37,64,51,.04)}.soft{background:var(--mint2)}.warn{background:#fff7e8}.danger{background:#fff0ed}
 label{display:block;font-weight:850;margin:13px 0 6px}input,select,textarea{width:100%;min-height:48px;border:1px solid var(--line);border-radius:13px;background:#fff;padding:10px 12px;color:var(--ink)}textarea{min-height:90px;resize:vertical}
-.cta,.secondary,.option,.method-card,.info-card{width:100%;border-radius:15px;padding:12px 14px;margin:7px 0;min-height:52px;font-weight:900}.cta{border:0;background:var(--brand);color:white}.secondary{border:1px solid var(--line);background:#fff;color:var(--brand)}.option{text-align:left;border:1px solid var(--line);background:#fff;color:var(--ink)}.option:active{transform:scale(.99)}
+.cta,.secondary,.option,.method-card,.info-card{width:100%;border-radius:15px;padding:12px 14px;margin:7px 0;min-height:52px;font-weight:900}.cta{border:0;background:var(--brand);color:white}.secondary{border:1px solid var(--line);background:#fff;color:var(--brand)}.option{text-align:left;border:1px solid var(--line);background:#fff;color:var(--ink);position:relative;transition:transform .15s,border-color .18s,background .18s,box-shadow .18s}.option:active{transform:scale(.99)}.option.selected{border-color:#ff8a2a;background:#fff6ed;color:#8a430f;box-shadow:0 0 0 2px rgba(255,138,42,.16);padding-right:48px}.option.selected::after{content:"✓";position:absolute;right:16px;top:50%;transform:translateY(-50%);width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:#ff7a12;color:#fff;font-weight:950}.option.locked{pointer-events:none}.option.locked:not(.selected){opacity:.62}
 .stepnav{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0 20px}.stepnav button{min-height:42px;border:1px solid var(--line);border-radius:999px;background:#e9eeea;color:#59665f;font-size:11px;font-weight:900}.stepnav button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
 .progress{height:9px;background:#e2e8e3;border-radius:999px;overflow:hidden;margin:15px 0}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand2),#8caf9e);transition:width .25s}
 .score-card{display:grid;grid-template-columns:128px 1fr;gap:18px;align-items:center}.score-ring{width:120px;height:120px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--brand) 0deg,var(--brand) var(--scoredeg,0deg),#dfe8e2 var(--scoredeg,0deg));position:relative}.score-ring:before{content:"";position:absolute;inset:9px;border-radius:50%;background:#fff}.score-number{position:relative;font-size:38px;font-weight:950;color:var(--brand)}.score-number small{font-size:13px}
@@ -94,7 +94,7 @@ body.flow-mode .bottom-nav{display:none!important}
 body.flow-mode .wrap{padding-bottom:28px}
 
 
-/* V2.3.9 질문 안내 마스코트 + 간단 음성 읽기 */
+/* V2.4.0 질문 안내 마스코트 + 13문항 UX 통합정리 + 간단 음성 읽기 */
 .question-guide{display:flex;align-items:center;gap:10px;margin:12px 0 10px;padding:9px 11px;border:1px solid #dfe9e3;border-radius:18px;background:linear-gradient(135deg,#fffdf8,#f1f8f3);box-shadow:0 7px 20px rgba(31,62,50,.07)}
 .question-mascot{width:64px;height:64px;flex:0 0 64px;object-fit:contain;filter:drop-shadow(0 4px 7px rgba(31,62,50,.10))}
 .question-guide-copy{min-width:0;flex:1;line-height:1.35}.question-guide-copy b{display:block;font-size:14px;color:#214c40}.question-guide-copy small{display:block;margin-top:3px;font-size:11px;color:#6e7772}
@@ -258,21 +258,21 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 <script>
 const $=id=>document.getElementById(id);
 const Q=[
-["세안 후 스킨이나 로션을 바르기 전, 피부가 당기거나 땅기는 느낌이 있나요?","hydration"],
-["하루가 지나면서 피부가 건조해지거나 각질이 느껴지나요?","hydration"],
-["피부결이 거칠게 느껴지거나, 화장을 하는 경우 들뜨는 편인가요?","hydration"],
-["오후가 되면 이마·코·볼 등에 번들거림이나 유분이 늘어나나요?","pores"],
-["코·볼 주변 모공이 눈에 띄거나 넓어 보인다고 느끼나요?","pores"],
-["새 화장품이나 세안제품을 사용할 때 따갑거나 가렵거나 붉어지는 편인가요?","sensitive"],
-["온도 변화·마스크 착용·피로 등으로 얼굴이 쉽게 붉어지나요?","sensitive"],
-["예전보다 피부가 처지거나 탄력이 줄었다고 느끼나요?","elasticity"],
-["눈가나 입가의 잔주름이 예전보다 더 신경 쓰이나요?","elasticity"],
-["피부톤이 칙칙하거나 얼굴이 피곤해 보인다고 느끼나요?","tone"],
-["잡티나 부분적인 피부톤 차이가 신경 쓰이나요?","tone"],
-["최근 수면시간이 부족하거나 취침 시간이 불규칙한 편인가요?","lifestyle"],
-["외출할 때 자외선 차단제를 빠뜨리는 날이 많은 편인가요?","lifestyle"]
+["💧 세안 후 아무것도 바르기 전, 피부가 당기거나 땅기나요?","hydration"],
+["💦 시간이 지나면 피부가 건조하거나 푸석하게 느껴지나요?","hydration"],
+["✨ 피부결이 거칠거나 화장이 들뜨는 편인가요?","hydration"],
+["🌿 오후가 되면 이마·코·볼에 유분이 많이 생기나요?","pores"],
+["🔍 코나 볼의 모공이 눈에 띄는 편인가요?","pores"],
+["🌸 화장품이나 세안제품을 바꿨을 때 피부가 쉽게 따갑거나 붉어지나요?","sensitive"],
+["🌡️ 온도 변화나 마스크 착용 후 얼굴이 쉽게 붉어지나요?","sensitive"],
+["💪 예전보다 피부 탄력이 줄었다고 느끼나요?","elasticity"],
+["👀 눈가나 입가의 잔주름이 신경 쓰이나요?","elasticity"],
+["☀️ 피부톤이 칙칙하거나 생기가 부족해 보이나요?","tone"],
+["🎨 잡티나 부분적인 피부톤 차이가 신경 쓰이나요?","tone"],
+["🌙 요즘 수면이 부족하거나 잠자는 시간이 불규칙한가요?","lifestyle"],
+["🧴 외출할 때 자외선 차단제를 자주 빼먹는 편인가요?","lifestyle"]
 ];
-const OPTIONS=[["전혀 그렇지 않다",0],["조금 그렇다",1],["꽤 그렇다",2],["매우 그렇다",3]];
+const OPTIONS=[["전혀 아니에요",0],["가끔 그래요",1],["자주 그래요",2],["매우 그래요",3]];
 const LABEL={hydration:"수분·보습",pores:"피지·모공",sensitive:"민감",elasticity:"탄력·주름",tone:"피부톤",lifestyle:"생활습관"};
 const TYPE={
  hydration:["수분 SOS형","메마르기 시작한 피부","건조 신호가 상대적으로 높게 나타났습니다.","세안·계절·실내환경·보습습관의 영향을 함께 받았을 가능성이 있습니다.","수분과 보습의 균형을 먼저 맞춰 보세요."],
@@ -291,7 +291,7 @@ function storeGet(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catc
 function storeSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch{return false}}
 
 
-/* V2.3.9 브라우저 내장 음성으로 질문 읽기 — 별도 API/비용 없음 */
+/* V2.4.0 13문항 UX 통합정리 + 브라우저 내장 음성 — 별도 API/비용 없음 */
 const QUESTION_VOICE_KEY='questionVoiceOnV239';
 let questionVoiceOn=storeGet(QUESTION_VOICE_KEY)===true;
 function pickKoreanVoice(){
@@ -314,7 +314,8 @@ function speakCurrentQuestion(force=false){
  if(!force&&!questionVoiceOn)return;
  if(!('speechSynthesis' in window)||!('SpeechSynthesisUtterance' in window))return;
  cancelQuestionSpeech();
- const u=new SpeechSynthesisUtterance(Q[qi][0]);
+ const spoken=Q[qi][0].replace(/^[^가-힣A-Za-z0-9]+/,'');
+ const u=new SpeechSynthesisUtterance(spoken);
  u.lang='ko-KR';u.rate=.94;u.pitch=1.02;u.volume=1;
  const v=pickKoreanVoice();if(v)u.voice=v;
  try{window.speechSynthesis.speak(u)}catch(e){}
@@ -357,8 +358,17 @@ function updateBottomNav(id){const nav=$('bottomNav');if(!nav)return;const hide=
 function show(id){if(id!=='question')cancelQuestionSpeech();document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const t=$(id);if(t)t.classList.add('active');document.body.classList.toggle('home-mode',id==='home');document.body.classList.toggle('flow-mode',id==='basic'||id==='question');updateBottomNav(id);refreshStepNav();if(id==='basic')restoreBasicDraft();if(id==='history')renderHistory();if(id==='info')renderInfo();if(id==='admin')renderAdmin();window.scrollTo(0,0)}
 function hasBasic(){return !!($('age').value&&$('gender').value&&$('concern').value)}
 function startQuestions(){saveBasicDraft();if(!hasBasic()){alert('연령대·성별·가장 걱정되는 피부 고민을 선택해 주세요.');return}qi=0;answers=new Array(13);show('question');renderQuestion()}
-function renderQuestion(){$('qNo').textContent=qi+1;$('qText').textContent=Q[qi][0];$('progressBar').style.width=((qi+1)/13*100)+'%';const box=$('answersBox');box.innerHTML='';OPTIONS.forEach(([t,s])=>{const b=document.createElement('button');b.className='option';b.textContent=t;b.onclick=()=>pick(s);box.appendChild(b)});$('prevBtn').style.display=qi===0?'none':'block';const gt=$('qGuideTitle');if(gt)gt.textContent=qi===12?'거의 다 왔어요! 마지막 질문이에요 ✨':'편하게 체크해 주세요 😊';updateQuestionVoiceBtn();if(questionVoiceOn)setTimeout(()=>speakCurrentQuestion(false),80)}
-function pick(score){answers[qi]=score;if(qi<12){qi++;renderQuestion()}else calculate()}
+let answerTransitioning=false;
+const QUESTION_GUIDES=[
+ '수분과 피부결을 가볍게 살펴볼게요 💧','수분과 피부결을 가볍게 살펴볼게요 💧','수분과 피부결을 가볍게 살펴볼게요 💧',
+ '유분과 모공 상태도 볼게요 🌿','유분과 모공 상태도 볼게요 🌿',
+ '피부가 얼마나 예민한지도 살펴볼게요 🌸','피부가 얼마나 예민한지도 살펴볼게요 🌸',
+ '탄력과 잔주름도 확인해 볼게요 ✨','탄력과 잔주름도 확인해 볼게요 ✨',
+ '피부톤과 생기도 볼게요 ☀️','피부톤과 생기도 볼게요 ☀️',
+ '생활습관도 함께 살펴볼게요 🌙','거의 다 왔어요! 마지막 질문이에요 ✨'
+];
+function renderQuestion(){answerTransitioning=false;$('qNo').textContent=qi+1;$('qText').textContent=Q[qi][0];$('progressBar').style.width=((qi+1)/13*100)+'%';const box=$('answersBox');box.innerHTML='';OPTIONS.forEach(([t,s])=>{const b=document.createElement('button');b.className='option';b.textContent=t;if(answers[qi]===s)b.classList.add('selected');b.onclick=()=>pick(s,b);box.appendChild(b)});$('prevBtn').style.display=qi===0?'none':'block';const gt=$('qGuideTitle');if(gt)gt.textContent=QUESTION_GUIDES[qi]||'편하게 체크해 주세요 😊';updateQuestionVoiceBtn();if(questionVoiceOn)setTimeout(()=>speakCurrentQuestion(false),80)}
+function pick(score,btn){if(answerTransitioning)return;answerTransitioning=true;cancelQuestionSpeech();answers[qi]=score;const opts=[...document.querySelectorAll('#answersBox .option')];opts.forEach(o=>{o.classList.add('locked');o.classList.remove('selected')});if(btn){btn.classList.add('selected');btn.classList.remove('locked')}setTimeout(()=>{answerTransitioning=false;if(qi<12){qi++;renderQuestion()}else calculate()},320)}
 function prevQuestion(){if(qi>0){qi--;renderQuestion()}}
 function norm(indices,max){return Math.round(indices.reduce((a,i)=>a+(answers[i]||0),0)/max*100)}
 function calculate(){const s={hydration:norm([0,1,2],9),pores:norm([3,4],6),sensitive:norm([5,6],6),elasticity:norm([7,8],6),tone:norm([9,10],6),lifestyle:norm([11,12],6)};const order=['hydration','pores','sensitive','elasticity','tone'].sort((a,b)=>s[b]-s[a]);const p=order[0],q=order[1],healthy=order.every(k=>s[k]<=33);const type=healthy?'healthy':(s[p]>=50&&s[q]>=50&&Math.abs(s[p]-s[q])<=15?'composite':p);const concern=s.hydration*.25+s.pores*.15+s.sensitive*.20+s.elasticity*.25+s.tone*.15;const condition=Math.max(0,Math.min(100,Math.round(100-concern*.55-(s.lifestyle>66?5:s.lifestyle>32?2:0))));currentResult={scores:s,primary:p,secondary:q,type,condition};const item={id:'R-'+Date.now(),date:new Date().toISOString(),result:currentResult,answers:[...answers],basic:{age:$('age').value,gender:$('gender').value,concern:$('concern').value,maiim:$('maiim').value,currentProduct:$('currentProduct').value,pastProduct:$('pastProduct').value}};storeSet('latestResult',item);const h=storeGet('history')||[];h.unshift(item);storeSet('history',h.slice(0,10));renderResult();show('result')}
