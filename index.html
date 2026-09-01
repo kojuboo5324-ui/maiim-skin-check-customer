@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 2분 피부신호 확인 · V2.3.2</title>
+<title>MAIIM 피부체크 · 2분 피부신호 확인 · V2.3.4</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -87,7 +87,7 @@ label{display:block;font-weight:850;margin:13px 0 6px}input,select,textarea{widt
 @media(max-width:640px){.hero{min-height:610px;padding:24px 18px 20px}.hero h1{font-size:35px}.hero-lead{font-size:16px}.quick-grid{grid-template-columns:1fr 1fr}.trust-strip{grid-template-columns:1fr 1fr 1fr}.page-title{font-size:27px}.stepnav{grid-template-columns:repeat(4,1fr)}.stepnav button{font-size:10px;padding:0 2px}.score-card{grid-template-columns:105px 1fr}.score-ring{width:100px;height:100px}.method-grid{grid-template-columns:1fr}.admin-grid{grid-template-columns:1fr}}
 @media(max-width:390px){.hero h1{font-size:32px}.floating{font-size:10px}.quick-grid{grid-template-columns:1fr}.trust-strip{gap:5px}.trust{padding:8px 5px}.bottom-nav button{font-size:9px}}
 
-/* V2.3.2 navigation cleanup + basic-info autosave/restore */
+/* V2.3.4 navigation cleanup + basic-info autosave/restore + 13-question review */
 .top-home{display:none!important}
 .stepnav button{cursor:default;pointer-events:none}
 body.flow-mode .bottom-nav{display:none!important}
@@ -143,7 +143,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 <section id="question" class="view">
  <div class="eyebrow">STEP 2 · SKIN CHECK</div>
  <div class="stepnav" aria-label="피부체크 진행 단계"><button type="button" tabindex="-1">1 기본정보</button><button class="on" type="button" tabindex="-1">2 피부체크</button><button type="button" tabindex="-1">3 결과</button><button type="button" tabindex="-1">4 상담</button></div>
- <p class="mini">답을 하나 누르면 자동으로 다음 질문으로 넘어갑니다.</p>
+ <p class="mini"><b>최근 2주 정도의 평소 피부 상태</b>를 기준으로 답해 주세요. 답을 하나 누르면 자동으로 다음 질문으로 넘어갑니다.</p>
  <div class="progress"><span id="progressBar"></span></div>
  <div class="mini"><span id="qNo">1</span> / 13</div>
  <h2 class="page-title" id="qText"></h2>
@@ -240,14 +240,21 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 <script>
 const $=id=>document.getElementById(id);
 const Q=[
-["세안 후 피부가 당기는 느낌이 있나요?","hydration"],["오후가 되면 피부가 건조하거나 각질이 느껴지나요?","hydration"],["화장이 들뜨거나 피부결이 거칠어 보이나요?","hydration"],
-["오후에 얼굴이 번들거리거나 유분이 많아지나요?","pores"],["모공이 눈에 띄거나 피부결이 거칠게 느껴지나요?","pores"],
-["새 화장품을 쓰면 따갑거나 가렵거나 붉어지나요?","sensitive"],["날씨·온도·피로에 따라 피부가 붉어지나요?","sensitive"],
-["예전보다 피부 탄력이 줄었다고 느끼나요?","elasticity"],["잔주름이 더 눈에 띄나요?","elasticity"],
-["얼굴빛이 칙칙하거나 피곤해 보이나요?","tone"],["잡티나 피부톤 불균형이 신경 쓰이나요?","tone"],
-["수면이 부족하거나 불규칙한 편인가요?","lifestyle"],["자외선 차단제를 자주 빼먹나요?","lifestyle"]
+["세안 후 스킨이나 로션을 바르기 전, 피부가 당기거나 땅기는 느낌이 있나요?","hydration"],
+["하루가 지나면서 피부가 건조해지거나 각질이 느껴지나요?","hydration"],
+["피부결이 거칠게 느껴지거나, 화장을 하는 경우 들뜨는 편인가요?","hydration"],
+["오후가 되면 이마·코·볼 등에 번들거림이나 유분이 늘어나나요?","pores"],
+["코·볼 주변 모공이 눈에 띄거나 넓어 보인다고 느끼나요?","pores"],
+["새 화장품이나 세안제품을 사용할 때 따갑거나 가렵거나 붉어지는 편인가요?","sensitive"],
+["온도 변화·마스크 착용·피로 등으로 얼굴이 쉽게 붉어지나요?","sensitive"],
+["예전보다 피부가 처지거나 탄력이 줄었다고 느끼나요?","elasticity"],
+["눈가나 입가의 잔주름이 예전보다 더 신경 쓰이나요?","elasticity"],
+["피부톤이 칙칙하거나 얼굴이 피곤해 보인다고 느끼나요?","tone"],
+["잡티나 부분적인 피부톤 차이가 신경 쓰이나요?","tone"],
+["최근 수면시간이 부족하거나 취침 시간이 불규칙한 편인가요?","lifestyle"],
+["외출할 때 자외선 차단제를 빠뜨리는 날이 많은 편인가요?","lifestyle"]
 ];
-const OPTIONS=[["전혀 아니다",0],["가끔 그렇다",1],["자주 그렇다",2],["매우 그렇다",3]];
+const OPTIONS=[["전혀 그렇지 않다",0],["조금 그렇다",1],["꽤 그렇다",2],["매우 그렇다",3]];
 const LABEL={hydration:"수분·보습",pores:"피지·모공",sensitive:"민감",elasticity:"탄력·주름",tone:"피부톤",lifestyle:"생활습관"};
 const TYPE={
  hydration:["수분 SOS형","메마르기 시작한 피부","건조 신호가 상대적으로 높게 나타났습니다.","세안·계절·실내환경·보습습관의 영향을 함께 받았을 가능성이 있습니다.","수분과 보습의 균형을 먼저 맞춰 보세요."],
