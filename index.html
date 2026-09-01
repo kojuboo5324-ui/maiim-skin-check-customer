@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 2분 피부신호 확인 · V2.3</title>
+<title>MAIIM 피부체크 · 2분 피부신호 확인 · V2.3.2</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -87,7 +87,7 @@ label{display:block;font-weight:850;margin:13px 0 6px}input,select,textarea{widt
 @media(max-width:640px){.hero{min-height:610px;padding:24px 18px 20px}.hero h1{font-size:35px}.hero-lead{font-size:16px}.quick-grid{grid-template-columns:1fr 1fr}.trust-strip{grid-template-columns:1fr 1fr 1fr}.page-title{font-size:27px}.stepnav{grid-template-columns:repeat(4,1fr)}.stepnav button{font-size:10px;padding:0 2px}.score-card{grid-template-columns:105px 1fr}.score-ring{width:100px;height:100px}.method-grid{grid-template-columns:1fr}.admin-grid{grid-template-columns:1fr}}
 @media(max-width:390px){.hero h1{font-size:32px}.floating{font-size:10px}.quick-grid{grid-template-columns:1fr}.trust-strip{gap:5px}.trust{padding:8px 5px}.bottom-nav button{font-size:9px}}
 
-/* V2.3 navigation cleanup */
+/* V2.3.2 navigation cleanup + basic-info autosave/restore */
 .top-home{display:none!important}
 .stepnav button{cursor:default;pointer-events:none}
 body.flow-mode .bottom-nav{display:none!important}
@@ -264,11 +264,19 @@ const ARTICLES=[
 let qi=0,answers=new Array(13),currentResult=null,pc=null,dc=null,localStream=null,assistantDraft="";
 function storeGet(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch{return null}}
 function storeSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch{return false}}
+
+/* V2.3.2 기본정보 자동저장·자동복원 */
+const BASIC_DRAFT_KEY='basicDraftV232';
+function getBasicForm(){return{age:$('age')?.value||'',gender:$('gender')?.value||'',concern:$('concern')?.value||'',maiim:$('maiim')?.value||'',currentProduct:$('currentProduct')?.value||'',pastProduct:$('pastProduct')?.value||''}}
+function applyMaiimVisibility(){const v=$('maiim')?.value||'';if($('currentBox'))$('currentBox').classList.toggle('hidden',v!=='CURRENT');if($('pastBox'))$('pastBox').classList.toggle('hidden',v!=='PAST')}
+function saveBasicDraft(){storeSet(BASIC_DRAFT_KEY,getBasicForm());applyMaiimVisibility()}
+function restoreBasicDraft(){let d=storeGet(BASIC_DRAFT_KEY);if(!d){const latest=storeGet('latestResult');d=latest?.basic||null}if(!d){applyMaiimVisibility();return}['age','gender','concern','maiim','currentProduct','pastProduct'].forEach(id=>{const el=$(id);if(el&&d[id]!=null)el.value=d[id]});applyMaiimVisibility()}
+function bindBasicAutosave(){['age','gender','concern','maiim'].forEach(id=>{const el=$(id);if(el)el.addEventListener('change',saveBasicDraft)});['currentProduct','pastProduct'].forEach(id=>{const el=$(id);if(el){el.addEventListener('input',saveBasicDraft);el.addEventListener('change',saveBasicDraft)}})}
+
 function updateBottomNav(id){const nav=$('bottomNav');if(!nav)return;const hide=id==='home'||id==='basic'||id==='question';nav.classList.toggle('hidden',hide);nav.style.setProperty('display',hide?'none':'grid','important');nav.setAttribute('aria-hidden',hide?'true':'false')}
-function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const t=$(id);if(t)t.classList.add('active');document.body.classList.toggle('home-mode',id==='home');document.body.classList.toggle('flow-mode',id==='basic'||id==='question');updateBottomNav(id);if(id==='history')renderHistory();if(id==='info')renderInfo();if(id==='admin')renderAdmin();window.scrollTo(0,0)}
+function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const t=$(id);if(t)t.classList.add('active');document.body.classList.toggle('home-mode',id==='home');document.body.classList.toggle('flow-mode',id==='basic'||id==='question');updateBottomNav(id);if(id==='basic')restoreBasicDraft();if(id==='history')renderHistory();if(id==='info')renderInfo();if(id==='admin')renderAdmin();window.scrollTo(0,0)}
 function hasBasic(){return !!($('age').value&&$('gender').value&&$('concern').value)}
-$('maiim').addEventListener('change',()=>{$('currentBox').classList.toggle('hidden',$('maiim').value!=='CURRENT');$('pastBox').classList.toggle('hidden',$('maiim').value!=='PAST')});
-function startQuestions(){if(!hasBasic()){alert('연령대·성별·가장 걱정되는 피부 고민을 선택해 주세요.');return}qi=0;answers=new Array(13);show('question');renderQuestion()}
+function startQuestions(){saveBasicDraft();if(!hasBasic()){alert('연령대·성별·가장 걱정되는 피부 고민을 선택해 주세요.');return}qi=0;answers=new Array(13);show('question');renderQuestion()}
 function renderQuestion(){$('qNo').textContent=qi+1;$('qText').textContent=Q[qi][0];$('progressBar').style.width=((qi+1)/13*100)+'%';const box=$('answersBox');box.innerHTML='';OPTIONS.forEach(([t,s])=>{const b=document.createElement('button');b.className='option';b.textContent=t;b.onclick=()=>pick(s);box.appendChild(b)});$('prevBtn').style.display=qi===0?'none':'block'}
 function pick(score){answers[qi]=score;if(qi<12){qi++;renderQuestion()}else calculate()}
 function prevQuestion(){if(qi>0){qi--;renderQuestion()}}
@@ -307,7 +315,7 @@ function endAiCall(){try{dc?.close()}catch{}try{pc?.close()}catch{}try{localStre
 async function sendAiText(){const input=$('aiText'),text=input.value.trim();if(!text)return;input.value='';addBubble('user',text);if(dc&&dc.readyState==='open'){dc.send(JSON.stringify({type:'conversation.item.create',item:{type:'message',role:'user',content:[{type:'input_text',text}]}}));dc.send(JSON.stringify({type:'response.create'}));return}const cfg=getAiConfig();if(!cfg.url||!cfg.key){addBubble('system','AI 상담 서버가 아직 연결되지 않았습니다.');return}try{setCallStatus('답변 작성 중…',true);const res=await fetch(cfg.url.replace(/\/$/,'')+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json','X-MAIIM-CLIENT':cfg.key},body:JSON.stringify({message:text,skinContext:buildSkinContext(),history:getTextHistory()})});const data=await res.json();if(!res.ok)throw new Error(data.error||'AI 오류');addBubble('ai',data.answer||'답변을 받지 못했습니다.');saveAiSummary();setCallStatus('글자 상담 가능',false)}catch(err){console.error(err);addBubble('system','AI 글자상담 연결에 실패했습니다.');setCallStatus('연결 오류',false)}}
 function getTextHistory(){return Array.from(document.querySelectorAll('#aiChat .bubble')).filter(b=>b.classList.contains('user')||b.classList.contains('ai')).slice(-8).map(b=>({role:b.classList.contains('user')?'user':'assistant',text:b.textContent}))}
 function saveAiSummary(){const hist=getTextHistory();storeSet('aiTranscriptSummary',hist.slice(-6))}
-function init(){importConfigFromQuery();renderInfo();show('home');const p=new URLSearchParams(location.search);if(p.get('view')==='ai'){const demo=storeGet('latestResult');if(demo){currentResult=demo.result;renderAiChips();show('ai')}}}
+function init(){importConfigFromQuery();bindBasicAutosave();restoreBasicDraft();renderInfo();show('home');const p=new URLSearchParams(location.search);if(p.get('view')==='ai'){const demo=storeGet('latestResult');if(demo){currentResult=demo.result;renderAiChips();show('ai')}}}
 document.addEventListener('DOMContentLoaded',init);window.addEventListener('beforeunload',endAiCall);
 </script>
 </body>
