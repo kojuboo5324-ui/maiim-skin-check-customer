@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 2분 피부신호 확인 · V2.3.5</title>
+<title>MAIIM 피부체크 · 2분 피부신호 확인 · V2.3.8</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -89,7 +89,7 @@ label{display:block;font-weight:850;margin:13px 0 6px}input,select,textarea{widt
 
 /* V2.3.5 navigation cleanup + basic-info autosave/restore + 13-question review */
 .top-home{display:none!important}
-.stepnav button{cursor:default;pointer-events:none}
+.stepnav button{cursor:default;pointer-events:none}.stepnav button.jump{cursor:pointer;pointer-events:auto;background:#fff;color:var(--brand);border-color:#9fb8ad}.stepnav button.jump:hover{background:var(--mint2)}.stepnav button.jump:focus{outline:2px solid #e9a76a;outline-offset:2px}.stepnav button.on.jump{background:var(--brand);color:#fff;border-color:var(--brand)}.stepnav button.locked{opacity:.58}
 body.flow-mode .bottom-nav{display:none!important}
 body.flow-mode .wrap{padding-bottom:28px}
 
@@ -191,6 +191,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  <div class="stepnav" aria-label="피부체크 진행 단계"><button type="button" tabindex="-1">1 기본정보</button><button type="button" tabindex="-1">2 피부체크</button><button type="button" tabindex="-1">3 결과</button><button class="on" type="button" tabindex="-1">4 상담</button></div>
  <h2 class="page-title">원하는 방법으로<br>사람 상담을 신청하세요.</h2>
  <p class="lead">AI 상담을 먼저 이용해도 되고, 바로 담당자 상담을 신청해도 됩니다.</p>
+ <div id="consultContext" class="card soft"></div>
  <label>이름 또는 닉네임</label><input id="consultName" autocomplete="name">
  <label>전화번호</label><input id="consultPhone" inputmode="tel" autocomplete="tel">
  <label>상담방법</label>
@@ -204,7 +205,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  <div id="directContactPanel" class="card soft" style="margin-top:12px"></div>
  <div class="card soft">
   <label class="checkline"><input type="checkbox" id="privacyAgree"><span>개인정보 수집·이용 동의 (필수)</span></label>
-  <label class="checkline"><input type="checkbox" id="skinAgree"><span>피부체크 결과 상담 활용 동의 (필수)</span></label>
+  <label class="checkline" id="skinAgreeRow"><input type="checkbox" id="skinAgree"><span>피부체크 결과 상담 활용 동의 (필수)</span></label>
   <label class="checkline"><input type="checkbox" id="marketingAgree"><span>마케팅 안내 동의 (선택)</span></label>
  </div>
  <button class="cta" onclick="submitConsult()">상담 신청 접수하기 →</button>
@@ -283,8 +284,29 @@ function saveBasicDraft(){storeSet(BASIC_DRAFT_KEY,getBasicForm());applyMaiimVis
 function restoreBasicDraft(){let d=storeGet(BASIC_DRAFT_KEY);if(!d){const latest=storeGet('latestResult');d=latest?.basic||null}if(!d){applyMaiimVisibility();return}['age','gender','concern','maiim','currentProduct','pastProduct'].forEach(id=>{const el=$(id);if(el&&d[id]!=null)el.value=d[id]});applyMaiimVisibility()}
 function bindBasicAutosave(){['age','gender','concern','maiim'].forEach(id=>{const el=$(id);if(el)el.addEventListener('change',saveBasicDraft)});['currentProduct','pastProduct'].forEach(id=>{const el=$(id);if(el){el.addEventListener('input',saveBasicDraft);el.addEventListener('change',saveBasicDraft)}})}
 
+function refreshStepNav(){
+ const hasResult=!!storeGet('latestResult');
+ document.querySelectorAll('.stepnav').forEach(nav=>{
+  const btns=[...nav.querySelectorAll('button')];
+  if(btns.length<4)return;
+  btns.forEach(b=>{b.classList.remove('jump','locked');b.onclick=null;b.removeAttribute('aria-disabled');b.title=''});
+  const resultBtn=btns[2],consultBtn=btns[3];
+  if(hasResult){
+   resultBtn.classList.add('jump');
+   resultBtn.onclick=()=>goStep('result');
+   resultBtn.title='저장된 최근 피부결과 보기';
+  }else{
+   resultBtn.classList.add('locked');
+   resultBtn.setAttribute('aria-disabled','true');
+   resultBtn.title='피부체크를 완료하면 결과를 볼 수 있습니다';
+  }
+  consultBtn.classList.add('jump');
+  consultBtn.onclick=()=>openConsult();
+  consultBtn.title='피부체크를 다시 하지 않고 바로 상담하기';
+ });
+}
 function updateBottomNav(id){const nav=$('bottomNav');if(!nav)return;const hide=id==='home'||id==='basic'||id==='question';nav.classList.toggle('hidden',hide);nav.style.setProperty('display',hide?'none':'grid','important');nav.setAttribute('aria-hidden',hide?'true':'false')}
-function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const t=$(id);if(t)t.classList.add('active');document.body.classList.toggle('home-mode',id==='home');document.body.classList.toggle('flow-mode',id==='basic'||id==='question');updateBottomNav(id);if(id==='basic')restoreBasicDraft();if(id==='history')renderHistory();if(id==='info')renderInfo();if(id==='admin')renderAdmin();window.scrollTo(0,0)}
+function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const t=$(id);if(t)t.classList.add('active');document.body.classList.toggle('home-mode',id==='home');document.body.classList.toggle('flow-mode',id==='basic'||id==='question');updateBottomNav(id);refreshStepNav();if(id==='basic')restoreBasicDraft();if(id==='history')renderHistory();if(id==='info')renderInfo();if(id==='admin')renderAdmin();window.scrollTo(0,0)}
 function hasBasic(){return !!($('age').value&&$('gender').value&&$('concern').value)}
 function startQuestions(){saveBasicDraft();if(!hasBasic()){alert('연령대·성별·가장 걱정되는 피부 고민을 선택해 주세요.');return}qi=0;answers=new Array(13);show('question');renderQuestion()}
 function renderQuestion(){$('qNo').textContent=qi+1;$('qText').textContent=Q[qi][0];$('progressBar').style.width=((qi+1)/13*100)+'%';const box=$('answersBox');box.innerHTML='';OPTIONS.forEach(([t,s])=>{const b=document.createElement('button');b.className='option';b.textContent=t;b.onclick=()=>pick(s);box.appendChild(b)});$('prevBtn').style.display=qi===0?'none':'block'}
@@ -297,7 +319,23 @@ function goStep(step){if(step==='question'){if(!hasBasic()){alert('먼저 기본
 const CENTER_CONTACT={landline:'041-622-4646',mobile:'010-4923-9989',address:'천안시 동남구 신부 10길 8 남양빌딩 304호'};
 const KAKAO_ID='kojuboo';
 const KAKAO_CHAT_URL='https://pf.kakao.com/_KqkxaX/chat';
-function openConsult(){const x=storeGet('latestResult');if(!x){alert('상담 신청 전에 피부체크를 먼저 완료해 주세요.');show('basic');return}currentResult=x.result;show('consult');renderDirectContact()}
+function renderConsultContext(){
+ const x=storeGet('latestResult'),box=$('consultContext'),row=$('skinAgreeRow'),skin=$('skinAgree');
+ if(!box)return;
+ if(x&&x.result){
+  currentResult=x.result;
+  const type=TYPE[x.result.type]?.[0]||'최근 피부결과';
+  const p=LABEL[x.result.primary]||'';
+  box.innerHTML='<b>최근 피부결과를 불러왔습니다.</b><p style="margin:7px 0 2px">'+escapeHtml(type)+' · 컨디션 '+escapeHtml(x.result.condition)+'점</p><p class="mini" style="margin:0">관리 1순위 '+escapeHtml(p)+'를 상담에 함께 참고합니다. 13문항을 다시 하지 않아도 됩니다.</p>';
+  if(row)row.style.display='flex';
+ }else{
+  currentResult=null;
+  box.innerHTML=`<b>피부체크 없이 바로 상담할 수 있습니다.</b><p class="mini" style="margin:7px 0 0">전화·카카오톡·센터 방문 상담은 13문항을 먼저 하지 않아도 이용할 수 있습니다. 맞춤형 피부결과가 필요하면 나중에 피부체크를 진행하셔도 됩니다.</p><button class="secondary" style="margin-top:10px" onclick="show('basic')">피부체크부터 하고 상담하기</button>`;
+  if(row)row.style.display='none';
+  if(skin)skin.checked=false;
+ }
+}
+function openConsult(){const x=storeGet('latestResult');currentResult=x?.result||null;show('consult');renderConsultContext();renderDirectContact()}
 function selectMethod(method){$('consultMethod').value=method;document.querySelectorAll('.method-card').forEach(b=>b.classList.toggle('on',b.dataset.method===method));renderDirectContact()}
 function getKakaoConfig(){const saved=storeGet('kakaoConfig')||{};return {url:saved.url||KAKAO_CHAT_URL}}
 async function copyKakaoId(){try{await navigator.clipboard.writeText(KAKAO_ID);alert('카카오톡 ID '+KAKAO_ID+' 를 복사했습니다. 카카오톡 친구 검색에 붙여넣어 주세요.')}catch{prompt('아래 카카오톡 ID를 복사해 주세요.',KAKAO_ID)}}
@@ -305,7 +343,7 @@ function telHref(v){return 'tel:'+String(v).replace(/[^0-9+]/g,'')}
 function mapHref(provider){const q=encodeURIComponent(CENTER_CONTACT.address);return provider==='kakao'?'https://map.kakao.com/link/search/'+q:'https://map.naver.com/p/search/'+q}
 function renderDirectContact(){const box=$('directContactPanel');if(!box)return;const method=$('consultMethod').value||'전화';if(method==='전화'){box.innerHTML='<b>지금 바로 전화하기</b><p class="mini">스마트폰에서는 아래 번호를 누르면 전화 화면이 열립니다.</p><a class="cta" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="'+telHref(CENTER_CONTACT.mobile)+'">📱 휴대전화 010-4923-9989</a><a class="secondary" style="display:block;text-align:center;text-decoration:none;margin-top:8px" href="'+telHref(CENTER_CONTACT.landline)+'">☎ 일반전화 041-622-4646</a>';return}if(method==='카카오톡'){const k=getKakaoConfig();box.innerHTML='<b>꿀광피부 카카오 1:1 상담</b><p class="mini">아래 버튼을 누르면 카카오톡 꿀광피부 채널의 1:1 채팅으로 바로 이동합니다.</p><a class="cta" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="'+escapeHtml(k.url)+'" target="_blank" rel="noopener">💬 카카오 상담 시작하기 →</a><p class="mini" style="margin-top:10px">검색용 아이디: <b>'+KAKAO_ID+'</b></p>';return}if(method==='센터 방문'){box.innerHTML='<b>천안 신부센터 방문</b><p style="margin:8px 0 4px">'+escapeHtml(CENTER_CONTACT.address)+'</p><p class="mini">지도에서 위치를 확인한 뒤 방문상담을 신청해 주세요.</p><a class="cta" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="'+mapHref('naver')+'" target="_blank" rel="noopener">🗺 네이버지도에서 보기 →</a><a class="secondary" style="display:block;text-align:center;text-decoration:none;margin-top:8px" href="'+mapHref('kakao')+'" target="_blank" rel="noopener">카카오맵에서 보기</a>';return}box.innerHTML='<b>AI 후 사람상담</b><p class="mini">AI 척척 박사 음성상담 서버 연결이 완료되면 AI 상담 내용 요약을 참고해 전화·카카오·센터 방문 상담으로 자연스럽게 이어지도록 연결합니다. 현재는 사람 상담 신청을 먼저 접수할 수 있습니다.</p>'}
 async function sendGoogle(item){const c=getGoogleConfig();if(!c.url||!c.key)return false;try{await fetch(c.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:c.key,action:'consultation',data:item})});return true}catch{return false}}
-async function submitConsult(){const name=$('consultName').value.trim(),phone=$('consultPhone').value.trim();if(!name){alert('이름 또는 닉네임을 입력해 주세요.');return}if(!phone){alert('전화번호를 입력해 주세요.');return}if(!$('privacyAgree').checked||!$('skinAgree').checked){alert('필수 동의 두 항목을 체크해 주세요.');return}const latest=storeGet('latestResult');const item={id:'C-'+Date.now(),date:new Date().toISOString(),name,phone,method:$('consultMethod').value,marketing:$('marketingAgree').checked,result:latest,aiSummary:storeGet('aiTranscriptSummary')||null};const arr=storeGet('consultations')||[];arr.unshift(item);storeSet('consultations',arr);const sent=await sendGoogle(item);$('completeText').textContent=$('consultMethod').value+' 상담 신청이 접수되었습니다.'+(sent?' 중앙저장 전송도 요청했습니다.':' 이 기기에 먼저 저장했습니다.');show('complete')}
+async function submitConsult(){const name=$('consultName').value.trim(),phone=$('consultPhone').value.trim();if(!name){alert('이름 또는 닉네임을 입력해 주세요.');return}if(!phone){alert('전화번호를 입력해 주세요.');return}const latest=storeGet('latestResult');if(!$('privacyAgree').checked){alert('개인정보 수집·이용 동의가 필요합니다.');return}if(latest&&!$('skinAgree').checked){alert('저장된 피부체크 결과를 상담에 활용하려면 피부결과 상담 활용 동의가 필요합니다.');return}const item={id:'C-'+Date.now(),date:new Date().toISOString(),name,phone,method:$('consultMethod').value,marketing:$('marketingAgree').checked,result:latest||null,aiSummary:storeGet('aiTranscriptSummary')||null};const arr=storeGet('consultations')||[];arr.unshift(item);storeSet('consultations',arr);const sent=await sendGoogle(item);$('completeText').textContent=$('consultMethod').value+' 상담 신청이 접수되었습니다.'+(sent?' 중앙저장 전송도 요청했습니다.':' 이 기기에 먼저 저장했습니다.');show('complete')}
 function renderHistory(){const box=$('historyList'),h=storeGet('history')||[];box.innerHTML='';if(!h.length){box.innerHTML='<div class="card soft">아직 저장된 피부결과가 없습니다.</div>';return}h.forEach(x=>{const b=document.createElement('button');b.className='history-item';b.innerHTML='<b>'+TYPE[x.result.type][0]+'</b><div>피부 컨디션 '+x.result.condition+'점</div><div class="mini">'+new Date(x.date).toLocaleString('ko-KR')+'</div>';b.onclick=()=>{currentResult=x.result;answers=x.answers||[];storeSet('latestResult',x);renderResult();show('result')};box.appendChild(b)})}
 function renderInfo(){const box=$('infoList');box.innerHTML='';ARTICLES.forEach((a,i)=>{const d=document.createElement('button');d.className='info-card';d.innerHTML='<b>'+(i+1)+'. '+a[0]+'</b><span>'+a[1]+'</span>';box.appendChild(d)})}
 function getGoogleConfig(){return storeGet('googleConfig')||{}}
