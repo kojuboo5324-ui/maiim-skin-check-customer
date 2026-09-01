@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 카운셀러 호감형·코드등록 · V2.6.4</title>
+<title>MAIIM 피부체크 · 카운셀러 문의링크 안정화 · V2.6.5</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -135,7 +135,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 @media(max-width:420px){.info-detail-nav{grid-template-columns:1fr 1fr}.info-detail-box{padding:16px}}
 
 
-/* V2.6.4 카운셀러 호감형 안내 + 신청 자동저장 + 코드등록 흐름 */
+/* V2.6.5 카운셀러 문의링크 안정화 + 코드발급 안내 명확화 */
 .ref-card{border:1px solid #cfe7d6;background:linear-gradient(135deg,#f7fff9,#fffaf2);border-radius:20px;padding:16px;margin:12px 0}
 .ref-badge{display:inline-flex;align-items:center;gap:6px;background:#eef8f1;color:#2f7f4f;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900}
 .ref-code{font-weight:900;letter-spacing:.6px;color:#d96d1f}
@@ -238,6 +238,22 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .code-big{font-weight:950;font-size:22px;color:#2f7f4f;letter-spacing:1px}
 .mini-link-btns{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
 @media(max-width:520px){.mini-link-btns{grid-template-columns:1fr}}
+
+
+.action-link{
+  display:flex!important;align-items:center;justify-content:center;text-decoration:none;
+  box-sizing:border-box;text-align:center
+}
+.code-help{
+  margin:10px 0 12px;padding:12px 13px;border-radius:15px;
+  background:#fff7ec;border:1px solid #f2d1a8;color:#75512d;
+  font-size:12px;line-height:1.65
+}
+.test-code-note{
+  margin:8px 0 0;padding:10px 12px;border-radius:13px;
+  background:#f1f8f3;border:1px solid #d5e8da;color:#315246;
+  font-size:12px;line-height:1.6
+}
 
 </style>
 </head>
@@ -492,17 +508,26 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
    <h3 style="margin-top:0">아직 코드가 없어도 괜찮습니다</h3>
    <p>먼저 센터에서 편하게 상담을 받아보세요. 활동이 마음에 들고 등록을 결정하면 <b>나만의 코드</b>를 받아 SNS·카카오톡에 사용할 개인 피부체크 링크를 만들 수 있습니다.</p>
    <div class="mini-link-btns">
-     <button class="secondary" onclick="location.href='https://pf.kakao.com/_KqkxaX/chat'">카카오로 활동 문의하기</button>
-     <button class="secondary" onclick="location.href='tel:0416224646'">센터에 전화하기</button>
+     <a class="secondary action-link" href="https://pf.kakao.com/_KqkxaX/chat" target="_blank" rel="noopener noreferrer">카카오로 활동 문의하기</a>
+     <a class="secondary action-link" href="tel:0416224646">센터에 전화하기 · 041-622-4646</a>
    </div>
+   <p class="counselor-note" style="margin:9px 0 0">※ 전화 버튼은 스마트폰에서 바로 전화 앱으로 연결됩니다. PC에서는 전화 앱이 설정되어 있지 않으면 반응하지 않을 수 있습니다.</p>
  </div>
 
  <div class="code-stage">
    <span class="ref-badge">코드를 이미 받으셨나요?</span>
    <h3 style="margin:10px 0 6px">내 카운셀러 코드 등록</h3>
-   <p class="mini">센터에서 발급받은 승인 코드를 입력해 주세요.</p>
-   <label>카운셀러 코드</label>
-   <input id="myCounselorCodeInput" placeholder="예: C001" maxlength="20">
+   <p class="mini">카운셀러 코드는 신청자가 만드는 것이 아니라 <b>센터에서 등록 승인 후 발급</b>합니다.</p>
+   <div class="code-help">
+     아직 코드를 받지 않았다면 위의 카카오 또는 전화로 활동 안내를 먼저 받으시면 됩니다.<br>
+     코드를 받은 카운셀러만 아래에 입력해 개인 공유링크를 만듭니다.
+   </div>
+   <label>센터에서 발급받은 카운셀러 코드</label>
+   <input id="myCounselorCodeInput" placeholder="예: C001" maxlength="20" autocapitalize="characters" autocomplete="off">
+   <div class="test-code-note" id="testCodeNote" style="display:none">
+     현재 센터장 테스트 화면입니다. 기능 확인용으로 <b>C001</b>을 입력해 테스트할 수 있습니다.
+     <button class="secondary" type="button" onclick="fillTestCounselorCode()" style="min-height:42px;margin-top:8px">테스트용 C001 자동입력</button>
+   </div>
    <button class="cta" onclick="activateCounselorCode()">내 코드 등록하고 공유링크 만들기 →</button>
 
    <div class="code-result" id="myCounselorCodeResult">
@@ -581,6 +606,15 @@ function storeSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true
 
 const COUNSELOR_REF_KEY='maiimCounselorRefV260';
 function normalizeCounselorCode(v){return String(v||'').trim().toUpperCase().replace(/[^A-Z0-9_-]/g,'').slice(0,20)}
+function isCounselorTestMode(){return new URLSearchParams(location.search).get('test')==='1'}
+function fillTestCounselorCode(){
+ const el=$('myCounselorCodeInput');
+ if(el){el.value='C001';el.focus()}
+}
+function renderCounselorTestNote(){
+ const el=$('testCodeNote');
+ if(el)el.style.display=isCounselorTestMode()?'block':'none';
+}
 function importCounselorRef(){
  const p=new URLSearchParams(location.search);
  const ref=normalizeCounselorCode(p.get('ref'));
@@ -656,7 +690,7 @@ function showMyCounselorLink(code){
 }
 function activateCounselorCode(){
  const code=normalizeCounselorCode($('myCounselorCodeInput')?.value||'');
- if(!code){alert('센터에서 발급받은 카운셀러 코드를 입력해 주세요.');return}
+ if(!code){alert('아직 카운셀러 코드를 입력하지 않았습니다. 센터에서 발급받은 코드를 입력해 주세요. 테스트 중이라면 C001을 입력하시면 됩니다.');return}
  if(code.length<2){alert('카운셀러 코드를 다시 확인해 주세요.');return}
  storeSet(MY_COUNSELOR_CODE_KEY,code);
  showMyCounselorLink(code);
@@ -804,7 +838,7 @@ function refreshStepNav(){
  });
 }
 function updateBottomNav(id){const nav=$('bottomNav');if(!nav)return;const hide=id==='home'||id==='basic'||id==='question'||id==='counselorApply'||id==='counselorCode';nav.classList.toggle('hidden',hide);nav.style.setProperty('display',hide?'none':'grid','important');nav.setAttribute('aria-hidden',hide?'true':'false')}
-function show(id){if(id!=='question')cancelQuestionSpeech();document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const t=$(id);if(t)t.classList.add('active');document.body.classList.toggle('home-mode',id==='home');document.body.classList.toggle('flow-mode',id==='basic'||id==='question');updateBottomNav(id);if(id==='basic'){restoreBasicDraft();updateBasicActionButton()}refreshStepNav();if(id==='history')renderHistory();if(id==='info')renderInfo();if(id==='infoDetail')renderInfoDetail();if(id==='consult')renderCounselorRef();if(id==='counselorApply')restoreCounselorApplyDraft();if(id==='counselorCode')restoreMyCounselorCode();if(id==='admin')renderAdmin();window.scrollTo(0,0)}
+function show(id){if(id!=='question')cancelQuestionSpeech();document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const t=$(id);if(t)t.classList.add('active');document.body.classList.toggle('home-mode',id==='home');document.body.classList.toggle('flow-mode',id==='basic'||id==='question');updateBottomNav(id);if(id==='basic'){restoreBasicDraft();updateBasicActionButton()}refreshStepNav();if(id==='history')renderHistory();if(id==='info')renderInfo();if(id==='infoDetail')renderInfoDetail();if(id==='consult')renderCounselorRef();if(id==='counselorApply')restoreCounselorApplyDraft();if(id==='counselorCode'){restoreMyCounselorCode();renderCounselorTestNote();}if(id==='admin')renderAdmin();window.scrollTo(0,0)}
 function hasBasic(){return !!($('age').value&&$('gender').value&&$('concern').value)}
 let questionSessionActive=false;
 let questionResumeQi=0;
