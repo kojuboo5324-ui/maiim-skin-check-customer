@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 상담후 제품연결 안정화 · V2.7.10</title>
+<title>MAIIM 피부체크 · 상담버튼 오류수정 · V2.7.11</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -577,7 +577,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
    <b>다음 단계로 가려면</b>
    <p class="mini" style="margin:7px 0 0">이름·전화번호를 입력하고, 위의 <b>필수 동의 2개</b>를 체크한 뒤 아래 버튼을 눌러 주세요. 접수 완료 화면에서 바로 제품 상세보기로 이어집니다.</p>
  </div>
- <button class="cta" id="consultSubmitBtn" onclick="submitConsult()">상담 신청하고 제품 안내로 계속 →</button>
+ <button class="cta" type="button" id="consultSubmitBtn" onclick="submitConsult()">상담 신청하고 제품 안내로 계속 →</button>
  <button class="secondary" onclick="openAiConsult()">AI 피부박사와 먼저 대화하기</button>
  <button class="secondary" onclick="goStep('result')">내 피부결과 다시 보기</button>
  <div class="home-counselor-card" style="margin-top:18px">
@@ -1166,7 +1166,7 @@ function refreshStepNav(){
  });
 }
 function updateBottomNav(id){const nav=$('bottomNav');if(!nav)return;const hide=id==='home'||id==='welcome'||id==='basic'||id==='question'||id==='counselorApply'||id==='counselorCode';nav.classList.toggle('hidden',hide);nav.style.setProperty('display',hide?'none':'grid','important');nav.setAttribute('aria-hidden',hide?'true':'false')}
-function show(id){if(id!=='question')cancelQuestionSpeech();document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const t=$(id);if(t)t.classList.add('active');document.body.classList.toggle('home-mode',id==='home');document.body.classList.toggle('flow-mode',id==='basic'||id==='question');updateBottomNav(id);if(id==='welcome')renderWelcomeHeadline();if(id==='basic'){restoreBasicDraft();updateBasicActionButton();renderPersonalHello();syncWelcomeName()}if(id==='consult')renderConsultHours();refreshStepNav();if(id==='history')renderHistory();if(id==='info')renderInfo();if(id==='infoDetail')renderInfoDetail();if(id==='consult')renderCounselorRef();if(id==='productGuide')renderProductGuide();if(id==='complete'){const lc=storeGet('latestConsultation');if(lc)renderCompleteProductBridge(lc)}if(id==='counselorApply')restoreCounselorApplyDraft();if(id==='counselorCode'){restoreMyCounselorCode();renderCounselorTestNote();}if(id==='admin')renderAdmin();window.scrollTo(0,0)}
+function show(id){if(id!=='question')cancelQuestionSpeech();document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const t=$(id);if(t)t.classList.add('active');document.body.classList.toggle('home-mode',id==='home');document.body.classList.toggle('flow-mode',id==='basic'||id==='question');updateBottomNav(id);if(id==='welcome')renderWelcomeHeadline();if(id==='basic'){restoreBasicDraft();updateBasicActionButton();renderPersonalHello();syncWelcomeName()}if(id==='consult')renderConsultHours();refreshStepNav();if(id==='history')renderHistory();if(id==='info')renderInfo();if(id==='infoDetail')renderInfoDetail();if(id==='consult')renderCounselorRef();if(id==='productGuide')renderProductGuide();if(id==='complete'){const lc=storeGet('latestConsultation');if(lc){try{renderCompleteProductBridge(lc)}catch(err){console.error('product bridge error',err)}}}if(id==='counselorApply')restoreCounselorApplyDraft();if(id==='counselorCode'){restoreMyCounselorCode();renderCounselorTestNote();}if(id==='admin')renderAdmin();window.scrollTo(0,0)}
 function hasBasic(){return !!($('age').value&&$('gender').value&&$('concern').value)}
 let questionSessionActive=false;
 let questionResumeQi=0;
@@ -1257,8 +1257,8 @@ async function submitConsult(){
  // 먼저 기기에 저장하고 즉시 다음 화면을 보여준다.
  // 중앙저장은 느리거나 설정이 오래되어도 화면 진행을 막지 않도록 백그라운드 처리한다.
  $('completeText').textContent=$('consultMethod').value+' 상담 신청이 이 기기에 저장되었습니다.';
- renderCompleteProductBridge(item);
  show('complete');
+ try{renderCompleteProductBridge(item)}catch(err){console.error('product bridge error',err)}
 
  sendGoogle(item).then(sent=>{
    if(sent&&$('completeText')){
@@ -1491,6 +1491,31 @@ function renderProductGuide(){
  if(reason)reason.textContent=plan?.reason||'현재 피부결과의 관리 1순위를 기준으로 상담에서 필요한 기초관리와 제품을 함께 확인합니다.';
  renderProductCards();
 }
+
+function renderCompleteProductBridge(item){
+ const box=$('completeProductBridge');
+ const text=$('completeProductText');
+ if(!box)return;
+
+ const plan=getProductPlan();
+ const wants=item?.productGuideWanted!==false;
+
+ if(!wants){
+   box.style.display='none';
+   return;
+ }
+
+ box.style.display='block';
+
+ if(!plan||!plan.products?.length){
+   if(text)text.textContent='상담 신청은 완료되었습니다. 피부체크 결과가 있으면 결과에 맞는 제품 안내를 이어서 확인할 수 있습니다.';
+   return;
+ }
+
+ const names=plan.products.map(p=>p.name).join(' · ');
+ if(text)text.textContent='현재 피부결과를 기준으로 '+names+' 등을 우선 확인합니다. 아래 버튼에서 제품별 공식 상세정보를 볼 수 있습니다.';
+}
+
 function openProductGuide(){
  const latestConsult=storeGet('latestConsultation');
  if(!latestConsult){
