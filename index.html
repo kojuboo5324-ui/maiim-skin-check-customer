@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 카운셀러 중앙상태 동기화 · V2.7.16.1</title>
+<title>MAIIM 피부체크 · 전화번호 자동하이픈 · V2.7.16.2</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -720,7 +720,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  </div>
  <div id="consultContext" class="card soft"></div>
  <label>이름 또는 닉네임</label><input id="consultName" autocomplete="name">
- <label>전화번호</label><input id="consultPhone" inputmode="tel" autocomplete="tel">
+ <label>전화번호</label><input id="consultPhone" inputmode="tel" autocomplete="tel" maxlength="13" placeholder="010-0000-0000">
  <label>상담방법</label>
  <div class="method-grid" id="methodGrid">
   <button class="method-card on" data-method="전화" onclick="selectMethod('전화')"><b>☎ 전화</b><span>지금 바로 전화하거나 상담을 신청합니다.</span></button>
@@ -900,7 +900,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
        <input id="caName" autocomplete="name" placeholder="예: 김OO">
 
        <label>연락처</label>
-       <input id="caPhone" inputmode="tel" autocomplete="tel" placeholder="010-0000-0000">
+       <input id="caPhone" inputmode="tel" autocomplete="tel" maxlength="13" placeholder="010-0000-0000">
 
        <label>가장 관심 있는 활동</label>
        <select id="caInterest">
@@ -1284,6 +1284,33 @@ let counselorApplyReturnView='home';
 const COUNSELOR_APPLY_DRAFT_KEY='counselorApplyDraftV264';
 const MY_COUNSELOR_CODE_KEY='myCounselorCodeV264';
 
+/* V2.7.16.2 전화번호 숫자 입력 시 자동 하이픈 */
+function formatKoreanPhone(v){
+ const digits=String(v||'').replace(/\D/g,'');
+ if(!digits)return '';
+ if(digits.startsWith('02')){
+   const d=digits.slice(0,10);
+   if(d.length<=2)return d;
+   if(d.length<=5)return d.slice(0,2)+'-'+d.slice(2);
+   if(d.length<=9)return d.slice(0,2)+'-'+d.slice(2,d.length-4)+'-'+d.slice(-4);
+   return d.slice(0,2)+'-'+d.slice(2,6)+'-'+d.slice(6,10);
+ }
+ const d=digits.slice(0,11);
+ if(d.length<=3)return d;
+ if(d.length<=7)return d.slice(0,3)+'-'+d.slice(3);
+ if(d.length===10)return d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6);
+ return d.slice(0,3)+'-'+d.slice(3,7)+'-'+d.slice(7);
+}
+function bindPhoneAutoFormat(){
+ ['consultPhone','caPhone'].forEach(id=>{
+   const el=$(id);if(!el)return;
+   const apply=()=>{el.value=formatKoreanPhone(el.value)};
+   el.addEventListener('input',apply);
+   el.addEventListener('blur',apply);
+   apply();
+ });
+}
+
 function getCounselorApplyDraft(){
  return{
    name:$('caName')?.value||'',
@@ -1296,7 +1323,7 @@ function saveCounselorApplyDraft(){storeSet(COUNSELOR_APPLY_DRAFT_KEY,getCounsel
 function restoreCounselorApplyDraft(){
  const d=storeGet(COUNSELOR_APPLY_DRAFT_KEY)||{};
  if($('caName')&&d.name!=null)$('caName').value=d.name;
- if($('caPhone')&&d.phone!=null)$('caPhone').value=d.phone;
+ if($('caPhone')&&d.phone!=null)$('caPhone').value=formatKoreanPhone(d.phone);
  if($('caInterest')&&d.interest)$('caInterest').value=d.interest;
  if($('caPrivacy'))$('caPrivacy').checked=!!d.privacy;
 }
@@ -1317,7 +1344,7 @@ function openCounselorApply(){
 
  const saved=storeGet(COUNSELOR_APPLY_DRAFT_KEY)||{};
  const n=$('consultName')?.value?.trim()||'';
- const p=$('consultPhone')?.value?.trim()||'';
+ const p=formatKoreanPhone($('consultPhone')?.value||'');
  if(n&&!saved.name){$('caName').value=n;saveCounselorApplyDraft()}
  if(p&&!saved.phone){$('caPhone').value=p;saveCounselorApplyDraft()}
  show('counselorApply');
@@ -1438,7 +1465,8 @@ async function copyIssuedCounselorLink(id){
 
 function submitCounselorApply(){
  const name=String($('caName')?.value||'').trim();
- const phone=String($('caPhone')?.value||'').trim();
+ const phone=formatKoreanPhone($('caPhone')?.value||'');
+ if($('caPhone'))$('caPhone').value=phone;
  const interest=String($('caInterest')?.value||'카운셀러 활동 전체 안내');
  const privacy=!!$('caPrivacy')?.checked;
 
@@ -1760,7 +1788,8 @@ function mapHref(provider){const q=encodeURIComponent(CENTER_CONTACT.address);re
 function renderDirectContact(){const box=$('directContactPanel');if(!box)return;const method=$('consultMethod').value||'전화';if(method==='전화'){box.innerHTML='<b>지금 바로 전화하기</b><p class="mini">스마트폰에서는 아래 번호를 누르면 전화 화면이 열립니다.</p><a class="cta" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="'+telHref(CENTER_CONTACT.mobile)+'">📱 휴대전화 010-4923-9989</a><a class="secondary" style="display:block;text-align:center;text-decoration:none;margin-top:8px" href="'+telHref(CENTER_CONTACT.landline)+'">☎ 일반전화 041-622-4646</a>';return}if(method==='카카오톡'){const k=getKakaoConfig();box.innerHTML='<b>꿀광피부 카카오 1:1 상담</b><p class="mini">아래 버튼을 누르면 카카오톡 꿀광피부 채널의 1:1 채팅으로 바로 이동합니다.</p><a class="cta" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="'+escapeHtml(k.url)+'" target="_blank" rel="noopener">💬 카카오 상담 시작하기 →</a><p class="mini" style="margin-top:10px">검색용 아이디: <b>'+KAKAO_ID+'</b></p>';return}if(method==='센터 방문'){box.innerHTML='<b>천안 신부센터 방문</b><p style="margin:8px 0 4px">'+escapeHtml(CENTER_CONTACT.address)+'</p><p class="mini">지도에서 위치를 확인한 뒤 방문상담을 신청해 주세요.</p><a class="cta" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="'+mapHref('naver')+'" target="_blank" rel="noopener">🗺 네이버지도에서 보기 →</a><a class="secondary" style="display:block;text-align:center;text-decoration:none;margin-top:8px" href="'+mapHref('kakao')+'" target="_blank" rel="noopener">카카오맵에서 보기</a>';return}box.innerHTML='<b>AI 후 사람상담</b><p class="mini">AI 척척 박사 음성상담 서버 연결이 완료되면 AI 상담 내용 요약을 참고해 전화·카카오·센터 방문 상담으로 자연스럽게 이어지도록 연결합니다. 현재는 사람 상담 신청을 먼저 접수할 수 있습니다.</p>'}
 async function sendGoogle(item){const c=getGoogleConfig();if(!c.url||!c.key)return false;try{await fetch(c.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:c.key,action:'consultation',data:item})});return true}catch{return false}}
 async function submitConsult(){
- const name=$('consultName').value.trim(),phone=$('consultPhone').value.trim();
+ const name=$('consultName').value.trim(),phone=formatKoreanPhone($('consultPhone').value);
+ if($('consultPhone'))$('consultPhone').value=phone;
  if(!name){alert('이름 또는 닉네임을 입력해 주세요.');$('consultName').focus();return}
  if(!phone){alert('전화번호를 입력해 주세요.');$('consultPhone').focus();return}
 
@@ -2228,7 +2257,7 @@ function endAiCall(){try{dc?.close()}catch{}try{pc?.close()}catch{}try{localStre
 async function sendAiText(){const input=$('aiText'),text=input.value.trim();if(!text)return;input.value='';addBubble('user',text);if(dc&&dc.readyState==='open'){dc.send(JSON.stringify({type:'conversation.item.create',item:{type:'message',role:'user',content:[{type:'input_text',text}]}}));dc.send(JSON.stringify({type:'response.create'}));return}const cfg=getAiConfig();if(!cfg.url||!cfg.key){addBubble('system','AI 상담 서버가 아직 연결되지 않았습니다.');return}try{setCallStatus('답변 작성 중…',true);const res=await fetch(cfg.url.replace(/\/$/,'')+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json','X-MAIIM-CLIENT':cfg.key},body:JSON.stringify({message:text,skinContext:buildSkinContext(),history:getTextHistory()})});const data=await res.json();if(!res.ok)throw new Error(data.error||'AI 오류');addBubble('ai',data.answer||'답변을 받지 못했습니다.');saveAiSummary();setCallStatus('글자 상담 가능',false)}catch(err){console.error(err);addBubble('system','AI 글자상담 연결에 실패했습니다.');setCallStatus('연결 오류',false)}}
 function getTextHistory(){return Array.from(document.querySelectorAll('#aiChat .bubble')).filter(b=>b.classList.contains('user')||b.classList.contains('ai')).slice(-8).map(b=>({role:b.classList.contains('user')?'user':'assistant',text:b.textContent}))}
 function saveAiSummary(){const hist=getTextHistory();storeSet('aiTranscriptSummary',hist.slice(-6))}
-async function init(){if($('welcomeName'))$('welcomeName').value=getWelcomeName();renderWelcomeHeadline();importConfigFromQuery();importCounselorStatusUrlFromQuery();await importCounselorRef();bindBasicAutosave();bindCounselorApplyAutosave();restoreBasicDraft();restoreCounselorApplyDraft();renderInfo();show('home');const p=new URLSearchParams(location.search);if(p.get('view')==='ai'){const demo=storeGet('latestResult');if(demo){currentResult=demo.result;renderAiChips();show('ai')}}}
+async function init(){if($('welcomeName'))$('welcomeName').value=getWelcomeName();renderWelcomeHeadline();importConfigFromQuery();importCounselorStatusUrlFromQuery();await importCounselorRef();bindBasicAutosave();restoreBasicDraft();restoreCounselorApplyDraft();bindPhoneAutoFormat();bindCounselorApplyAutosave();renderInfo();show('home');const p=new URLSearchParams(location.search);if(p.get('view')==='ai'){const demo=storeGet('latestResult');if(demo){currentResult=demo.result;renderAiChips();show('ai')}}}
 document.addEventListener('DOMContentLoaded',init);window.addEventListener('beforeunload',endAiCall);
 </script>
 </body>
