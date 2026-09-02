@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 문항번호 표시 · V2.7.8</title>
+<title>MAIIM 피부체크 · 재확인 1번 시작 · V2.7.9</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -1128,7 +1128,7 @@ function refreshStepNav(){
   btns.forEach(b=>{b.classList.remove('jump','locked');b.onclick=null;b.removeAttribute('aria-disabled');b.title=''});
   const basicBtn=btns[0],skinBtn=btns[1],resultBtn=btns[2],consultBtn=btns[3];
   basicBtn.textContent=inQuestion?'1 기본정보 ✎':'1 기본정보';
-  skinBtn.textContent=canReview?'2 피부체크 ↩':(inBasic&&questionSessionActive?'2 피부체크 →':'2 피부체크');
+  skinBtn.textContent=canReview?'2 피부체크 · 1번부터 ↩':(inBasic&&questionSessionActive?'2 피부체크 →':'2 피부체크');
   if(inQuestion){
    basicBtn.classList.add('jump');
    basicBtn.onclick=()=>openBasicFromQuestion();
@@ -1145,7 +1145,7 @@ function refreshStepNav(){
    basicBtn.title='기본정보 확인·수정';
    skinBtn.classList.add('jump');
    skinBtn.onclick=()=>editSkinCheckAnswers();
-   skinBtn.title='마지막 질문으로 돌아가 답변 다시 보기';
+   skinBtn.title='기존 답변을 유지한 채 1번 질문부터 다시 보기';
   }
   if(hasResult){
    resultBtn.classList.add('jump');
@@ -1188,7 +1188,7 @@ function norm(indices,max){return Math.round(indices.reduce((a,i)=>a+(answers[i]
 function calculate(){questionSessionActive=false;questionResumeQi=0;const s={hydration:norm([0,1,2],9),pores:norm([3,4],6),sensitive:norm([5,6],6),elasticity:norm([7,8],6),tone:norm([9,10],6),lifestyle:norm([11,12],6)};const order=['hydration','pores','sensitive','elasticity','tone'].sort((a,b)=>s[b]-s[a]);const p=order[0],q=order[1],healthy=order.every(k=>s[k]<=33);const type=healthy?'healthy':(s[p]>=50&&s[q]>=50&&Math.abs(s[p]-s[q])<=15?'composite':p);const concern=s.hydration*.25+s.pores*.15+s.sensitive*.20+s.elasticity*.25+s.tone*.15;const condition=Math.max(0,Math.min(100,Math.round(100-concern*.55-(s.lifestyle>66?5:s.lifestyle>32?2:0))));currentResult={scores:s,primary:p,secondary:q,type,condition};const item={id:'R-'+Date.now(),date:new Date().toISOString(),result:currentResult,answers:[...answers],basic:{age:$('age').value,gender:$('gender').value,concern:$('concern').value,maiim:$('maiim').value,currentProduct:$('currentProduct').value,pastProduct:$('pastProduct').value}};storeSet('latestResult',item);const h=storeGet('history')||[];h.unshift(item);storeSet('history',h.slice(0,10));renderResult();show('result')}
 function renderResult(){if(!currentResult)return;const t=TYPE[currentResult.type];$('resultTitle').textContent=t[0];$('resultSub').textContent=t[1];$('conditionScore').textContent=currentResult.condition;$('scoreRing').style.setProperty('--scoredeg',(currentResult.condition*3.6)+'deg');$('priorityText').innerHTML='<b>관리 1순위 · '+LABEL[currentResult.primary]+'</b><br>관리 2순위 · '+LABEL[currentResult.secondary];$('signalText').textContent=t[2];$('causeText').textContent=t[3];$('positiveText').textContent=t[4];renderResultProductPreview()}
 function restoreLatestBasicForRecheck(){restoreBasicDraft();const x=storeGet('latestResult');if(x?.basic){['age','gender','concern','maiim','currentProduct','pastProduct'].forEach(id=>{const el=$(id);if(el&&x.basic[id]!=null&&!el.value)el.value=x.basic[id]});applyMaiimVisibility()}return x}
-function editSkinCheckAnswers(){const x=restoreLatestBasicForRecheck();if(!hasBasic()){alert('먼저 기본정보를 확인해 주세요.');show('basic');return}if(x?.answers?.length===13){answers=[...x.answers];qi=12}else{answers=new Array(13);qi=0}questionSessionActive=true;questionResumeQi=qi;show('question');renderQuestion()}
+function editSkinCheckAnswers(){const x=restoreLatestBasicForRecheck();if(!hasBasic()){alert('먼저 기본정보를 확인해 주세요.');show('basic');return}if(x?.answers?.length===13){answers=[...x.answers]}else{answers=new Array(13)}qi=0;questionSessionActive=true;questionResumeQi=0;show('question');renderQuestion()}
 function restartSkinCheck(){restoreLatestBasicForRecheck();if(!hasBasic()){alert('먼저 기본정보를 확인해 주세요.');show('basic');return}answers=new Array(13);qi=0;questionSessionActive=true;questionResumeQi=0;show('question');renderQuestion()}
 function goStep(step){if(step==='question'){if(!hasBasic()){alert('먼저 기본정보를 입력해 주세요.');show('basic')}else{show('question');renderQuestion()}return}if(step==='result'){const x=storeGet('latestResult');if(!x){alert('아직 피부체크 결과가 없습니다.');return}currentResult=x.result;answers=x.answers||[];renderResult();show('result');return}if(step==='consult')openConsult()}
 const CENTER_CONTACT={landline:'041-622-4646',mobile:'010-4923-9989',address:'천안시 동남구 신부 10길 8 남양빌딩 304호'};
