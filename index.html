@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 이름입력 명확화 · V2.7.6</title>
+<title>MAIIM 피부체크 · 결과별 제품연결 · V2.7.7</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -506,21 +506,10 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  <div class="ai-highlight"><div class="eyebrow" style="color:#cdeadd">AI VOICE CONSULTATION</div><h3>결과가 궁금하면 바로 물어보세요.</h3><p>AI 피부박사가 방금 나온 피부결과를 알고 있습니다. 전화하듯 말하면 음성으로 답하고, 이어서 다시 질문할 수 있습니다.</p><button class="ai-start" onclick="openAiConsult()">🎙 AI 피부박사와 음성상담 시작 →</button></div>
  <div class="product-preview-wrap">
    <span class="ref-badge">상담 후 안내 예정 제품</span>
-   <h3 class="product-preview-title">내 피부결과와 연결해 볼 기초 제품</h3>
-   <p class="product-preview-sub">지금은 제품 이름만 먼저 보여드립니다. 상담에서 현재 사용 제품과 피부 반응을 확인한 뒤 상세 설명을 확인할 수 있습니다.</p>
+   <h3 class="product-preview-title">내 피부결과에 따라 달라지는 제품 안내</h3>
+   <p class="product-preview-sub">관리 1순위와 성별 정보를 함께 참고해 제품이 달라집니다. 지금은 제품 이름을 먼저 보여드리고, 상담 후 공식 상세정보로 연결합니다.</p>
 
-   <div class="product-preview-grid">
-     <div class="product-preview-item">
-       <span class="label">DAY · 낮 관리</span>
-       <h4>라헬 데이케어 수분젤</h4>
-       <p>낮 시간 기초 보습 루틴에서 상담 후 확인할 수 있는 제품입니다.</p>
-     </div>
-     <div class="product-preview-item">
-       <span class="label">NIGHT · 저녁 관리</span>
-       <h4>라헬 나이트케어 보습젤</h4>
-       <p>저녁 시간 기초 보습 루틴에서 상담 후 확인할 수 있는 제품입니다.</p>
-     </div>
-   </div>
+   <div class="product-preview-grid" id="resultProductPreviewGrid"></div>
 
    <div class="product-lock-note">🔒 제품 이미지·상세설명은 상담 신청 후 확인할 수 있습니다.</div>
  </div>
@@ -635,29 +624,14 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  </div>
 
  <div class="card">
-   <h3>상담에서 먼저 확인할 기초 제품</h3>
-   <p class="mini">현재 앱의 1차 제품 연결은 라헬 데이케어 수분젤·라헬 나이트케어 보습젤을 중심으로 구성했습니다. 최종 선택은 상담에서 피부 반응과 현재 사용 제품을 확인한 뒤 안내합니다.</p>
-   <div class="product-pair">
-     <div class="product-card">
-       <span class="time">DAY · 낮 관리</span>
-       <h3>라헬 데이케어 수분젤</h3>
-       <p>낮 시간의 기초 보습 루틴에서 상담 시 먼저 확인해 볼 제품입니다. 사용량과 함께 사용할 제품은 피부상태에 따라 조정합니다.</p>
-       <a class="product-detail-btn" href="https://www.maiim.com/makeup/productView.do?seq=140" target="_blank" rel="noopener noreferrer">제품 이미지·상세설명 보기 →</a>
-       <div class="product-detail-note">마임 공식 제품 페이지가 새 화면으로 열립니다.</div>
-     </div>
-     <div class="product-card">
-       <span class="time">NIGHT · 저녁 관리</span>
-       <h3>라헬 나이트케어 보습젤</h3>
-       <p>저녁 기초 보습 루틴에서 상담 시 확인해 볼 제품입니다. 피부가 예민한 날에는 새 제품을 한꺼번에 늘리지 않도록 안내합니다.</p>
-       <a class="product-detail-btn" href="https://m.maiim.com/makeup/productView.do?seq=141" target="_blank" rel="noopener noreferrer">제품 이미지·상세설명 보기 →</a>
-       <div class="product-detail-note">마임 공식 제품 페이지가 새 화면으로 열립니다.</div>
-     </div>
-   </div>
+   <h3 id="productGuideHeading">상담에서 먼저 확인할 제품</h3>
+   <p class="mini" id="productGuideIntro">피부결과와 기본정보를 바탕으로 우선 확인할 제품을 정리합니다.</p>
+   <div class="product-pair" id="productGuideCards"></div>
  </div>
 
  <div class="product-caution">
    <b>왜 바로 구매 버튼을 두지 않았나요?</b><br>
-   피부결과만 보고 제품을 단정하기보다 상담에서 현재 사용 중인 제품, 과거 불편 반응, 생활습관을 함께 확인한 뒤 안내하기 위해서입니다.<br><br>
+   피부결과에 따라 우선 확인할 제품은 달라지지만, 상담에서 현재 사용 중인 제품, 과거 불편 반응, 생활습관을 함께 확인한 뒤 최종 안내하기 위해서입니다.<br><br>
    <b>제품 상세보기는 공식 정보 확인용입니다.</b> 제품 상담과 구입 안내는 이 앱의 담당 카운셀러·센터 연결을 이용해 주세요.
  </div>
 
@@ -1212,7 +1186,7 @@ function prevQuestion(){if(qi>0){qi--;questionResumeQi=qi;renderQuestion()}}
 function nextQuestion(){if(answerTransitioning)return;if(answers[qi]===undefined||answers[qi]===null){alert('현재 질문의 답을 먼저 선택해 주세요.');return}cancelQuestionSpeech();if(qi<12){qi++;questionResumeQi=qi;renderQuestion()}else calculate()}
 function norm(indices,max){return Math.round(indices.reduce((a,i)=>a+(answers[i]||0),0)/max*100)}
 function calculate(){questionSessionActive=false;questionResumeQi=0;const s={hydration:norm([0,1,2],9),pores:norm([3,4],6),sensitive:norm([5,6],6),elasticity:norm([7,8],6),tone:norm([9,10],6),lifestyle:norm([11,12],6)};const order=['hydration','pores','sensitive','elasticity','tone'].sort((a,b)=>s[b]-s[a]);const p=order[0],q=order[1],healthy=order.every(k=>s[k]<=33);const type=healthy?'healthy':(s[p]>=50&&s[q]>=50&&Math.abs(s[p]-s[q])<=15?'composite':p);const concern=s.hydration*.25+s.pores*.15+s.sensitive*.20+s.elasticity*.25+s.tone*.15;const condition=Math.max(0,Math.min(100,Math.round(100-concern*.55-(s.lifestyle>66?5:s.lifestyle>32?2:0))));currentResult={scores:s,primary:p,secondary:q,type,condition};const item={id:'R-'+Date.now(),date:new Date().toISOString(),result:currentResult,answers:[...answers],basic:{age:$('age').value,gender:$('gender').value,concern:$('concern').value,maiim:$('maiim').value,currentProduct:$('currentProduct').value,pastProduct:$('pastProduct').value}};storeSet('latestResult',item);const h=storeGet('history')||[];h.unshift(item);storeSet('history',h.slice(0,10));renderResult();show('result')}
-function renderResult(){if(!currentResult)return;const t=TYPE[currentResult.type];$('resultTitle').textContent=t[0];$('resultSub').textContent=t[1];$('conditionScore').textContent=currentResult.condition;$('scoreRing').style.setProperty('--scoredeg',(currentResult.condition*3.6)+'deg');$('priorityText').innerHTML='<b>관리 1순위 · '+LABEL[currentResult.primary]+'</b><br>관리 2순위 · '+LABEL[currentResult.secondary];$('signalText').textContent=t[2];$('causeText').textContent=t[3];$('positiveText').textContent=t[4]}
+function renderResult(){if(!currentResult)return;const t=TYPE[currentResult.type];$('resultTitle').textContent=t[0];$('resultSub').textContent=t[1];$('conditionScore').textContent=currentResult.condition;$('scoreRing').style.setProperty('--scoredeg',(currentResult.condition*3.6)+'deg');$('priorityText').innerHTML='<b>관리 1순위 · '+LABEL[currentResult.primary]+'</b><br>관리 2순위 · '+LABEL[currentResult.secondary];$('signalText').textContent=t[2];$('causeText').textContent=t[3];$('positiveText').textContent=t[4];renderResultProductPreview()}
 function restoreLatestBasicForRecheck(){restoreBasicDraft();const x=storeGet('latestResult');if(x?.basic){['age','gender','concern','maiim','currentProduct','pastProduct'].forEach(id=>{const el=$(id);if(el&&x.basic[id]!=null&&!el.value)el.value=x.basic[id]});applyMaiimVisibility()}return x}
 function editSkinCheckAnswers(){const x=restoreLatestBasicForRecheck();if(!hasBasic()){alert('먼저 기본정보를 확인해 주세요.');show('basic');return}if(x?.answers?.length===13){answers=[...x.answers];qi=12}else{answers=new Array(13);qi=0}questionSessionActive=true;questionResumeQi=qi;show('question');renderQuestion()}
 function restartSkinCheck(){restoreLatestBasicForRecheck();if(!hasBasic()){alert('먼저 기본정보를 확인해 주세요.');show('basic');return}answers=new Array(13);qi=0;questionSessionActive=true;questionResumeQi=0;show('question');renderQuestion()}
@@ -1259,6 +1233,205 @@ function renderCompleteProductBridge(item){
    ? '저장된 피부결과와 상담 내용을 바탕으로, 상담에서 우선 확인할 제품 안내 화면을 볼 수 있습니다.'
    : '피부체크 결과가 없는 상담입니다. 제품 선택은 담당자 상담에서 먼저 확인해 주세요.';
 }
+
+/* V2.7.7 피부결과별 제품 연결
+   제품 분류는 MAIIM 공식 제품정보의 보습/수분·진정·균형·미백·주름개선·탄력 등의 표기를 기준으로 구성.
+   피부체크는 진단이 아니며 최종 제품 선택은 상담에서 현재 사용제품과 피부반응을 함께 확인한다. */
+const PRODUCT_CATALOG={
+ dayGel:{
+   name:'라헬 데이케어 수분젤',
+   badge:'보습·수분 · 진정',
+   role:'낮 수분·진정 관리',
+   desc:'낮 시간에 수분을 보충하고 편안한 피부 컨디션을 유지하는 기초 관리 제품으로 확인합니다.',
+   url:'https://www.maiim.com/makeup/productView.do?seq=140'
+ },
+ nightGel:{
+   name:'라헬 나이트케어 보습젤',
+   badge:'보습·수분 · 진정',
+   role:'저녁 집중 보습 관리',
+   desc:'저녁 시간 수분과 보습을 보완하는 기초 관리 제품으로 확인합니다.',
+   url:'https://www.maiim.com/makeup/productView.do?seq=141'
+ },
+ boostSkin:{
+   name:'라헬 모이스트 부스팅 스킨',
+   badge:'보습·수분 · 미백 · 진정',
+   role:'피부결·모공 정돈 관리',
+   desc:'거친 피부결과 모공이 신경 쓰일 때 기초 첫 단계의 균형 관리 제품으로 확인합니다.',
+   url:'https://www.maiim.com/makeup/productView.do?seq=135'
+ },
+ balanceLotion:{
+   name:'라헬 모이스트 밸런싱 로션',
+   badge:'보습·수분 · 균형 · 미백',
+   role:'유·수분 균형 관리',
+   desc:'유분과 수분의 균형을 함께 살피는 데 적합한 기초 로션으로 확인합니다.',
+   url:'https://www.maiim.com/makeup/productView.do?seq=136'
+ },
+ aloePack:{
+   name:'라헬 알로에 내추럴팩',
+   badge:'보습·수분 · 균형 · 진정',
+   role:'진정·보습 스페셜 관리',
+   desc:'피부가 쉽게 불편해지거나 지쳐 보일 때 보습과 진정 중심의 스페셜 관리로 확인합니다.',
+   url:'https://www.maiim.com/makeup/productView.do?seq=191'
+ },
+ antiAging:{
+   name:'비에타 안티에이징 에센스',
+   badge:'보습·수분 · 주름개선 · 탄력',
+   role:'탄력·주름 집중 관리',
+   desc:'탄력 저하와 주름 고민이 우선일 때 집중 관리 에센스로 확인합니다.',
+   url:'https://www.maiim.com/makeup/productView.do?seq=97'
+ },
+ collagenAmpoule:{
+   name:'비에타 비타 콜라겐 인텐시브 앰플',
+   badge:'미백 · 주름개선 · 탄력',
+   role:'탄력·생기 집중 관리',
+   desc:'탄력과 피부톤 고민이 함께 보일 때 집중 안티에이징 관리 제품으로 확인합니다.',
+   url:'https://www.maiim.com/makeup/productView.do?seq=105'
+ },
+ whiteNight:{
+   name:'비에타 화이트케어 나이트 세럼',
+   badge:'보습·수분 · 미백 · 주름개선 · 탄력',
+   role:'피부톤·나이트 집중 관리',
+   desc:'칙칙함과 피부톤 차이가 신경 쓰일 때 저녁 집중 관리 제품으로 확인합니다.',
+   url:'https://www.maiim.com/makeup/productView.do?seq=108'
+ },
+ menToner:{
+   name:'비에타 포맨 클리어런스 토너',
+   badge:'남성 · 보습·수분 · 진정',
+   role:'남성 피부결·모공 정돈',
+   desc:'면도와 유분으로 거칠어지기 쉬운 남성 피부의 기초 정돈 제품으로 확인합니다.',
+   url:'https://www.maiim.com/makeup/productView.do?seq=131'
+ },
+ menEmulsion:{
+   name:'비에타 포맨 리차징 에멀젼',
+   badge:'남성 · 보습·수분 · 진정',
+   role:'남성 보습·진정 관리',
+   desc:'건조하거나 자극받기 쉬운 남성 피부의 산뜻한 보습 관리 제품으로 확인합니다.',
+   url:'https://www.maiim.com/makeup/productView.do?seq=132'
+ },
+ menCollagen:{
+   name:'비에타 포맨 콜라겐 에센스 젤',
+   badge:'남성 · 보습·수분 · 탄력',
+   role:'남성 수분·탄력 집중 관리',
+   desc:'수분과 탄력, 칙칙함이 함께 신경 쓰이는 남성 피부의 집중 관리 제품으로 확인합니다.',
+   url:'https://www.maiim.com/makeup/productView.do?seq=391'
+ }
+};
+
+const PRODUCT_MAP_GENERAL={
+ hydration:['dayGel','nightGel'],
+ pores:['boostSkin','balanceLotion'],
+ sensitive:['dayGel','aloePack'],
+ elasticity:['antiAging','collagenAmpoule'],
+ tone:['whiteNight','collagenAmpoule'],
+ healthy:['balanceLotion','dayGel']
+};
+
+const PRODUCT_MAP_MEN={
+ hydration:['menEmulsion','menCollagen'],
+ pores:['menToner','menEmulsion'],
+ sensitive:['menEmulsion','menToner'],
+ elasticity:['menCollagen','menEmulsion'],
+ tone:['menCollagen','menToner'],
+ healthy:['menToner','menEmulsion']
+};
+
+const PRODUCT_REASON={
+ hydration:'수분·보습 신호가 가장 높게 나타나 낮과 저녁의 보습 루틴을 우선 확인합니다.',
+ pores:'피지·모공 신호가 가장 높게 나타나 과도한 유분 제거보다 피부결 정돈과 유·수분 균형을 우선 확인합니다.',
+ sensitive:'민감 신호가 가장 높게 나타나 제품 수를 늘리기보다 보습·진정 중심의 단순한 루틴을 우선 확인합니다.',
+ elasticity:'탄력·주름 신호가 가장 높게 나타나 보습을 기본으로 탄력과 주름 관리 제품을 우선 확인합니다.',
+ tone:'피부톤 신호가 가장 높게 나타나 자외선 관리와 함께 피부톤·생기 관리 제품을 우선 확인합니다.',
+ healthy:'현재 큰 치우침이 적어 강한 집중관리보다 기본적인 유·수분 균형 유지 제품을 우선 확인합니다.'
+};
+
+function latestSkinRecord(){return storeGet('latestResult')||null}
+
+function productKeysForResult(record){
+ const r=record?.result;
+ if(!r)return [];
+ const isMen=record?.basic?.gender==='남성';
+ const map=isMen?PRODUCT_MAP_MEN:PRODUCT_MAP_GENERAL;
+
+ if(r.type==='healthy')return [...map.healthy];
+
+ if(r.type==='composite'){
+   const keys=[];
+   const p1=(map[r.primary]||[])[0];
+   const s1=(map[r.secondary]||[])[0];
+   [p1,s1,...(map[r.primary]||[]),...(map[r.secondary]||[])].forEach(k=>{
+     if(k&&!keys.includes(k)&&keys.length<2)keys.push(k);
+   });
+   return keys;
+ }
+ return [...(map[r.primary]||map.healthy)].slice(0,2);
+}
+
+function getProductPlan(){
+ const record=latestSkinRecord();
+ if(!record?.result)return null;
+ const keys=productKeysForResult(record);
+ const products=keys.map(k=>PRODUCT_CATALOG[k]).filter(Boolean);
+ const r=record.result;
+ const isMen=record?.basic?.gender==='남성';
+ const reason=r.type==='composite'
+   ? '두 가지 관리 신호가 함께 높게 나타나 관리 1순위와 2순위에서 각각 하나씩 우선 확인합니다.'
+   : (PRODUCT_REASON[r.type==='healthy'?'healthy':r.primary]||'현재 피부결과의 관리 우선순위를 기준으로 제품을 확인합니다.');
+ return{
+   products,
+   reason,
+   isMen,
+   type:TYPE[r.type]?.[0]||r.type||'피부결과',
+   primary:LABEL[r.primary]||r.primary||'',
+   secondary:LABEL[r.secondary]||r.secondary||''
+ };
+}
+
+function renderResultProductPreview(){
+ const box=$('resultProductPreviewGrid');
+ if(!box)return;
+ const plan=getProductPlan();
+ if(!plan||!plan.products.length){
+   box.innerHTML='<div class="product-preview-item"><h4>제품 안내 준비 중</h4><p>피부체크 결과를 완료하면 관리 우선순위에 맞는 제품을 보여드립니다.</p></div>';
+   return;
+ }
+ box.innerHTML=plan.products.map((p,i)=>`
+   <div class="product-preview-item">
+     <span class="label">${i===0?'1순위 연결':'함께 확인'} · ${escapeHtml(p.role)}</span>
+     <h4>${escapeHtml(p.name)}</h4>
+     <p>${escapeHtml(p.badge)}</p>
+   </div>
+ `).join('');
+}
+
+function renderProductCards(){
+ const plan=getProductPlan();
+ const box=$('productGuideCards');
+ const heading=$('productGuideHeading');
+ const intro=$('productGuideIntro');
+ if(!box)return;
+
+ if(!plan||!plan.products.length){
+   box.innerHTML='<div class="product-card"><h3>제품 안내 준비 중</h3><p>최근 피부체크 결과가 없습니다.</p></div>';
+   return;
+ }
+
+ if(heading)heading.textContent=plan.isMen?'남성 피부결과에 맞춰 먼저 확인할 제품':'피부결과에 따라 먼저 확인할 제품';
+ if(intro)intro.textContent=plan.isMen
+   ? '남성으로 선택한 기본정보와 피부 관리 1순위를 함께 반영했습니다. 최종 선택은 상담에서 조정합니다.'
+   : '피부 관리 1순위를 기준으로 제품을 연결했습니다. 복합 고민형은 1순위와 2순위를 함께 반영합니다.';
+
+ box.innerHTML=plan.products.map((p,i)=>`
+   <div class="product-card">
+     <span class="time">${i===0?'PRIMARY · 우선 확인':'SECOND · 함께 확인'}</span>
+     <h3>${escapeHtml(p.name)}</h3>
+     <p><b>${escapeHtml(p.badge)}</b></p>
+     <p>${escapeHtml(p.desc)}</p>
+     <a class="product-detail-btn" href="${escapeHtml(p.url)}" target="_blank" rel="noopener noreferrer">제품 이미지·공식 상세설명 보기 →</a>
+     <div class="product-detail-note">마임 공식 제품 페이지가 새 화면으로 열립니다.</div>
+   </div>
+ `).join('');
+}
+
 function productGuideSummary(){
  const x=storeGet('latestResult');
  if(!x?.result)return null;
@@ -1275,17 +1448,15 @@ function renderProductGuide(){
  if(chips)chips.innerHTML='';
  if(!s){
    if(reason)reason.textContent='최근 피부체크 결과가 없습니다. 먼저 피부체크를 하거나 담당자에게 현재 피부상태를 알려 주세요.';
+   if($('productGuideCards'))$('productGuideCards').innerHTML='';
    return;
  }
  [s.type,'컨디션 '+s.condition+'점','관리 1순위 '+s.primary,'관리 2순위 '+s.secondary].forEach(t=>{
    const el=document.createElement('span');el.textContent=t;chips.appendChild(el);
  });
- if(reason){
-   if(s.primary==='수분·건조') reason.textContent='현재 결과에서는 수분·보습 관리가 우선으로 나타났습니다. 상담에서는 낮·저녁 기초 보습 루틴과 현재 사용 제품을 함께 확인하는 것이 좋습니다.';
-   else if(s.primary==='민감·붉음') reason.textContent='현재 결과에서는 민감 신호를 먼저 살펴볼 필요가 있습니다. 제품을 많이 추가하기보다 현재 사용 제품과 최근 자극 반응을 확인한 뒤 단순한 루틴부터 안내하는 것이 좋습니다.';
-   else if(s.primary==='탄력·주름') reason.textContent='현재 결과에서는 탄력 관련 관리가 우선으로 나타났습니다. 상담에서는 보습과 자외선 관리 등 기본 루틴을 먼저 확인하고 필요한 제품을 연결합니다.';
-   else reason.textContent='현재 피부결과의 관리 1순위를 기준으로 상담에서 필요한 기초관리와 제품을 함께 확인합니다.';
- }
+ const plan=getProductPlan();
+ if(reason)reason.textContent=plan?.reason||'현재 피부결과의 관리 1순위를 기준으로 상담에서 필요한 기초관리와 제품을 함께 확인합니다.';
+ renderProductCards();
 }
 function openProductGuide(){
  const latestConsult=storeGet('latestConsultation');
