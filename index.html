@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 결과별 제품연결 · V2.7.7</title>
+<title>MAIIM 피부체크 · 문항번호 표시 · V2.7.8</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -1180,7 +1180,7 @@ const QUESTION_GUIDES=[
  '피부톤과 생기도 볼게요 ☀️','피부톤과 생기도 볼게요 ☀️',
  '생활습관도 함께 살펴볼게요 🌙','거의 다 왔어요! 마지막 질문이에요 ✨'
 ];
-function renderQuestion(){answerTransitioning=false;questionSessionActive=true;questionResumeQi=qi;$('qNo').textContent=qi+1;$('qText').textContent=Q[qi][0];$('progressBar').style.width=((qi+1)/13*100)+'%';const box=$('answersBox');box.innerHTML='';OPTIONS.forEach(([t,s])=>{const b=document.createElement('button');b.className='option';b.textContent=t;if(answers[qi]===s)b.classList.add('selected');b.onclick=()=>pick(s,b);box.appendChild(b)});const prev=$('prevBtn'),next=$('nextBtn');if(prev){prev.style.visibility=qi===0?'hidden':'visible';prev.disabled=qi===0}if(next){next.textContent=qi===12?'결과 보기 →':'다음 질문 →';next.disabled=answers[qi]===undefined||answers[qi]===null;next.title=next.disabled?'먼저 현재 질문에 답해 주세요':'이미 답한 다음 문항으로 이동'}const gt=$('qGuideTitle');if(gt)gt.textContent=QUESTION_GUIDES[qi]||'편하게 체크해 주세요 😊';updateQuestionVoiceBtn();refreshStepNav();if(questionVoiceOn)setTimeout(()=>speakCurrentQuestion(false),80)}
+function renderQuestion(){answerTransitioning=false;questionSessionActive=true;questionResumeQi=qi;$('qNo').textContent=(qi+1)+' / 13';$('qText').textContent=(qi+1)+'번. '+Q[qi][0];$('progressBar').style.width=((qi+1)/13*100)+'%';const box=$('answersBox');box.innerHTML='';OPTIONS.forEach(([t,s])=>{const b=document.createElement('button');b.className='option';b.textContent=t;if(answers[qi]===s)b.classList.add('selected');b.onclick=()=>pick(s,b);box.appendChild(b)});const prev=$('prevBtn'),next=$('nextBtn');if(prev){prev.style.visibility=qi===0?'hidden':'visible';prev.disabled=qi===0}if(next){next.textContent=qi===12?'결과 보기 →':'다음 질문 →';next.disabled=answers[qi]===undefined||answers[qi]===null;next.title=next.disabled?'먼저 현재 질문에 답해 주세요':'이미 답한 다음 문항으로 이동'}const gt=$('qGuideTitle');if(gt)gt.textContent=QUESTION_GUIDES[qi]||'편하게 체크해 주세요 😊';updateQuestionVoiceBtn();refreshStepNav();if(questionVoiceOn)setTimeout(()=>speakCurrentQuestion(false),80)}
 function pick(score,btn){if(answerTransitioning)return;answerTransitioning=true;cancelQuestionSpeech();answers[qi]=score;questionResumeQi=qi;const next=$('nextBtn');if(next)next.disabled=false;const opts=[...document.querySelectorAll('#answersBox .option')];opts.forEach(o=>{o.classList.add('locked');o.classList.remove('selected')});if(btn){btn.classList.add('selected');btn.classList.remove('locked')}setTimeout(()=>{answerTransitioning=false;if(qi<12){qi++;questionResumeQi=qi;renderQuestion()}else calculate()},320)}
 function prevQuestion(){if(qi>0){qi--;questionResumeQi=qi;renderQuestion()}}
 function nextQuestion(){if(answerTransitioning)return;if(answers[qi]===undefined||answers[qi]===null){alert('현재 질문의 답을 먼저 선택해 주세요.');return}cancelQuestionSpeech();if(qi<12){qi++;questionResumeQi=qi;renderQuestion()}else calculate()}
