@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 재확인 1번 시작 · V2.7.9</title>
+<title>MAIIM 피부체크 · 상담후 제품연결 안정화 · V2.7.10</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -568,12 +568,16 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  <input type="hidden" id="consultMethod" value="전화">
  <div id="directContactPanel" class="card soft" style="margin-top:12px"></div>
  <div class="card soft">
-  <label class="checkline"><input type="checkbox" id="privacyAgree"><span>개인정보 수집·이용 동의 (필수)</span></label>
-  <label class="checkline" id="skinAgreeRow"><input type="checkbox" id="skinAgree"><span>피부체크 결과 상담 활용 동의 (필수)</span></label>
+  <label class="checkline"><input type="checkbox" id="privacyAgree"><span><b>개인정보 수집·이용 동의 (필수)</b></span></label>
+  <label class="checkline" id="skinAgreeRow"><input type="checkbox" id="skinAgree"><span><b>피부체크 결과 상담 활용 동의 (필수)</b></span></label>
   <label class="checkline"><input type="checkbox" id="marketingAgree"><span>마케팅 안내 동의 (선택)</span></label>
   <label class="checkline"><input type="checkbox" id="productGuideAgree" checked><span>상담 후 내 피부결과에 맞는 제품 상세 안내도 받고 싶어요 (선택)</span></label>
  </div>
- <button class="cta" onclick="submitConsult()">상담 신청 접수하기 →</button>
+ <div class="card soft" style="margin-top:12px">
+   <b>다음 단계로 가려면</b>
+   <p class="mini" style="margin:7px 0 0">이름·전화번호를 입력하고, 위의 <b>필수 동의 2개</b>를 체크한 뒤 아래 버튼을 눌러 주세요. 접수 완료 화면에서 바로 제품 상세보기로 이어집니다.</p>
+ </div>
+ <button class="cta" id="consultSubmitBtn" onclick="submitConsult()">상담 신청하고 제품 안내로 계속 →</button>
  <button class="secondary" onclick="openAiConsult()">AI 피부박사와 먼저 대화하기</button>
  <button class="secondary" onclick="goStep('result')">내 피부결과 다시 보기</button>
  <div class="home-counselor-card" style="margin-top:18px">
@@ -596,9 +600,9 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  <div class="card"><h3>이후 진행 순서</h3><p>① 담당자가 피부체크 결과 확인</p><p>② 전화·카카오·방문 또는 AI로 상담 진행</p><p>③ 현재 피부상태와 사용 중인 제품을 함께 확인</p><p>④ 상담 결과에 따라 필요한 관리와 제품을 연결</p><p class="mini">제품 구매 의무는 없습니다. 제품 안내는 피부체크 결과만으로 확정하지 않습니다.</p></div>
  <div class="product-bridge" id="completeProductBridge">
    <span class="ref-badge">PRODUCT GUIDE</span>
-   <h3>상담 결과를 제품 안내로 이어갑니다</h3>
+   <h3>이제 내 피부결과에 맞는 제품을 확인하세요</h3>
    <p class="mini" id="completeProductText">피부결과를 바탕으로 상담에서 우선 확인할 제품을 정리해 드립니다.</p>
-   <button class="cta" type="button" onclick="openProductGuide()">상담 결과로 제품 상세보기 →</button>
+   <button class="cta" type="button" onclick="openProductGuide()">내 피부결과 제품 상세보기 →</button>
  </div>
  <div class="card soft"><b>천안 신부센터</b><p style="margin:8px 0 4px">일반전화 041-622-4646 · 휴대전화 010-4923-9989</p><p style="margin:4px 0">카카오톡 ID <b>kojuboo</b></p><p class="mini" style="margin:0">천안시 동남구 신부 10길 8 남양빌딩 304호</p></div>
  <div class="counselor-apply-box">
@@ -1218,20 +1222,49 @@ function telHref(v){return 'tel:'+String(v).replace(/[^0-9+]/g,'')}
 function mapHref(provider){const q=encodeURIComponent(CENTER_CONTACT.address);return provider==='kakao'?'https://map.kakao.com/link/search/'+q:'https://map.naver.com/p/search/'+q}
 function renderDirectContact(){const box=$('directContactPanel');if(!box)return;const method=$('consultMethod').value||'전화';if(method==='전화'){box.innerHTML='<b>지금 바로 전화하기</b><p class="mini">스마트폰에서는 아래 번호를 누르면 전화 화면이 열립니다.</p><a class="cta" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="'+telHref(CENTER_CONTACT.mobile)+'">📱 휴대전화 010-4923-9989</a><a class="secondary" style="display:block;text-align:center;text-decoration:none;margin-top:8px" href="'+telHref(CENTER_CONTACT.landline)+'">☎ 일반전화 041-622-4646</a>';return}if(method==='카카오톡'){const k=getKakaoConfig();box.innerHTML='<b>꿀광피부 카카오 1:1 상담</b><p class="mini">아래 버튼을 누르면 카카오톡 꿀광피부 채널의 1:1 채팅으로 바로 이동합니다.</p><a class="cta" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="'+escapeHtml(k.url)+'" target="_blank" rel="noopener">💬 카카오 상담 시작하기 →</a><p class="mini" style="margin-top:10px">검색용 아이디: <b>'+KAKAO_ID+'</b></p>';return}if(method==='센터 방문'){box.innerHTML='<b>천안 신부센터 방문</b><p style="margin:8px 0 4px">'+escapeHtml(CENTER_CONTACT.address)+'</p><p class="mini">지도에서 위치를 확인한 뒤 방문상담을 신청해 주세요.</p><a class="cta" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="'+mapHref('naver')+'" target="_blank" rel="noopener">🗺 네이버지도에서 보기 →</a><a class="secondary" style="display:block;text-align:center;text-decoration:none;margin-top:8px" href="'+mapHref('kakao')+'" target="_blank" rel="noopener">카카오맵에서 보기</a>';return}box.innerHTML='<b>AI 후 사람상담</b><p class="mini">AI 척척 박사 음성상담 서버 연결이 완료되면 AI 상담 내용 요약을 참고해 전화·카카오·센터 방문 상담으로 자연스럽게 이어지도록 연결합니다. 현재는 사람 상담 신청을 먼저 접수할 수 있습니다.</p>'}
 async function sendGoogle(item){const c=getGoogleConfig();if(!c.url||!c.key)return false;try{await fetch(c.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:c.key,action:'consultation',data:item})});return true}catch{return false}}
-async function submitConsult(){const name=$('consultName').value.trim(),phone=$('consultPhone').value.trim();if(!name){alert('이름 또는 닉네임을 입력해 주세요.');return}if(!phone){alert('전화번호를 입력해 주세요.');return}const latest=storeGet('latestResult');if(!$('privacyAgree').checked){alert('개인정보 수집·이용 동의가 필요합니다.');return}if(latest&&!$('skinAgree').checked){alert('저장된 피부체크 결과를 상담에 활용하려면 피부결과 상담 활용 동의가 필요합니다.');return}const item={id:'C-'+Date.now(),date:new Date().toISOString(),name,phone,method:$('consultMethod').value,marketing:$('marketingAgree').checked,productGuideWanted:$('productGuideAgree')?.checked!==false,result:latest||null,aiSummary:storeGet('aiTranscriptSummary')||null,referrerCode:getCounselorRef()||null};const arr=storeGet('consultations')||[];arr.unshift(item);storeSet('consultations',arr);storeSet('latestConsultation',item);const sent=await sendGoogle(item);$('completeText').textContent=$('consultMethod').value+' 상담 신청이 접수되었습니다.'+(sent?' 중앙저장 전송도 요청했습니다.':' 이 기기에 먼저 저장했습니다.');renderCompleteProductBridge(item);show('complete')}
+async function submitConsult(){
+ const name=$('consultName').value.trim(),phone=$('consultPhone').value.trim();
+ if(!name){alert('이름 또는 닉네임을 입력해 주세요.');$('consultName').focus();return}
+ if(!phone){alert('전화번호를 입력해 주세요.');$('consultPhone').focus();return}
 
-function renderCompleteProductBridge(item){
- const box=$('completeProductBridge'),txt=$('completeProductText');
- if(!box||!txt)return;
- const hasResult=!!item?.result?.result;
- if(!item?.productGuideWanted){
-   box.style.display='none';
+ const latest=storeGet('latestResult');
+ if(!$('privacyAgree').checked){
+   alert('“개인정보 수집·이용 동의 (필수)”를 체크해 주세요.');
+   $('privacyAgree').scrollIntoView({behavior:'smooth',block:'center'});
    return;
  }
- box.style.display='block';
- txt.textContent=hasResult
-   ? '저장된 피부결과와 상담 내용을 바탕으로, 상담에서 우선 확인할 제품 안내 화면을 볼 수 있습니다.'
-   : '피부체크 결과가 없는 상담입니다. 제품 선택은 담당자 상담에서 먼저 확인해 주세요.';
+ if(latest&&!$('skinAgree').checked){
+   alert('“피부체크 결과 상담 활용 동의 (필수)”를 체크해 주세요.');
+   $('skinAgree').scrollIntoView({behavior:'smooth',block:'center'});
+   return;
+ }
+
+ const item={
+   id:'C-'+Date.now(),date:new Date().toISOString(),name,phone,
+   method:$('consultMethod').value,
+   marketing:$('marketingAgree').checked,
+   productGuideWanted:$('productGuideAgree')?.checked!==false,
+   result:latest||null,
+   aiSummary:storeGet('aiTranscriptSummary')||null,
+   referrerCode:getCounselorRef()||null
+ };
+
+ const arr=storeGet('consultations')||[];
+ arr.unshift(item);
+ storeSet('consultations',arr);
+ storeSet('latestConsultation',item);
+
+ // 먼저 기기에 저장하고 즉시 다음 화면을 보여준다.
+ // 중앙저장은 느리거나 설정이 오래되어도 화면 진행을 막지 않도록 백그라운드 처리한다.
+ $('completeText').textContent=$('consultMethod').value+' 상담 신청이 이 기기에 저장되었습니다.';
+ renderCompleteProductBridge(item);
+ show('complete');
+
+ sendGoogle(item).then(sent=>{
+   if(sent&&$('completeText')){
+     $('completeText').textContent=$('consultMethod').value+' 상담 신청이 접수되었습니다. 중앙저장 전송도 요청했습니다.';
+   }
+ }).catch(()=>{});
 }
 
 /* V2.7.7 피부결과별 제품 연결
