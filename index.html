@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 맞춤 인사+상담시간 · V2.7.4</title>
+<title>MAIIM 피부체크 · 이름입력 명확화 · V2.7.6</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -367,6 +367,35 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .consult-hours.closed{background:#fff4f1;border-color:#efc9c1;color:#7c554f}
 .consult-hours.open{background:#f1faf4;border-color:#cfe7d6;color:#315247}
 
+
+/* V2.7.6 이름/닉네임 입력칸 명확화 */
+.welcome-name-row{display:block!important;margin-top:10px!important}
+.welcome-name-row input{
+  display:block!important;width:100%!important;min-width:100%!important;
+  min-height:54px!important;box-sizing:border-box!important;
+  border:2px solid #8fbea0!important;background:#fff!important;
+  border-radius:15px!important;padding:12px 14px!important;
+  font-size:16px!important;box-shadow:0 5px 14px rgba(47,127,79,.06)
+}
+.welcome-name-row .cta{
+  display:block!important;width:100%!important;margin:10px 0 0!important;
+}
+.welcome-input-card{
+  margin-top:15px;padding:14px;border-radius:18px;background:#fff;
+  border:1px solid #dce9e0
+}
+.welcome-input-card label{margin-top:0}
+.welcome-flow-note{
+  margin:10px 0 0;padding:10px 12px;border-radius:13px;
+  background:#f7faf8;border:1px solid #e2ebe5;
+  font-size:12px;line-height:1.65;color:#59665f
+}
+.welcome-hours{
+  margin-top:14px;padding:10px 12px;border-radius:14px;
+  background:#fff8ed;border:1px solid #f0d2aa;
+  font-size:12px;line-height:1.6;color:#6e5638
+}
+
 </style>
 </head>
 <body class="home-mode">
@@ -405,14 +434,23 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
    <h2 id="welcomeHeadline">피부에 관심이 많으신가 봐요</h2>
    <p>이름이나 편하게 불리고 싶은 닉네임을 알려주시면, 피부체크를 조금 더 친근하게 안내해 드릴게요.</p>
 
-   <label style="margin-top:14px">이름 또는 닉네임</label>
-   <div class="welcome-name-row">
-     <input id="welcomeName" placeholder="예: 충기 / 김OO" maxlength="20" autocomplete="name">
-     <button class="cta" type="button" onclick="saveWelcomeNameAndStart()" style="margin:0">맞춤 피부체크 시작 →</button>
+   <div class="welcome-input-card">
+     <label>이름 또는 닉네임을 입력하고 싶다면</label>
+     <div class="welcome-name-row">
+       <input id="welcomeName" placeholder="여기에 이름 또는 닉네임 입력" maxlength="20" autocomplete="name">
+       <button class="cta" type="button" onclick="saveWelcomeNameAndStart()">이름 입력하고 피부체크 시작 →</button>
+     </div>
    </div>
 
-   <div class="welcome-note">※ 이름은 이 기기에서 맞춤 인사를 위해 저장됩니다. 원하지 않으면 이름 없이 시작할 수도 있습니다.</div>
-   <button class="secondary" type="button" onclick="skipWelcomeName()">이름 없이 시작하기</button>
+   <div class="welcome-flow-note">
+     이름을 입력해도, 입력하지 않아도 다음 단계에서 <b>연령대·성별·피부 고민</b> 등 기본정보를 선택합니다. 이 정보는 피부결과를 만들기 위해 필요합니다.
+   </div>
+
+   <button class="secondary" type="button" onclick="skipWelcomeName()">이름 없이 기본정보부터 시작하기 →</button>
+
+   <div class="welcome-note">※ 이름을 입력하면 다음 화면부터 “○○님, 안녕하세요”라고 맞춤 인사를 합니다. 이름 없이 시작하면 이전 사람의 기본정보를 불러오지 않고 빈칸에서 시작합니다.</div>
+
+   <div class="welcome-hours">🕘 고객 상담 가능시간 · <b>오전 9:00 ~ 오후 6:00</b><br>상담 화면과 제품 문의 화면에서도 다시 안내합니다.</div>
  </div>
 </section>
 
@@ -850,14 +888,20 @@ function startPersonalFlow(){
 function saveWelcomeNameAndStart(){
  const name=String($('welcomeName')?.value||'').trim();
  if(!name){
-   alert('이름 또는 닉네임을 입력해 주세요. 원하지 않으면 아래 “이름 없이 시작하기”를 눌러 주세요.');
+   alert('이름 또는 닉네임을 입력해 주세요. 입력하지 않으려면 아래 “이름 없이 기본정보부터 시작하기”를 눌러 주세요.');
    return;
  }
- storeSet(WELCOME_NAME_KEY,name.slice(0,20));
+ const prev=getWelcomeName();
+ const next=name.slice(0,20);
+ if(!prev||prev!==next)clearBasicFormForNewPerson();
+ storeSet(WELCOME_NAME_KEY,next);
  syncWelcomeName();
  show('basic');
 }
 function skipWelcomeName(){
+ clearBasicFormForNewPerson();
+ try{localStorage.removeItem(WELCOME_NAME_KEY)}catch{}
+ if($('welcomeName'))$('welcomeName').value='';
  show('basic');
 }
 function editWelcomeName(){
@@ -1074,10 +1118,28 @@ function toggleQuestionVoice(){
 
 /* V2.3.2 기본정보 자동저장·자동복원 */
 const BASIC_DRAFT_KEY='basicDraftV232';
+let freshPersonStart=false;
 function getBasicForm(){return{age:$('age')?.value||'',gender:$('gender')?.value||'',concern:$('concern')?.value||'',maiim:$('maiim')?.value||'',currentProduct:$('currentProduct')?.value||'',pastProduct:$('pastProduct')?.value||''}}
 function applyMaiimVisibility(){const v=$('maiim')?.value||'';if($('currentBox'))$('currentBox').classList.toggle('hidden',v!=='CURRENT');if($('pastBox'))$('pastBox').classList.toggle('hidden',v!=='PAST')}
-function saveBasicDraft(){storeSet(BASIC_DRAFT_KEY,getBasicForm());applyMaiimVisibility()}
-function restoreBasicDraft(){let d=storeGet(BASIC_DRAFT_KEY);if(!d){const latest=storeGet('latestResult');d=latest?.basic||null}if(!d){applyMaiimVisibility();return}['age','gender','concern','maiim','currentProduct','pastProduct'].forEach(id=>{const el=$(id);if(el&&d[id]!=null)el.value=d[id]});applyMaiimVisibility()}
+function clearBasicFormForNewPerson(){
+ freshPersonStart=true;
+ try{localStorage.removeItem(BASIC_DRAFT_KEY)}catch{}
+ ['age','gender','concern','maiim','currentProduct','pastProduct'].forEach(id=>{const el=$(id);if(el)el.value=''});
+ qi=0;answers=new Array(13);questionSessionActive=false;questionResumeQi=0;currentResult=null;
+ applyMaiimVisibility();
+}
+function saveBasicDraft(){storeSet(BASIC_DRAFT_KEY,getBasicForm());freshPersonStart=false;applyMaiimVisibility()}
+function restoreBasicDraft(){
+ if(freshPersonStart){
+   ['age','gender','concern','maiim','currentProduct','pastProduct'].forEach(id=>{const el=$(id);if(el)el.value=''});
+   applyMaiimVisibility();return;
+ }
+ let d=storeGet(BASIC_DRAFT_KEY);
+ if(!d){const latest=storeGet('latestResult');d=latest?.basic||null}
+ if(!d){applyMaiimVisibility();return}
+ ['age','gender','concern','maiim','currentProduct','pastProduct'].forEach(id=>{const el=$(id);if(el&&d[id]!=null)el.value=d[id]});
+ applyMaiimVisibility();
+}
 function bindBasicAutosave(){['age','gender','concern','maiim'].forEach(id=>{const el=$(id);if(el)el.addEventListener('change',saveBasicDraft)});['currentProduct','pastProduct'].forEach(id=>{const el=$(id);if(el){el.addEventListener('input',saveBasicDraft);el.addEventListener('change',saveBasicDraft)}})}
 
 function refreshStepNav(){
