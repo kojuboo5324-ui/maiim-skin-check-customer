@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 상담 중앙목록 자동동기화 · V2.7.22</title>
+<title>MAIIM 피부체크 · 질문 이전버튼 구분 개선 · V2.7.23</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -558,7 +558,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .ref-checking{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:#eef7f2;color:#315247;font-size:11px;font-weight:850}
 
 
-/* V2.7.22 · 고객 상담 중앙목록 자동동기화 + V2.7.21 카운셀러 관리 유지 */
+/* V2.7.23 · 질문 화면의 전역 이전 버튼을 “기본정보로”로 명확히 표시 + V2.7.22 중앙목록 자동동기화 유지 */
 /* V2.7.18 · 센터장/카운셀러/고객 역할 구분 */
 .role-badge{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;min-height:24px;padding:4px 9px;margin-right:7px;border-radius:999px;font-size:11px;font-weight:950;line-height:1;border:1px solid #d8e2dc;background:#f6f8f7;color:#496057;white-space:nowrap}
 .role-badge.manager{background:#fff3df;border-color:#efcf9f;color:#8a571f}
@@ -1721,8 +1721,11 @@ const viewHistoryStack=[];
 let suppressViewHistory=false;
 function updateGlobalBackButton(id){
  const w=$('globalBackWrap');
+ const b=$('globalBackBtn');
  if(!w)return;
  w.classList.toggle('hidden',id==='home');
+ // 질문 화면에서는 ‘이전 질문’ 버튼과 헷갈리지 않도록 목적지를 분명히 표시한다.
+ if(b)b.textContent=id==='question'?'← 기본정보로':'← 이전 화면';
 }
 function goPreviousView(){
  let prev=null;
