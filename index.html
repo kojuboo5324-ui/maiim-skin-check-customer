@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 새 카운셀러 중앙저장 · V2.7.19</title>
+<title>MAIIM 피부체크 · 카운셀러 중앙승인 동기화 · V2.7.20</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -553,7 +553,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .ref-checking{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:#eef7f2;color:#315247;font-size:11px;font-weight:850}
 
 
-/* V2.7.19 · 새 고객 카운셀러 활동 신청도 중앙저장 공개 접수 지원 */
+/* V2.7.20 · 중앙 CounselorApplications를 센터장 승인 화면으로 자동 동기화 */
 /* V2.7.18 · 센터장/카운셀러/고객 역할 구분 */
 .role-badge{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;min-height:24px;padding:4px 9px;margin-right:7px;border-radius:999px;font-size:11px;font-weight:950;line-height:1;border:1px solid #d8e2dc;background:#f6f8f7;color:#496057;white-space:nowrap}
 .role-badge.manager{background:#fff3df;border-color:#efcf9f;color:#8a571f}
@@ -1058,6 +1058,12 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
    <h3>⑥ 카운셀러 신청 승인 관리</h3>
    <p class="mini">카운셀러 활동 안내를 신청한 분을 센터장이 확인하고 승인하는 단계입니다.</p>
    <div class="duplicate-rule-note">동일한 전화번호는 <b>한 사람으로 관리</b>합니다. 같은 번호로 다시 신청해도 새 신청이 추가되지 않으며, 기존 테스트 중복 신청도 자동으로 1건으로 정리됩니다.</div>
+   <div class="card soft" style="margin:10px 0 12px">
+     <b>Google 중앙 신청 자동 동기화</b>
+     <p class="mini" style="margin:6px 0 8px">센터관리 화면을 열면 새 카운셀러 신청을 Google 중앙저장에서 자동으로 불러옵니다.</p>
+     <button class="secondary" type="button" onclick="loadCentralCounselorApplications({silent:false})">중앙 신청 새로 불러오기</button>
+     <span class="status-pill" id="counselorApprovalSyncStatus">대기</span>
+   </div>
    <div class="counselor-approval-summary" id="counselorApprovalSummary"></div>
    <div class="counselor-approval-list" id="counselorApprovalList"></div>
    <div class="counselor-approval-note">센터장이 승인하면 <b>C001, C002… 형식의 개인 코드와 개인 공유링크가 즉시 자동 발급</b>됩니다. 승인 후에는 <b>활동 중지·재개</b>도 이 화면에서 관리합니다.</div>
@@ -1746,7 +1752,7 @@ function show(id){
  if(id==='counselorPending')renderCounselorPending();
  if(id==='counselorCode'){restoreMyCounselorCode();renderCounselorTestNote();}
  if(id==='counselorShareDone')renderShareDone();
- if(id==='admin')renderAdmin();
+ if(id==='admin'){renderAdmin();setTimeout(()=>loadCentralCounselorApplications({silent:true}),60);}
  window.scrollTo(0,0);
 }
 function hasBasic(){return !!($('age').value&&$('gender').value&&$('concern').value)}
@@ -1780,7 +1786,7 @@ function goStep(step){if(step==='question'){if(!hasBasic()){alert('먼저 기본
 const CENTER_CONTACT={landline:'041-622-4646',mobile:'010-4923-9989',address:'천안시 동남구 신부 10길 8 남양빌딩 304호'};
 const KAKAO_ID='kojuboo';
 const KAKAO_CHAT_URL='https://pf.kakao.com/_KqkxaX/chat';
-/* V2.7.19 새 카운셀러 중앙저장: 새 기기에서도 공개 접수로 CounselorApplications에 저장 */
+/* V2.7.20 카운셀러 중앙승인 동기화: 새 신청을 중앙저장하고 센터관리에서 자동 불러오기 */
 /* V2.7.18 역할 구분: 센터장/매니저 · 카운셀러 코드 · 고객 배지 표시 */
 /* V2.7.17 새 고객 중앙저장: 공개 접수 주소만 앱에 포함하며 전송 키는 포함하지 않음 */
 const PUBLIC_CONSULTATION_WEB_APP_URL='https://script.google.com/macros/s/AKfycbxMqpStgSVH-HOVwIvvGMwNrEoNu6ld-T-QDST9J1tGrPDvN1wIuCU1OAnJckscoi-OrQ/exec';
@@ -2155,6 +2161,77 @@ function sendCounselorStatusCentral(item){
  return fetch(cfg.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:cfg.key,action:'counselor_status_upsert',data})}).then(()=>true).catch(()=>false);
 }
 
+let counselorCentralSyncPromise=null;
+function mergeCentralCounselorApplications(remote){
+ const local=storeGet('counselorApplications')||[];
+ const byId=new Map();
+ local.forEach(x=>{if(x&&x.id)byId.set(String(x.id),{...x})});
+ (remote||[]).forEach(r=>{
+   if(!r)return;
+   const id=String(r.id||'');
+   let prev=id?byId.get(id):null;
+   if(!prev&&r.phone){
+     const pk=counselorPhoneKey(r.phone);
+     prev=local.find(x=>pk&&counselorPhoneKey(x.phone)===pk)||null;
+   }
+   let merged=prev?{...prev,...r}:{...r};
+   // 중앙값이 아직 승인 대기여도 이 브라우저에서 이미 승인 완료된 정보는 뒤로 되돌리지 않습니다.
+   if(prev?.status==='승인 완료'&&r.status!=='승인 완료'){
+     merged={...r,...prev,status:'승인 완료'};
+   }
+   if(id)byId.set(id,merged);
+   else byId.set('phone:'+counselorPhoneKey(merged.phone),merged);
+ });
+ const arr=[...byId.values()];
+ storeSet('counselorApplications',arr);
+ prepareCounselorApplications();
+ renderCounselorApprovals();
+ return arr;
+}
+function loadCentralCounselorApplications(options){
+ const silent=options?.silent===true;
+ const cfg=getGoogleConfig();
+ const status=$('counselorApprovalSyncStatus');
+ if(!cfg.url||!cfg.key){
+   if(status){status.textContent='Google 연결 필요';status.className='status-pill'}
+   if(!silent)alert('먼저 ① Google 중앙저장 연결의 주소와 전송 키를 저장해 주세요.');
+   return Promise.resolve(false);
+ }
+ if(counselorCentralSyncPromise)return counselorCentralSyncPromise;
+ if(status){status.textContent='불러오는 중…';status.className='status-pill'}
+ counselorCentralSyncPromise=new Promise(resolve=>{
+   const cb='__maiimCounselorApps'+Date.now();
+   const script=document.createElement('script');
+   let done=false;
+   const cleanup=()=>{if(done)return;done=true;try{delete window[cb]}catch(e){window[cb]=undefined}script.remove();clearTimeout(timer);counselorCentralSyncPromise=null};
+   const finish=(ok,msg)=>{cleanup();if(status){status.textContent=msg;status.className='status-pill '+(ok?'ok':'')}resolve(ok)};
+   window[cb]=payload=>{
+     if(payload?.ok&&Array.isArray(payload.applications)){
+       mergeCentralCounselorApplications(payload.applications);
+       finish(true,'동기화 '+payload.applications.length+'건');
+     }else{
+       finish(false,'동기화 실패');
+       if(!silent)alert('중앙 신청을 불러오지 못했습니다. Google 연결설정을 확인해 주세요.');
+     }
+   };
+   script.onerror=()=>{finish(false,'연결 실패');if(!silent)alert('중앙 신청 불러오기에 실패했습니다. 잠시 후 다시 시도해 주세요.')};
+   const u=new URL(cfg.url);
+   u.searchParams.set('action','counselor_applications');
+   u.searchParams.set('key',cfg.key);
+   u.searchParams.set('callback',cb);
+   u.searchParams.set('_',String(Date.now()));
+   script.src=u.toString();
+   document.head.appendChild(script);
+   const timer=setTimeout(()=>{finish(false,'시간 초과');if(!silent)alert('중앙 신청 불러오기가 지연되고 있습니다. 다시 눌러 주세요.')},12000);
+ });
+ return counselorCentralSyncPromise;
+}
+function syncCounselorApplicationCentral(item){
+ const cfg=getGoogleConfig();
+ if(!cfg.url||!cfg.key||!item)return Promise.resolve(false);
+ return fetch(cfg.url,{method:'POST',mode:'no-cors',cache:'no-store',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:cfg.key,action:'counselor_application',data:item})}).then(()=>true).catch(()=>false);
+}
+
 function getAiConfig(){return storeGet('aiConfig')||{}}
 function saveGoogleConfig(){const url=$('googleUrl').value.trim(),key=$('googleKey').value.trim();if(!url||!key){alert('Apps Script 주소와 전송 키를 모두 입력해 주세요.');return}storeSet('googleConfig',{url,key});renderAdmin();alert('Google 중앙저장 설정을 저장했습니다.')}
 function saveKakaoConfig(){const url=$('kakaoUrl').value.trim();if(!url){alert('카카오 상담 링크를 입력해 주세요.');return}if(!/^https?:\/\//i.test(url)){alert('https:// 로 시작하는 카카오 상담 링크를 입력해 주세요.');return}storeSet('kakaoConfig',{url});renderAdmin();alert('카카오 상담 링크를 저장했습니다.')}
@@ -2220,6 +2297,7 @@ function approveCounselorApplication(id){
    storeSet('latestCounselorApplication',arr[idx]);
    storeSet(MY_COUNSELOR_CODE_KEY,code);
  }
+ syncCounselorApplicationCentral(arr[idx]);
  sendCounselorStatusCentral(arr[idx]);
  renderCounselorApprovals();
  alert('승인 완료되었습니다.\n\n개인 카운셀러 코드 '+code+'와 개인 공유링크가 자동 발급되었습니다.');
@@ -2248,6 +2326,7 @@ function setCounselorActivity(id,nextStatus){
  if(cfg.url&&cfg.key){
    fetch(cfg.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:cfg.key,action:'counselor_activity_status',data:{id:arr[idx].id,phone:arr[idx].phone,counselorCode:code,activityStatus:arr[idx].activityStatus,changedAt:now}})}).catch(()=>{});
  }
+ syncCounselorApplicationCentral(arr[idx]);
  sendCounselorStatusCentral(arr[idx]);
  renderCounselorApprovals();
  alert(pause?'활동 중지로 변경했습니다. 기존 코드와 기록은 보존됩니다.':'활동중으로 다시 변경했습니다. 기존 코드와 공유링크를 그대로 사용합니다.');
