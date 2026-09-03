@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 새 고객 중앙저장 · V2.7.17</title>
+<title>MAIIM 피부체크 · 역할 구분 · V2.7.18</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -552,6 +552,17 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .counselor-central-help{margin-top:9px;padding:10px 12px;border-radius:13px;background:#fff;border:1px solid #dce8e0;color:#5b6a62;font-size:11px;line-height:1.65}
 .ref-checking{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:#eef7f2;color:#315247;font-size:11px;font-weight:850}
 
+
+/* V2.7.18 · 센터장/카운셀러/고객 역할 구분 */
+.role-badge{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;min-height:24px;padding:4px 9px;margin-right:7px;border-radius:999px;font-size:11px;font-weight:950;line-height:1;border:1px solid #d8e2dc;background:#f6f8f7;color:#496057;white-space:nowrap}
+.role-badge.manager{background:#fff3df;border-color:#efcf9f;color:#8a571f}
+.role-badge.counselor{background:#edf8f1;border-color:#c7dfcf;color:#2f704a}
+.role-badge.customer{background:#eef5fb;border-color:#cbddeb;color:#345d79}
+.role-badge.applicant{background:#f7f3fb;border-color:#ddd0eb;color:#684d82}
+.role-title-line{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.counselor-role-line{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:4px}
+.admin-customer-title{display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-weight:900}
+
 </style>
 </head>
 <body class="home-mode">
@@ -1016,7 +1027,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 </section>
 
 <section id="admin" class="view">
- <div class="eyebrow">CENTER ADMIN · TEST</div><h2 class="page-title">10명 테스트 관리</h2>
+ <div class="eyebrow">CENTER ADMIN · TEST</div><div class="role-title-line"><span class="role-badge manager">센터장/매니저</span><h2 class="page-title" style="margin:0">10명 테스트 관리</h2></div>
  <div class="card warn"><b>① Google 중앙저장 연결</b><p class="mini">센터관리용 연결정보입니다. <b>고객 상담신청은 새 고객 휴대폰에서도 공개 접수 주소로 자동 중앙저장</b>되며, 전송 키는 고객 링크에 넣거나 공개하지 않습니다.</p><label>Apps Script Web App URL</label><input id="googleUrl" placeholder="https://script.google.com/macros/s/.../exec"><label>전송 키</label><input id="googleKey" type="password"><button class="secondary" onclick="saveGoogleConfig()">Google 연결설정 저장</button><span class="status-pill" id="googleStatus">미설정</span></div>
  <div class="counselor-central-card">
    <b>①-1 카운셀러 중앙상태 연결 · 휴대폰 공용</b>
@@ -1142,7 +1153,7 @@ function renderPersonalHello(){
  const box=$('personalHelloBox'),txt=$('personalHelloName');
  if(!box||!txt)return;
  if(name){
-   txt.textContent=name+'님, 안녕하세요 👋';
+   txt.innerHTML='<span class="role-badge customer">고객</span>'+escapeHtml(name)+'님, 안녕하세요 👋';
    box.style.display='block';
  }else{
    box.style.display='none';
@@ -1151,7 +1162,7 @@ function renderPersonalHello(){
 function renderWelcomeHeadline(){
  const name=getWelcomeName(),h=$('welcomeHeadline');
  if(!h)return;
- h.textContent=name ? name+'님, 안녕하세요 👋' : '피부에 관심이 많으신가 봐요';
+ h.innerHTML=name ? '<span class="role-badge customer">고객</span>'+escapeHtml(name)+'님, 안녕하세요 👋' : '피부에 관심이 많으신가 봐요';
 }
 function renderConsultHours(){
  const box=$('consultHoursBox'),txt=$('consultHoursText');
@@ -1763,6 +1774,7 @@ function goStep(step){if(step==='question'){if(!hasBasic()){alert('먼저 기본
 const CENTER_CONTACT={landline:'041-622-4646',mobile:'010-4923-9989',address:'천안시 동남구 신부 10길 8 남양빌딩 304호'};
 const KAKAO_ID='kojuboo';
 const KAKAO_CHAT_URL='https://pf.kakao.com/_KqkxaX/chat';
+/* V2.7.18 역할 구분: 센터장/매니저 · 카운셀러 코드 · 고객 배지 표시 */
 /* V2.7.17 새 고객 중앙저장: 공개 접수 주소만 앱에 포함하며 전송 키는 포함하지 않음 */
 const PUBLIC_CONSULTATION_WEB_APP_URL='https://script.google.com/macros/s/AKfycbxMqpStgSVH-HOVwIvvGMwNrEoNu6ld-T-QDST9J1tGrPDvN1wIuCU1OAnJckscoi-OrQ/exec';
 const PUBLIC_CONSULTATION_APP_ID='maiim-cheonan-shinbu-v1';
@@ -2174,7 +2186,10 @@ function renderCounselorApprovals(){
    }else{
      action='<button class="counselor-activity-btn pause" type="button" onclick="setCounselorActivity(\''+safeId+'\',\'활동중지\')">활동 중지</button>';
    }
-   d.innerHTML='<div class="counselor-approval-head"><div><div class="counselor-approval-name">'+escapeHtml(x.name||'이름 없음')+'</div><div class="counselor-approval-meta">연락처 '+escapeHtml(x.phone||'-')+'<br>관심 활동 '+escapeHtml(x.interest||'-')+'<br>신청 '+escapeHtml(when)+(approvedWhen?'<br>승인 '+escapeHtml(approvedWhen):'')+'</div>'+history+'</div><span class="counselor-approval-status">'+statusText+'</span></div>'+issued+'<div class="counselor-approval-actions">'+action+'</div>';
+   const roleLabel=approvedState
+     ? '<span class="role-badge counselor">카운셀러 '+escapeHtml(code||'')+'</span>'
+     : '<span class="role-badge applicant">카운셀러 신청자</span>';
+   d.innerHTML='<div class="counselor-approval-head"><div><div class="counselor-role-line">'+roleLabel+'<div class="counselor-approval-name">'+escapeHtml(x.name||'이름 없음')+'</div></div><div class="counselor-approval-meta">연락처 '+escapeHtml(x.phone||'-')+'<br>관심 활동 '+escapeHtml(x.interest||'-')+'<br>신청 '+escapeHtml(when)+(approvedWhen?'<br>승인 '+escapeHtml(approvedWhen):'')+'</div>'+history+'</div><span class="counselor-approval-status">'+statusText+'</span></div>'+issued+'<div class="counselor-approval-actions">'+action+'</div>';
    list.appendChild(d);
  });
 }
@@ -2247,9 +2262,9 @@ function renderAdmin(){
    const ref=normalizeCounselorCode(x.referrerCode||'');
    const counselor=ref?apps.find(a=>normalizeCounselorCode(a.counselorCode||'')===ref):null;
    const refHtml=ref
-     ? '<div class="admin-consult-ref">담당 카운셀러 · '+escapeHtml(ref)+(counselor?.name?' · '+escapeHtml(counselor.name):'')+'</div>'
-     : '<div class="admin-consult-ref center">센터 공용 상담</div>';
-   d.innerHTML='<b>'+escapeHtml(x.name)+' · '+escapeHtml(x.method)+'</b><div>'+escapeHtml(x.phone)+'</div>'+refHtml+'<div class="mini" style="margin-top:6px">'+new Date(x.date).toLocaleString('ko-KR')+'</div>';
+     ? '<div class="admin-consult-ref"><span class="role-badge counselor">카운셀러 '+escapeHtml(ref)+'</span>'+(counselor?.name?escapeHtml(counselor.name)+' · ':'')+'담당</div>'
+     : '<div class="admin-consult-ref center"><span class="role-badge manager">센터</span>공용 상담</div>';
+   d.innerHTML='<div class="admin-customer-title"><span class="role-badge customer">고객</span>'+escapeHtml(x.name)+' · '+escapeHtml(x.method)+'</div><div>'+escapeHtml(x.phone)+'</div>'+refHtml+'<div class="mini" style="margin-top:6px">'+new Date(x.date).toLocaleString('ko-KR')+'</div>';
    box.appendChild(d)
  });
 }
