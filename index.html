@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 카운셀러 중앙승인 동기화 · V2.7.20</title>
+<title>MAIIM 피부체크 · 카운셀러 신청 거절·삭제 · V2.7.21</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -539,6 +539,11 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .counselor-activity-btn{width:100%;border:1px solid #d9e1dc;border-radius:14px;min-height:46px;padding:10px 13px;font-weight:900;background:#fff;color:#315247}
 .counselor-activity-btn.pause{border-color:#e8c3a9;background:#fff8f2;color:#9a5d36}
 .counselor-activity-btn.resume{border-color:#a9d2b5;background:#f1faf4;color:#2f7f4f}
+.counselor-reject-btn{width:100%;border:1px solid #e7c784;border-radius:14px;min-height:44px;padding:10px 13px;font-weight:900;background:#fffaf0;color:#8a661e}
+.counselor-delete-btn{width:100%;border:1px solid #e1b6b6;border-radius:14px;min-height:44px;padding:10px 13px;font-weight:900;background:#fff6f6;color:#a04747}
+.counselor-approval-item.rejected{border-color:#ead7aa;background:#fffdf7}
+.counselor-approval-actions.multi{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.counselor-approval-actions.multi .counselor-approve-btn{grid-column:1/-1}
 .counselor-customer-count{display:inline-flex;margin-top:8px;padding:5px 9px;border-radius:999px;background:#eef4f0;border:1px solid #d9e4dd;color:#426052;font-size:11px;font-weight:900}
 .counselor-activity-history{margin-top:7px;color:#78817c;font-size:10px;line-height:1.5}
 .counselor-ref-paused{margin-top:9px;padding:11px 12px;border-radius:14px;background:#fff4ef;border:1px solid #efcabb;color:#86584b;font-size:12px;line-height:1.65}
@@ -553,7 +558,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .ref-checking{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:#eef7f2;color:#315247;font-size:11px;font-weight:850}
 
 
-/* V2.7.20 · 중앙 CounselorApplications를 센터장 승인 화면으로 자동 동기화 */
+/* V2.7.21 · 카운셀러 신청 거절·삭제 + 중앙 동기화 */
 /* V2.7.18 · 센터장/카운셀러/고객 역할 구분 */
 .role-badge{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;min-height:24px;padding:4px 9px;margin-right:7px;border-radius:999px;font-size:11px;font-weight:950;line-height:1;border:1px solid #d8e2dc;background:#f6f8f7;color:#496057;white-space:nowrap}
 .role-badge.manager{background:#fff3df;border-color:#efcf9f;color:#8a571f}
@@ -1786,6 +1791,7 @@ function goStep(step){if(step==='question'){if(!hasBasic()){alert('먼저 기본
 const CENTER_CONTACT={landline:'041-622-4646',mobile:'010-4923-9989',address:'천안시 동남구 신부 10길 8 남양빌딩 304호'};
 const KAKAO_ID='kojuboo';
 const KAKAO_CHAT_URL='https://pf.kakao.com/_KqkxaX/chat';
+/* V2.7.21 카운셀러 신청 관리: 승인 대기 신청을 거절 또는 삭제하고 중앙저장에 동기화 */
 /* V2.7.20 카운셀러 중앙승인 동기화: 새 신청을 중앙저장하고 센터관리에서 자동 불러오기 */
 /* V2.7.18 역할 구분: 센터장/매니저 · 카운셀러 코드 · 고객 배지 표시 */
 /* V2.7.17 새 고객 중앙저장: 공개 접수 주소만 앱에 포함하며 전송 키는 포함하지 않음 */
@@ -2164,21 +2170,30 @@ function sendCounselorStatusCentral(item){
 let counselorCentralSyncPromise=null;
 function mergeCentralCounselorApplications(remote){
  const local=storeGet('counselorApplications')||[];
+ const remoteList=Array.isArray(remote)?remote:[];
+ const remoteIds=new Set(remoteList.map(r=>String(r?.id||'')).filter(Boolean));
  const byId=new Map();
- local.forEach(x=>{if(x&&x.id)byId.set(String(x.id),{...x})});
- (remote||[]).forEach(r=>{
+ // V2.7.21: 이전에 중앙에서 불러온 항목이 중앙에서 삭제되었다면 이 브라우저에서도 제거합니다.
+ local.forEach(x=>{
+   if(!x||!x.id)return;
+   const id=String(x.id);
+   if(x.centralSynced===true&&!remoteIds.has(id))return;
+   byId.set(id,{...x});
+ });
+ remoteList.forEach(r=>{
    if(!r)return;
    const id=String(r.id||'');
    let prev=id?byId.get(id):null;
    if(!prev&&r.phone){
      const pk=counselorPhoneKey(r.phone);
-     prev=local.find(x=>pk&&counselorPhoneKey(x.phone)===pk)||null;
+     prev=[...byId.values()].find(x=>pk&&counselorPhoneKey(x.phone)===pk)||null;
    }
    let merged=prev?{...prev,...r}:{...r};
    // 중앙값이 아직 승인 대기여도 이 브라우저에서 이미 승인 완료된 정보는 뒤로 되돌리지 않습니다.
    if(prev?.status==='승인 완료'&&r.status!=='승인 완료'){
      merged={...r,...prev,status:'승인 완료'};
    }
+   merged.centralSynced=true;
    if(id)byId.set(id,merged);
    else byId.set('phone:'+counselorPhoneKey(merged.phone),merged);
  });
@@ -2231,6 +2246,11 @@ function syncCounselorApplicationCentral(item){
  if(!cfg.url||!cfg.key||!item)return Promise.resolve(false);
  return fetch(cfg.url,{method:'POST',mode:'no-cors',cache:'no-store',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:cfg.key,action:'counselor_application',data:item})}).then(()=>true).catch(()=>false);
 }
+function deleteCounselorApplicationCentral(item){
+ const cfg=getGoogleConfig();
+ if(!cfg.url||!cfg.key||!item?.id)return Promise.resolve(false);
+ return fetch(cfg.url,{method:'POST',mode:'no-cors',cache:'no-store',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:cfg.key,action:'counselor_application_delete',data:{id:item.id,phone:item.phone||''}})}).then(()=>true).catch(()=>false);
+}
 
 function getAiConfig(){return storeGet('aiConfig')||{}}
 function saveGoogleConfig(){const url=$('googleUrl').value.trim(),key=$('googleKey').value.trim();if(!url||!key){alert('Apps Script 주소와 전송 키를 모두 입력해 주세요.');return}storeSet('googleConfig',{url,key});renderAdmin();alert('Google 중앙저장 설정을 저장했습니다.')}
@@ -2242,29 +2262,38 @@ function renderCounselorApprovals(){
  const consultations=storeGet('consultations')||[];
  const list=$('counselorApprovalList'),summary=$('counselorApprovalSummary');
  if(!list||!summary)return;
- const pending=arr.filter(x=>x.status!=='승인 완료');
+ const pending=arr.filter(x=>(x.status||'승인 대기')==='승인 대기');
+ const rejected=arr.filter(x=>x.status==='거절');
  const approved=arr.filter(x=>x.status==='승인 완료');
  const active=approved.filter(x=>x.activityStatus!=='활동중지');
  const paused=approved.filter(x=>x.activityStatus==='활동중지');
- summary.innerHTML='<span class="pending">승인 대기 '+pending.length+'명</span><span class="active">활동중 '+active.length+'명</span><span class="paused">활동중지 '+paused.length+'명</span><span>전체 '+arr.length+'명</span>';
+ summary.innerHTML='<span class="pending">승인 대기 '+pending.length+'명</span><span>거절 '+rejected.length+'명</span><span class="active">활동중 '+active.length+'명</span><span class="paused">활동중지 '+paused.length+'명</span><span>전체 '+arr.length+'명</span>';
  list.innerHTML='';
  if(!arr.length){list.innerHTML='<div class="counselor-approval-empty">아직 카운셀러 활동 안내 신청이 없습니다.<br>카운셀러 신청 화면에서 테스트 신청을 한 뒤 이곳에서 승인할 수 있습니다.</div>';return}
  arr.forEach(x=>{
    const approvedState=x.status==='승인 완료';
+   const rejectedState=x.status==='거절';
+   const pendingState=!approvedState&&!rejectedState;
    const pausedState=approvedState&&x.activityStatus==='활동중지';
    const d=document.createElement('div');
-   d.className='counselor-approval-item'+(approvedState?' approved':'')+(pausedState?' paused':'');
+   d.className='counselor-approval-item'+(approvedState?' approved':'')+(pausedState?' paused':'')+(rejectedState?' rejected':'');
    const when=x.date?new Date(x.date).toLocaleString('ko-KR'):'날짜 없음';
    const approvedWhen=x.approvedAt?new Date(x.approvedAt).toLocaleString('ko-KR'):'';
+   const rejectedWhen=x.rejectedAt?new Date(x.rejectedAt).toLocaleString('ko-KR'):'';
    const safeId=String(x.id||'').replace(/'/g,'');
    const code=normalizeCounselorCode(x.counselorCode||'');
    const customerCount=code?consultations.filter(c=>normalizeCounselorCode(c.referrerCode||'')===code).length:0;
    const issued=approvedState&&x.counselorCode?'<div class="issued-mini"><b>개인 코드 '+escapeHtml(x.counselorCode)+'</b><div class="mini" style="margin-top:4px;word-break:break-all">'+escapeHtml(x.shareLink||counselorShareUrl(x.counselorCode))+'</div><span class="counselor-customer-count">연결 고객 '+customerCount+'명</span><button class="counselor-copy-issued" type="button" onclick="copyIssuedCounselorLink(\''+safeId+'\')">개인 공유링크 복사하기</button></div>':'';
    const history=pausedState&&x.pausedAt?'<div class="counselor-activity-history">활동 중지 '+escapeHtml(new Date(x.pausedAt).toLocaleString('ko-KR'))+'</div>':(!pausedState&&x.resumedAt?'<div class="counselor-activity-history">활동 재개 '+escapeHtml(new Date(x.resumedAt).toLocaleString('ko-KR'))+'</div>':'');
-   const statusText=approvedState?(pausedState?'활동 중지':'활동중'):'승인 대기';
-   let action='';
-   if(!approvedState){
-     action='<button class="counselor-approve-btn" type="button" onclick="approveCounselorApplication(\''+safeId+'\')">센터장 승인하고 코드 자동발급</button>';
+   const statusText=approvedState?(pausedState?'활동 중지':'활동중'):(rejectedState?'거절':'승인 대기');
+   let action='',actionsClass='counselor-approval-actions';
+   if(pendingState){
+     actionsClass+=' multi';
+     action='<button class="counselor-approve-btn" type="button" onclick="approveCounselorApplication(\''+safeId+'\')">센터장 승인하고 코드 자동발급</button>'+
+       '<button class="counselor-reject-btn" type="button" onclick="rejectCounselorApplication(\''+safeId+'\')">신청 거절</button>'+
+       '<button class="counselor-delete-btn" type="button" onclick="deleteCounselorApplication(\''+safeId+'\')">신청 삭제</button>';
+   }else if(rejectedState){
+     action='<button class="counselor-delete-btn" type="button" onclick="deleteCounselorApplication(\''+safeId+'\')">거절 신청 삭제</button>';
    }else if(pausedState){
      action='<button class="counselor-activity-btn resume" type="button" onclick="setCounselorActivity(\''+safeId+'\',\'활동중\')">활동 재개</button>';
    }else{
@@ -2273,7 +2302,7 @@ function renderCounselorApprovals(){
    const roleLabel=approvedState
      ? '<span class="role-badge counselor">카운셀러 '+escapeHtml(code||'')+'</span>'
      : '<span class="role-badge applicant">카운셀러 신청자</span>';
-   d.innerHTML='<div class="counselor-approval-head"><div><div class="counselor-role-line">'+roleLabel+'<div class="counselor-approval-name">'+escapeHtml(x.name||'이름 없음')+'</div></div><div class="counselor-approval-meta">연락처 '+escapeHtml(x.phone||'-')+'<br>관심 활동 '+escapeHtml(x.interest||'-')+'<br>신청 '+escapeHtml(when)+(approvedWhen?'<br>승인 '+escapeHtml(approvedWhen):'')+'</div>'+history+'</div><span class="counselor-approval-status">'+statusText+'</span></div>'+issued+'<div class="counselor-approval-actions">'+action+'</div>';
+   d.innerHTML='<div class="counselor-approval-head"><div><div class="counselor-role-line">'+roleLabel+'<div class="counselor-approval-name">'+escapeHtml(x.name||'이름 없음')+'</div></div><div class="counselor-approval-meta">연락처 '+escapeHtml(x.phone||'-')+'<br>관심 활동 '+escapeHtml(x.interest||'-')+'<br>신청 '+escapeHtml(when)+(approvedWhen?'<br>승인 '+escapeHtml(approvedWhen):'')+(rejectedWhen?'<br>거절 '+escapeHtml(rejectedWhen):'')+'</div>'+history+'</div><span class="counselor-approval-status">'+statusText+'</span></div>'+issued+'<div class="'+actionsClass+'">'+action+'</div>';
    list.appendChild(d);
  });
 }
@@ -2301,6 +2330,44 @@ function approveCounselorApplication(id){
  sendCounselorStatusCentral(arr[idx]);
  renderCounselorApprovals();
  alert('승인 완료되었습니다.\n\n개인 카운셀러 코드 '+code+'와 개인 공유링크가 자동 발급되었습니다.');
+}
+function rejectCounselorApplication(id){
+ const arr=prepareCounselorApplications();
+ const idx=arr.findIndex(x=>String(x.id)===String(id));
+ if(idx<0){alert('신청 정보를 찾지 못했습니다.');return}
+ if(arr[idx].status==='승인 완료'){alert('이미 승인된 카운셀러는 거절 처리할 수 없습니다. 활동 중지 기능을 이용해 주세요.');return}
+ if(arr[idx].status==='거절'){alert('이미 거절 처리된 신청입니다.');return}
+ const ok=confirm((arr[idx].name||'신청자')+' 님의 카운셀러 활동 신청을 거절하시겠습니까?\n\n거절 기록은 남고, 개인 코드는 발급되지 않습니다.');
+ if(!ok)return;
+ const now=new Date().toISOString();
+ arr[idx]={...arr[idx],status:'거절',rejectedAt:now,counselorCode:null,shareLink:null,activityStatus:null};
+ storeSet('counselorApplications',arr);
+ const latest=storeGet('latestCounselorApplication');
+ if(latest&&(String(latest.id)===String(id)||counselorPhoneKey(latest.phone)===counselorPhoneKey(arr[idx].phone)))storeSet('latestCounselorApplication',arr[idx]);
+ syncCounselorApplicationCentral(arr[idx]);
+ renderCounselorApprovals();
+ alert('신청을 거절 처리했습니다. 중앙저장에도 거절 상태를 반영했습니다.');
+}
+function deleteCounselorApplication(id){
+ const arr=prepareCounselorApplications();
+ const idx=arr.findIndex(x=>String(x.id)===String(id));
+ if(idx<0){alert('신청 정보를 찾지 못했습니다.');return}
+ const item=arr[idx];
+ if(item.status==='승인 완료'){
+   alert('승인 완료된 카운셀러는 삭제할 수 없습니다. 고객 연결 기록과 개인 코드 보호를 위해 활동 중지 기능을 이용해 주세요.');
+   return;
+ }
+ const cfg=getGoogleConfig();
+ if(!cfg.url||!cfg.key){alert('중앙저장에서도 삭제하려면 먼저 ① Google 중앙저장 연결을 확인해 주세요.');return}
+ const ok=confirm((item.name||'신청자')+' 님의 신청을 삭제하시겠습니까?\n\n센터관리 화면과 Google 중앙저장의 신청 기록에서 제거됩니다. 이 작업은 되돌리기 어렵습니다.');
+ if(!ok)return;
+ deleteCounselorApplicationCentral(item);
+ const next=arr.filter((_,i)=>i!==idx);
+ storeSet('counselorApplications',next);
+ const latest=storeGet('latestCounselorApplication');
+ if(latest&&(String(latest.id)===String(id)||counselorPhoneKey(latest.phone)===counselorPhoneKey(item.phone)))storeSet('latestCounselorApplication',null);
+ renderCounselorApprovals();
+ alert('신청 삭제를 요청했습니다. 중앙저장에서도 제거되며, 다시 불러오면 최신 상태가 확인됩니다.');
 }
 function setCounselorActivity(id,nextStatus){
  const arr=prepareCounselorApplications();
