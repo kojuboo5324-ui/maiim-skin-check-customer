@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 10명 파일럿 테스트 관리 · V2.7.26</title>
+<title>MAIIM 피부체크 · 10명 파일럿 테스트 관리 · V2.7.27</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -558,7 +558,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .ref-checking{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:#eef7f2;color:#315247;font-size:11px;font-weight:850}
 
 
-/* V2.7.26 · 파일럿 2번 평가문항 문구 명확화 + 진행중 카드만 자동 펼침 */
+/* V2.7.27 · 피부체크 1번 문항 표현 명확화 + 이전 파일럿 개선 유지 */
 /* V2.7.18 · 센터장/카운셀러/고객 역할 구분 */
 .role-badge{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;min-height:24px;padding:4px 9px;margin-right:7px;border-radius:999px;font-size:11px;font-weight:950;line-height:1;border:1px solid #d8e2dc;background:#f6f8f7;color:#496057;white-space:nowrap}
 .role-badge.manager{background:#fff3df;border-color:#efcf9f;color:#8a571f}
@@ -570,7 +570,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .admin-customer-title{display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-weight:900}
 
 
-/* V2.7.26 · 10명 파일럿 테스트 관리 */
+/* V2.7.27 · 10명 파일럿 테스트 관리 */
 .pilot-admin{background:linear-gradient(180deg,#fffdf8,#f4faf6);border:1px solid #cfdcd3;border-radius:22px;padding:18px;margin:16px 0;box-shadow:0 10px 30px rgba(33,76,64,.06)}
 .pilot-admin h3{margin:4px 0 7px;font-size:20px;color:var(--brand)}
 .pilot-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
@@ -1111,7 +1111,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  </div>
 
  <div class="pilot-admin" id="pilotAdminBox">
-   <div class="eyebrow">10-PERSON PILOT · V2.7.26</div>
+   <div class="eyebrow">10-PERSON PILOT · V2.7.27</div>
    <h3>⑧ 10명 실제 테스트 기록표</h3>
    <p class="mini" style="margin:5px 0 0">T01부터 한 명씩 진행하면서 성공 여부와 고객 반응을 바로 기록합니다. <b>실제 전화번호는 꼭 필요할 때만 기록</b>하고, 참가자는 앱에서 본인 정보를 직접 입력합니다.</p>
    <div class="pilot-summary" id="pilotSummary"></div>
@@ -1134,7 +1134,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 <script>
 const $=id=>document.getElementById(id);
 const Q=[
-["💧 세안 후 아무것도 바르기 전, 피부가 당기거나 땅기나요?","hydration"],
+["💧 세안 후 아무것도 바르기 전, 피부가 건조하고 땅기는 느낌이 있나요?","hydration"],
 ["💦 시간이 지나면 피부가 건조하거나 푸석하게 느껴지나요?","hydration"],
 ["✨ 피부결이 거칠거나 화장이 들뜨는 편인가요?","hydration"],
 ["🌿 오후가 되면 이마·코·볼에 유분이 많이 생기나요?","pores"],
@@ -2389,7 +2389,7 @@ function renderAdminConsultations(){
 }
 
 
-/* V2.7.26 · 10명 파일럿 테스트 기록표 */
+/* V2.7.27 · 10명 파일럿 테스트 기록표 */
 const PILOT_TEST_KEY='maiimPilotTestsV2724';
 const PILOT_TEST_SPECS=[
  {id:'T01',testName:'테스트고객01',age:'30대',gender:'여성',device:'갤럭시',route:'센터 공용',goal:'기본 전체 흐름 · 이름 → 기본정보 → 13문항 → 결과 → 상담 → 제품'},
