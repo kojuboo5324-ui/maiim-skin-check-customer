@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 10명 파일럿 테스트 관리 · V2.7.24</title>
+<title>MAIIM 피부체크 · 10명 파일럿 테스트 관리 · V2.7.26</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -558,7 +558,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .ref-checking{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:#eef7f2;color:#315247;font-size:11px;font-weight:850}
 
 
-/* V2.7.24 · 센터관리 10명 파일럿 테스트 기록표 추가 + V2.7.23 질문 이전버튼 구분 개선 유지 */
+/* V2.7.26 · 파일럿 2번 평가문항 문구 명확화 + 진행중 카드만 자동 펼침 */
 /* V2.7.18 · 센터장/카운셀러/고객 역할 구분 */
 .role-badge{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;min-height:24px;padding:4px 9px;margin-right:7px;border-radius:999px;font-size:11px;font-weight:950;line-height:1;border:1px solid #d8e2dc;background:#f6f8f7;color:#496057;white-space:nowrap}
 .role-badge.manager{background:#fff3df;border-color:#efcf9f;color:#8a571f}
@@ -570,7 +570,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .admin-customer-title{display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-weight:900}
 
 
-/* V2.7.24 · 10명 파일럿 테스트 관리 */
+/* V2.7.26 · 10명 파일럿 테스트 관리 */
 .pilot-admin{background:linear-gradient(180deg,#fffdf8,#f4faf6);border:1px solid #cfdcd3;border-radius:22px;padding:18px;margin:16px 0;box-shadow:0 10px 30px rgba(33,76,64,.06)}
 .pilot-admin h3{margin:4px 0 7px;font-size:20px;color:var(--brand)}
 .pilot-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
@@ -1111,7 +1111,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  </div>
 
  <div class="pilot-admin" id="pilotAdminBox">
-   <div class="eyebrow">10-PERSON PILOT · V2.7.24</div>
+   <div class="eyebrow">10-PERSON PILOT · V2.7.26</div>
    <h3>⑧ 10명 실제 테스트 기록표</h3>
    <p class="mini" style="margin:5px 0 0">T01부터 한 명씩 진행하면서 성공 여부와 고객 반응을 바로 기록합니다. <b>실제 전화번호는 꼭 필요할 때만 기록</b>하고, 참가자는 앱에서 본인 정보를 직접 입력합니다.</p>
    <div class="pilot-summary" id="pilotSummary"></div>
@@ -2389,7 +2389,7 @@ function renderAdminConsultations(){
 }
 
 
-/* V2.7.24 · 10명 파일럿 테스트 기록표 */
+/* V2.7.26 · 10명 파일럿 테스트 기록표 */
 const PILOT_TEST_KEY='maiimPilotTestsV2724';
 const PILOT_TEST_SPECS=[
  {id:'T01',testName:'테스트고객01',age:'30대',gender:'여성',device:'갤럭시',route:'센터 공용',goal:'기본 전체 흐름 · 이름 → 기본정보 → 13문항 → 결과 → 상담 → 제품'},
@@ -2425,7 +2425,7 @@ function renderPilotTests(){
    const statusClass=pilotStatusClass(r.status);
    const checkHtml=checks.map(([field,label])=>'<label class="pilot-check"><input type="checkbox" data-pilot-id="'+r.id+'" data-pilot-field="'+field+'" '+(r[field]?'checked':'')+'><span>'+label+'</span></label>').join('');
    const ans=['미확인','예','보통','아니오'];
-   return '<details class="pilot-item" '+(idx===0?'open':'')+'><summary><span class="pilot-summary-main">'+r.id+' · '+escapeHtml(r.participantName||r.testName)+'<small>'+escapeHtml(r.route)+' · '+escapeHtml(r.goal)+'</small></span><span class="pilot-status-chip '+statusClass+'">'+escapeHtml(r.status)+'</span></summary><div class="pilot-body">'+
+   return '<details class="pilot-item" '+(r.status==='진행중'?'open':'')+'><summary><span class="pilot-summary-main">'+r.id+' · '+escapeHtml(r.participantName||r.testName)+'<small>'+escapeHtml(r.route)+' · '+escapeHtml(r.goal)+'</small></span><span class="pilot-status-chip '+statusClass+'">'+escapeHtml(r.status)+'</span></summary><div class="pilot-body">'+
     '<div class="pilot-goal"><b>이번 사람의 시험 목적</b><br>'+escapeHtml(r.goal)+'</div>'+
     '<div class="pilot-grid">'+
       '<div><label>참가자 이름/닉네임</label><input data-pilot-id="'+r.id+'" data-pilot-field="participantName" value="'+escapeHtml(r.participantName)+'"></div>'+
@@ -2439,7 +2439,7 @@ function renderPilotTests(){
     '<div class="pilot-checks">'+checkHtml+'</div>'+
     '<div class="pilot-feedback"><b>참가자에게 마지막으로 물어볼 5가지</b>'+
       '<label>1. 첫 화면에서 무엇을 해야 하는지 바로 알았나요?</label><select data-pilot-id="'+r.id+'" data-pilot-field="q1">'+pilotSelectOptions(ans,r.q1)+'</select>'+
-      '<label>2. 13문항이 어렵거나 지루하지 않았나요?</label><select data-pilot-id="'+r.id+'" data-pilot-field="q2">'+pilotSelectOptions(ans,r.q2)+'</select>'+
+      '<label>2. 13문항은 적당한 길이와 난이도로 편하게 답할 수 있었나요?</label><select data-pilot-id="'+r.id+'" data-pilot-field="q2">'+pilotSelectOptions(ans,r.q2)+'</select>'+
       '<label>3. 피부 결과가 본인 이야기처럼 느껴졌나요?</label><select data-pilot-id="'+r.id+'" data-pilot-field="q3">'+pilotSelectOptions(ans,r.q3)+'</select>'+
       '<label>4. 상담이나 제품 안내를 더 받아보고 싶었나요?</label><select data-pilot-id="'+r.id+'" data-pilot-field="q4">'+pilotSelectOptions(ans,r.q4)+'</select>'+
       '<label>5. 가장 헷갈리거나 고쳤으면 하는 부분</label><textarea data-pilot-id="'+r.id+'" data-pilot-field="q5" placeholder="고객 말을 가능한 그대로 적어 주세요">'+escapeHtml(r.q5)+'</textarea>'+
