@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 카운셀러 신청 거절·삭제 · V2.7.21</title>
+<title>MAIIM 피부체크 · 상담 중앙목록 자동동기화 · V2.7.22</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -558,7 +558,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .ref-checking{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:#eef7f2;color:#315247;font-size:11px;font-weight:850}
 
 
-/* V2.7.21 · 카운셀러 신청 거절·삭제 + 중앙 동기화 */
+/* V2.7.22 · 고객 상담 중앙목록 자동동기화 + V2.7.21 카운셀러 관리 유지 */
 /* V2.7.18 · 센터장/카운셀러/고객 역할 구분 */
 .role-badge{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;min-height:24px;padding:4px 9px;margin-right:7px;border-radius:999px;font-size:11px;font-weight:950;line-height:1;border:1px solid #d8e2dc;background:#f6f8f7;color:#496057;white-space:nowrap}
 .role-badge.manager{background:#fff3df;border-color:#efcf9f;color:#8a571f}
@@ -1072,6 +1072,12 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
    <div class="counselor-approval-summary" id="counselorApprovalSummary"></div>
    <div class="counselor-approval-list" id="counselorApprovalList"></div>
    <div class="counselor-approval-note">센터장이 승인하면 <b>C001, C002… 형식의 개인 코드와 개인 공유링크가 즉시 자동 발급</b>됩니다. 승인 후에는 <b>활동 중지·재개</b>도 이 화면에서 관리합니다.</div>
+ </div>
+ <div class="card soft" id="consultationCentralSyncCard">
+   <b>⑦ 고객 상담 중앙저장 자동 동기화</b>
+   <p class="mini" style="margin:6px 0 8px">센터관리 화면을 열면 다른 휴대폰·시크릿 창에서 접수된 고객 상담신청도 Google 중앙저장에서 자동으로 불러옵니다.</p>
+   <button class="secondary" type="button" onclick="loadCentralConsultations({silent:false})">중앙 상담 새로 불러오기</button>
+   <span class="status-pill" id="consultationCentralSyncStatus">대기</span>
  </div>
  <div id="adminList"></div>
  <button class="secondary" onclick="show('home')">고객화면으로</button>
@@ -1757,7 +1763,7 @@ function show(id){
  if(id==='counselorPending')renderCounselorPending();
  if(id==='counselorCode'){restoreMyCounselorCode();renderCounselorTestNote();}
  if(id==='counselorShareDone')renderShareDone();
- if(id==='admin'){renderAdmin();setTimeout(()=>loadCentralCounselorApplications({silent:true}),60);}
+ if(id==='admin'){renderAdmin();setTimeout(()=>{loadCentralCounselorApplications({silent:true});loadCentralConsultations({silent:true});},60);}
  window.scrollTo(0,0);
 }
 function hasBasic(){return !!($('age').value&&$('gender').value&&$('concern').value)}
@@ -2252,6 +2258,91 @@ function deleteCounselorApplicationCentral(item){
  return fetch(cfg.url,{method:'POST',mode:'no-cors',cache:'no-store',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:cfg.key,action:'counselor_application_delete',data:{id:item.id,phone:item.phone||''}})}).then(()=>true).catch(()=>false);
 }
 
+let consultationCentralSyncPromise=null;
+function mergeCentralConsultations(remote){
+ const local=storeGet('consultations')||[];
+ const remoteList=Array.isArray(remote)?remote:[];
+ const byId=new Map();
+ local.forEach(x=>{
+   if(!x||!x.id)return;
+   byId.set(String(x.id),{...x});
+ });
+ remoteList.forEach(r=>{
+   if(!r||!r.id)return;
+   const id=String(r.id);
+   const prev=byId.get(id)||{};
+   byId.set(id,{...prev,...r,centralSynced:true});
+ });
+ const arr=[...byId.values()].sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+ storeSet('consultations',arr);
+ renderAdminConsultations();
+ return arr;
+}
+function loadCentralConsultations(options){
+ const silent=options?.silent===true;
+ const cfg=getGoogleConfig();
+ const status=$('consultationCentralSyncStatus');
+ if(!cfg.url||!cfg.key){
+   if(status){status.textContent='Google 연결 필요';status.className='status-pill'}
+   if(!silent)alert('먼저 ① Google 중앙저장 연결의 주소와 전송 키를 저장해 주세요.');
+   return Promise.resolve(false);
+ }
+ if(consultationCentralSyncPromise)return consultationCentralSyncPromise;
+ if(status){status.textContent='불러오는 중…';status.className='status-pill'}
+ consultationCentralSyncPromise=new Promise(resolve=>{
+   const cb='__maiimConsultations'+Date.now();
+   const script=document.createElement('script');
+   let done=false;
+   let timer=null;
+   const cleanup=()=>{if(done)return;done=true;try{delete window[cb]}catch(e){window[cb]=undefined}script.remove();if(timer)clearTimeout(timer);consultationCentralSyncPromise=null};
+   const finish=(ok,msg)=>{cleanup();if(status){status.textContent=msg;status.className='status-pill '+(ok?'ok':'')}resolve(ok)};
+   window[cb]=payload=>{
+     if(payload?.ok&&Array.isArray(payload.consultations)){
+       mergeCentralConsultations(payload.consultations);
+       finish(true,'동기화 '+payload.consultations.length+'건');
+     }else{
+       finish(false,'동기화 실패');
+       if(!silent)alert('중앙 상담신청을 불러오지 못했습니다. Google 연결설정을 확인해 주세요.');
+     }
+   };
+   script.onerror=()=>{finish(false,'연결 실패');if(!silent)alert('중앙 상담신청 불러오기에 실패했습니다. 잠시 후 다시 시도해 주세요.')};
+   const u=new URL(cfg.url);
+   u.searchParams.set('action','consultations');
+   u.searchParams.set('key',cfg.key);
+   u.searchParams.set('callback',cb);
+   u.searchParams.set('_',String(Date.now()));
+   script.src=u.toString();
+   document.head.appendChild(script);
+   timer=setTimeout(()=>{finish(false,'시간 초과');if(!silent)alert('중앙 상담신청 불러오기가 지연되고 있습니다. 다시 눌러 주세요.')},12000);
+ });
+ return consultationCentralSyncPromise;
+}
+function renderAdminConsultations(){
+ const apps=prepareCounselorApplications();
+ const arr=(storeGet('consultations')||[]).slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+ const box=$('adminList');
+ if(!box)return;
+ const centralCount=arr.filter(x=>x.centralSynced===true).length;
+ box.innerHTML='<div class="card"><b>고객 상담신청 '+arr.length+'건</b><p class="mini" style="margin:6px 0 0">Google 중앙저장 동기화 '+centralCount+'건 포함 · 개인 공유링크 고객은 담당 카운셀러 코드가 함께 표시됩니다.</p></div>';
+ arr.forEach(x=>{
+   const d=document.createElement('div');d.className='card';
+   const ref=normalizeCounselorCode(x.referrerCode||'');
+   const counselor=ref?apps.find(a=>normalizeCounselorCode(a.counselorCode||'')===ref):null;
+   const refHtml=ref
+     ? '<div class="admin-consult-ref"><span class="role-badge counselor">카운셀러 '+escapeHtml(ref)+'</span>'+(counselor?.name?escapeHtml(counselor.name)+' · ':'')+'담당</div>'
+     : '<div class="admin-consult-ref center"><span class="role-badge manager">센터</span>공용 상담</div>';
+   const sourceHtml=x.centralSynced===true?'<span class="status-pill ok" style="margin-left:6px">중앙저장</span>':'';
+   let when='';
+   try{when=x.date?new Date(x.date).toLocaleString('ko-KR'):''}catch(e){when=String(x.date||'')}
+   const skinBits=[];
+   if(x.skinType)skinBits.push('피부 '+escapeHtml(x.skinType));
+   if(x.condition!==undefined&&x.condition!==null&&String(x.condition)!=='')skinBits.push('컨디션 '+escapeHtml(x.condition)+'점');
+   const skinHtml=skinBits.length?'<div class="mini" style="margin-top:5px">'+skinBits.join(' · ')+'</div>':'';
+   d.innerHTML='<div class="admin-customer-title"><span class="role-badge customer">고객</span>'+escapeHtml(x.name)+' · '+escapeHtml(x.method)+sourceHtml+'</div><div>'+escapeHtml(x.phone)+'</div>'+refHtml+skinHtml+'<div class="mini" style="margin-top:6px">'+escapeHtml(when)+'</div>';
+   box.appendChild(d)
+ });
+}
+
 function getAiConfig(){return storeGet('aiConfig')||{}}
 function saveGoogleConfig(){const url=$('googleUrl').value.trim(),key=$('googleKey').value.trim();if(!url||!key){alert('Apps Script 주소와 전송 키를 모두 입력해 주세요.');return}storeSet('googleConfig',{url,key});renderAdmin();alert('Google 중앙저장 설정을 저장했습니다.')}
 function saveKakaoConfig(){const url=$('kakaoUrl').value.trim();if(!url){alert('카카오 상담 링크를 입력해 주세요.');return}if(!/^https?:\/\//i.test(url)){alert('https:// 로 시작하는 카카오 상담 링크를 입력해 주세요.');return}storeSet('kakaoConfig',{url});renderAdmin();alert('카카오 상담 링크를 저장했습니다.')}
@@ -2407,19 +2498,7 @@ function renderAdmin(){
  $('kakaoStatus').textContent=k.url?'연결됨':'미설정';$('kakaoStatus').className='status-pill '+(k.url?'ok':'');
  $('aiStatus').textContent=a.url&&a.key?'연결정보 저장됨':'미설정';$('aiStatus').className='status-pill '+(a.url&&a.key?'ok':'');
  renderCounselorApprovals();
- const apps=prepareCounselorApplications();
- const arr=storeGet('consultations')||[],box=$('adminList');
- box.innerHTML='<div class="card"><b>이 기기에 저장된 상담신청 '+arr.length+'건</b><p class="mini" style="margin:6px 0 0">개인 공유링크로 들어온 고객은 담당 카운셀러 코드가 함께 표시됩니다.</p></div>';
- arr.forEach(x=>{
-   const d=document.createElement('div');d.className='card';
-   const ref=normalizeCounselorCode(x.referrerCode||'');
-   const counselor=ref?apps.find(a=>normalizeCounselorCode(a.counselorCode||'')===ref):null;
-   const refHtml=ref
-     ? '<div class="admin-consult-ref"><span class="role-badge counselor">카운셀러 '+escapeHtml(ref)+'</span>'+(counselor?.name?escapeHtml(counselor.name)+' · ':'')+'담당</div>'
-     : '<div class="admin-consult-ref center"><span class="role-badge manager">센터</span>공용 상담</div>';
-   d.innerHTML='<div class="admin-customer-title"><span class="role-badge customer">고객</span>'+escapeHtml(x.name)+' · '+escapeHtml(x.method)+'</div><div>'+escapeHtml(x.phone)+'</div>'+refHtml+'<div class="mini" style="margin-top:6px">'+new Date(x.date).toLocaleString('ko-KR')+'</div>';
-   box.appendChild(d)
- });
+ renderAdminConsultations();
 }
 async function copyTestLink(){const k=getKakaoConfig();const u=new URL(location.href);u.search='';u.hash='';u.searchParams.set('test','1');if(k.url&&k.url!==KAKAO_CHAT_URL)u.searchParams.set('kakaourl',k.url);try{await navigator.clipboard.writeText(u.toString());$('copyMessage').textContent='테스트 링크가 복사되었습니다. 중앙저장 전송 키는 링크에 포함하지 않습니다.'}catch{$('copyMessage').textContent='복사가 안 되면 주소창의 현재 주소를 복사해 주세요.'}}
 function importConfigFromQuery(){const p=new URLSearchParams(location.search);const gu=p.get('gsurl'),gk=p.get('gskey'),ku=p.get('kakaourl'),au=p.get('aiurl'),ak=p.get('aikey');if(gu&&gk)storeSet('googleConfig',{url:gu,key:gk});if(ku)storeSet('kakaoConfig',{url:ku});if(au&&ak)storeSet('aiConfig',{url:au.replace(/\/$/,''),key:ak});if(gu||gk||ku||au||ak){['gsurl','gskey','kakaourl','aiurl','aikey'].forEach(k=>p.delete(k));const qs=p.toString();history.replaceState({},'',location.pathname+(qs?'?'+qs:'')+location.hash)}}
