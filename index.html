@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 역할 구분 · V2.7.18</title>
+<title>MAIIM 피부체크 · 새 카운셀러 중앙저장 · V2.7.19</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -553,6 +553,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .ref-checking{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:#eef7f2;color:#315247;font-size:11px;font-weight:850}
 
 
+/* V2.7.19 · 새 고객 카운셀러 활동 신청도 중앙저장 공개 접수 지원 */
 /* V2.7.18 · 센터장/카운셀러/고객 역할 구분 */
 .role-badge{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;min-height:24px;padding:4px 9px;margin-right:7px;border-radius:999px;font-size:11px;font-weight:950;line-height:1;border:1px solid #d8e2dc;background:#f6f8f7;color:#496057;white-space:nowrap}
 .role-badge.manager{background:#fff3df;border-color:#efcf9f;color:#8a571f}
@@ -1514,11 +1515,16 @@ function submitCounselorApply(){
  show('counselorPending');
 
  const c=getGoogleConfig();
- if(c.url&&c.key){
-   fetch(c.url,{
-     method:'POST',mode:'no-cors',
+ const hasProtectedConfig=!!(c.url&&c.key);
+ const url=hasProtectedConfig?c.url:PUBLIC_CONSULTATION_WEB_APP_URL;
+ if(url){
+   const payload=hasProtectedConfig
+     ? {key:c.key,action:'counselor_application',data:item}
+     : {action:'counselor_application_public',appId:PUBLIC_CONSULTATION_APP_ID,data:item};
+   fetch(url,{
+     method:'POST',mode:'no-cors',cache:'no-store',
      headers:{'Content-Type':'text/plain;charset=utf-8'},
-     body:JSON.stringify({key:c.key,action:'counselor_application',data:item})
+     body:JSON.stringify(payload)
    }).catch(()=>{});
  }
 }
@@ -1774,6 +1780,7 @@ function goStep(step){if(step==='question'){if(!hasBasic()){alert('먼저 기본
 const CENTER_CONTACT={landline:'041-622-4646',mobile:'010-4923-9989',address:'천안시 동남구 신부 10길 8 남양빌딩 304호'};
 const KAKAO_ID='kojuboo';
 const KAKAO_CHAT_URL='https://pf.kakao.com/_KqkxaX/chat';
+/* V2.7.19 새 카운셀러 중앙저장: 새 기기에서도 공개 접수로 CounselorApplications에 저장 */
 /* V2.7.18 역할 구분: 센터장/매니저 · 카운셀러 코드 · 고객 배지 표시 */
 /* V2.7.17 새 고객 중앙저장: 공개 접수 주소만 앱에 포함하며 전송 키는 포함하지 않음 */
 const PUBLIC_CONSULTATION_WEB_APP_URL='https://script.google.com/macros/s/AKfycbxMqpStgSVH-HOVwIvvGMwNrEoNu6ld-T-QDST9J1tGrPDvN1wIuCU1OAnJckscoi-OrQ/exec';
