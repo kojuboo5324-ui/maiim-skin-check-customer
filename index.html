@@ -862,7 +862,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 
 /* V2.7.31 · 스마트폰 저장 + 재체크 버튼 오류 수정 */
 
-/* V2.7.32 · 추석 소개문구 + 카카오톡 공유 버튼 */
+/* V2.7.33 · 카카오톡 인앱 공유 복사 방식 보완 */
 .seasonal-share-card{
   margin:14px 12px 10px;
   padding:16px 16px 15px;
@@ -947,7 +947,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
   <p>명절 동안 잠시 쉬어가며 내 피부 상태도 가볍게 확인해 보세요.<br>2분 피부체크로 현재 피부 컨디션과 관리 포인트를 확인할 수 있습니다.</p>
   <div class="seasonal-share-actions">
    <button class="share-kakao-btn" type="button" onclick="shareAppWithChuseok()">카카오톡으로 공유하기</button>
-   <div class="share-kakao-note">버튼을 누른 뒤 카카오톡을 선택하면 소개 문구와 링크를 함께 보낼 수 있습니다.</div>
+   <div class="share-kakao-note">카카오톡 안에서는 문구와 링크가 복사됩니다. 대화방에 붙여넣어 보내세요.</div>
   </div>
  </div>
  <div class="chuseok-image-card-v24" role="note" aria-label="2026 한가위 인사">
@@ -2596,36 +2596,67 @@ function renderConsultContext(){
 }
 
 const APP_SHARE_URL='https://kojuboo5324-ui.github.io/maiim-skin-check-customer/';
-const CHUSEOK_SHARE_MESSAGE='풍성한 한가위 보내세요 🌕
-명절 동안 잠시 쉬어가며 내 피부 상태도 가볍게 확인해 보세요.
-2분 피부체크로 현재 피부 컨디션과 관리 포인트를 확인할 수 있습니다.
-' + APP_SHARE_URL;
-async function shareAppWithChuseok(){
+const CHUSEOK_SHARE_TEXT='풍성한 한가위 보내세요 🌕\n명절 동안 잠시 쉬어가며 내 피부 상태도 가볍게 확인해 보세요.\n2분 피부체크로 현재 피부 컨디션과 관리 포인트를 확인할 수 있습니다.';
+const CHUSEOK_SHARE_MESSAGE=CHUSEOK_SHARE_TEXT+'\n'+APP_SHARE_URL;
+
+async function copyTextReliable(text){
  try{
-  if(navigator.share){
-   try{
-    await navigator.share({
-      title:'MAIIM 피부체크',
-      text:'풍성한 한가위 보내세요 🌕
-명절 동안 잠시 쉬어가며 내 피부 상태도 가볍게 확인해 보세요.
-2분 피부체크로 현재 피부 컨디션과 관리 포인트를 확인할 수 있습니다.',
-      url:APP_SHARE_URL
-    });
-    return;
-   }catch(e){
-    if(e&&e.name==='AbortError')return;
-   }
-  }
   if(navigator.clipboard&&navigator.clipboard.writeText){
-   await navigator.clipboard.writeText(CHUSEOK_SHARE_MESSAGE);
-   alert('공유창을 열지 못해 소개 문구와 링크를 복사했습니다.
-카카오톡 대화창에 붙여넣어 보내주세요.');
-   return;
+   await navigator.clipboard.writeText(text);
+   return true;
   }
-  prompt('아래 문구를 복사해서 카카오톡에 붙여넣어 보내주세요.', CHUSEOK_SHARE_MESSAGE);
+ }catch(e){}
+ try{
+  const ta=document.createElement('textarea');
+  ta.value=text;
+  ta.setAttribute('readonly','');
+  ta.style.position='fixed';
+  ta.style.left='-9999px';
+  ta.style.top='0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  ta.setSelectionRange(0,ta.value.length);
+  const ok=document.execCommand('copy');
+  ta.remove();
+  return !!ok;
  }catch(e){
-  console.error(e);
-  try{prompt('아래 문구를 복사해서 카카오톡에 붙여넣어 보내주세요.', CHUSEOK_SHARE_MESSAGE)}catch(_){alert('공유 기능을 열지 못했습니다. 잠시 후 다시 시도해 주세요.')}
+  return false;
+ }
+}
+
+async function shareAppWithChuseok(){
+ const ua=navigator.userAgent||'';
+ const isKakao=/KAKAOTALK/i.test(ua);
+
+ if(isKakao){
+  const copied=await copyTextReliable(CHUSEOK_SHARE_MESSAGE);
+  if(copied){
+   alert('추석 소개 문구와 피부체크 주소를 복사했습니다.\n카카오톡 대화방으로 돌아가 입력창을 길게 눌러 “붙여넣기” 후 보내주세요.');
+  }else{
+   prompt('아래 문구를 복사해서 카카오톡 대화방에 붙여넣어 보내주세요.',CHUSEOK_SHARE_MESSAGE);
+  }
+  return;
+ }
+
+ if(navigator.share){
+  try{
+   await navigator.share({
+    title:'MAIIM 피부체크',
+    text:CHUSEOK_SHARE_TEXT,
+    url:APP_SHARE_URL
+   });
+   return;
+  }catch(e){
+   if(e&&e.name==='AbortError')return;
+  }
+ }
+
+ const copied=await copyTextReliable(CHUSEOK_SHARE_MESSAGE);
+ if(copied){
+  alert('소개 문구와 피부체크 주소를 복사했습니다.\n카카오톡 대화방에 붙여넣어 보내주세요.');
+ }else{
+  prompt('아래 문구를 복사해서 카카오톡에 붙여넣어 보내주세요.',CHUSEOK_SHARE_MESSAGE);
  }
 }
 function openConsult(){const x=storeGet('latestResult');currentResult=x?.result||null;show('consult');renderConsultContext();renderDirectContact()}
