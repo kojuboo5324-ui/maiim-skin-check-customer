@@ -725,7 +725,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 
 /* V2.7.24 · 첫 화면 안정 복구 — 기존 포스터 유지 + 작은 AI + 추석 + SNS 카운셀러 */
 .poster-ai-v24{
-  position:absolute;left:5.0%;top:58.4%;width:57.8%;z-index:4;
+  position:absolute;left:5.0%;top:56.6%;width:57.8%;z-index:4;
   display:grid;grid-template-columns:minmax(0,1fr) 70px;gap:8px;align-items:end;
   box-sizing:border-box;padding:11px 11px 10px 12px;border-radius:17px;
   background:rgba(255,255,255,.985);border:1.5px solid rgba(65,126,102,.24);
@@ -747,7 +747,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
   width:calc(100% - 22px);max-width:490px;margin:18px auto 22px;overflow:hidden;
   border-radius:18px;border:1px solid #eadbc4;background:#fff;box-shadow:0 10px 22px rgba(102,77,43,.10);line-height:0
 }
-.chuseok-image-card-v24 img{display:block;width:100%;height:auto}
+.chuseok-image-card-v24 img{display:block;width:calc(100% + 10px);height:auto;max-width:none;margin:0 -10px 0 0}
 
 .counselor-home-v24{
   max-width:700px;margin:18px auto 26px;padding:0 11px
@@ -756,7 +756,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
   display:block;border:none;padding:0;margin:0;width:100%;background:none;cursor:pointer
 }
 .counselor-banner-frame{
-  overflow:hidden;border-radius:24px;border:1px solid #dce7e0;background:#fff;
+  overflow:hidden;border-radius:24px;border:0;background:transparent;
   box-shadow:0 13px 34px rgba(31,62,50,.10)
 }
 .counselor-banner-frame img{display:block;width:100%;height:auto}
@@ -764,7 +764,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
   margin:12px 0 0;min-height:52px;border-radius:16px;background:#214c40;box-shadow:0 10px 20px rgba(33,76,64,.16)
 }
 @media(max-width:480px){
-  .poster-ai-v24{left:5.1%;top:58.7%;width:59.2%;grid-template-columns:minmax(0,1fr) 56px;padding:9px 9px 9px 10px;border-radius:15px}
+  .poster-ai-v24{left:5.1%;top:56.9%;width:59.2%;grid-template-columns:minmax(0,1fr) 56px;padding:9px 9px 9px 10px;border-radius:15px}
   .poster-ai-v24 b{font-size:10.4px}
   .poster-ai-v24 small{font-size:8px;margin-top:5px;padding-top:5px}
   .poster-shell .poster-ai-v24 img.ai-v24-mascot{width:54px!important;height:62px!important;max-width:54px!important;max-height:62px!important}
