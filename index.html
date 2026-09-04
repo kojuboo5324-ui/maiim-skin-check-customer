@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 10명 파일럿 테스트 관리 · V2.7.30</title>
-<meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, AI 피부박사와 음성으로 상담해 보세요.">
+<title>MAIIM 피부체크 · 한가위 인사 · V2.7.16.3</title>
+<meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, 원하는 방법으로 상담을 신청해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
 <meta property="og:type" content="website">
@@ -112,10 +112,6 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .poster-hotspot{position:absolute;left:5.2%;top:67.7%;width:61.7%;height:8.4%;border:0;border-radius:999px;background:transparent;cursor:pointer;z-index:3}
 .poster-hotspot:focus-visible{outline:4px solid rgba(255,255,255,.95);outline-offset:-6px;box-shadow:0 0 0 3px #ff6a00}
 .poster-start-hint{position:absolute;left:5.2%;top:77.4%;width:61.7%;text-align:center;color:#315f50;font-size:10px;font-weight:850;line-height:1.3;pointer-events:none;opacity:.01}
-.home-direct-consult-wrap{padding:12px 14px 0;max-width:520px;margin:0 auto}
-.home-direct-consult{width:100%;min-height:50px;margin:0;border:1px solid #c9dacf;border-radius:16px;background:#fff;color:#285348;font-size:14px;font-weight:900;box-shadow:0 8px 20px rgba(31,64,50,.08);cursor:pointer}
-.home-direct-consult small{display:block;margin-top:3px;color:#74827b;font-size:10px;font-weight:750}
-.home-direct-consult:focus-visible{outline:3px solid rgba(47,110,88,.25);outline-offset:2px}
 @media(max-width:560px){
  body.home-mode{background:#fbfaf6}
  body.home-mode .wrap{padding:0;max-width:none}
@@ -543,11 +539,6 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .counselor-activity-btn{width:100%;border:1px solid #d9e1dc;border-radius:14px;min-height:46px;padding:10px 13px;font-weight:900;background:#fff;color:#315247}
 .counselor-activity-btn.pause{border-color:#e8c3a9;background:#fff8f2;color:#9a5d36}
 .counselor-activity-btn.resume{border-color:#a9d2b5;background:#f1faf4;color:#2f7f4f}
-.counselor-reject-btn{width:100%;border:1px solid #e7c784;border-radius:14px;min-height:44px;padding:10px 13px;font-weight:900;background:#fffaf0;color:#8a661e}
-.counselor-delete-btn{width:100%;border:1px solid #e1b6b6;border-radius:14px;min-height:44px;padding:10px 13px;font-weight:900;background:#fff6f6;color:#a04747}
-.counselor-approval-item.rejected{border-color:#ead7aa;background:#fffdf7}
-.counselor-approval-actions.multi{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.counselor-approval-actions.multi .counselor-approve-btn{grid-column:1/-1}
 .counselor-customer-count{display:inline-flex;margin-top:8px;padding:5px 9px;border-radius:999px;background:#eef4f0;border:1px solid #d9e4dd;color:#426052;font-size:11px;font-weight:900}
 .counselor-activity-history{margin-top:7px;color:#78817c;font-size:10px;line-height:1.5}
 .counselor-ref-paused{margin-top:9px;padding:11px 12px;border-radius:14px;background:#fff4ef;border:1px solid #efcabb;color:#86584b;font-size:12px;line-height:1.65}
@@ -562,58 +553,14 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .ref-checking{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:#eef7f2;color:#315247;font-size:11px;font-weight:850}
 
 
-/* V2.7.30 · 첫 화면 피부체크 없이 바로 상담 + 이전 파일럿 개선 유지 */
-/* V2.7.18 · 센터장/카운셀러/고객 역할 구분 */
-.role-badge{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;min-height:24px;padding:4px 9px;margin-right:7px;border-radius:999px;font-size:11px;font-weight:950;line-height:1;border:1px solid #d8e2dc;background:#f6f8f7;color:#496057;white-space:nowrap}
-.role-badge.manager{background:#fff3df;border-color:#efcf9f;color:#8a571f}
-.role-badge.counselor{background:#edf8f1;border-color:#c7dfcf;color:#2f704a}
-.role-badge.customer{background:#eef5fb;border-color:#cbddeb;color:#345d79}
-.role-badge.applicant{background:#f7f3fb;border-color:#ddd0eb;color:#684d82}
-.role-title-line{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-.counselor-role-line{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:4px}
-.admin-customer-title{display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-weight:900}
-
-
-/* V2.7.30 · 10명 파일럿 테스트 관리 */
-.pilot-admin{background:linear-gradient(180deg,#fffdf8,#f4faf6);border:1px solid #cfdcd3;border-radius:22px;padding:18px;margin:16px 0;box-shadow:0 10px 30px rgba(33,76,64,.06)}
-.pilot-admin h3{margin:4px 0 7px;font-size:20px;color:var(--brand)}
-.pilot-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
-.pilot-summary span{background:#fff;border:2px solid var(--line);border-radius:13px;padding:9px 8px;text-align:center;font-size:11px;color:var(--muted);font-weight:800}
-.pilot-summary b{display:block;color:inherit;font-size:17px;margin-bottom:1px}
-.pilot-summary .waiting{background:#f2f4f3;border-color:#c9d0cc;color:#4f6057}
-.pilot-summary .progress{background:#fff3d6;border-color:#e5bd55;color:#7b5205}
-.pilot-summary .done{background:#e6f6eb;border-color:#8bc49a;color:#24613a}
-.pilot-summary .issue{background:#fde9e6;border-color:#e39a90;color:#96372d}
-.pilot-toolbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px}
-.pilot-toolbar button{margin:0}
-.pilot-item{border:1px solid var(--line);border-radius:16px;background:#fff;margin:9px 0;overflow:hidden}
-.pilot-item[open]{box-shadow:0 8px 22px rgba(33,76,64,.06)}
-.pilot-item summary{cursor:pointer;list-style:none;padding:13px 14px;font-weight:900;color:var(--ink);display:flex;justify-content:space-between;gap:10px;align-items:center}
-.pilot-item summary::-webkit-details-marker{display:none}
-.pilot-item summary:after{content:'펼치기';font-size:10px;color:var(--brand);border:1px solid var(--line);border-radius:999px;padding:4px 7px;background:#fff}
-.pilot-item[open] summary:after{content:'접기'}
-.pilot-summary-main{display:block}.pilot-summary-main small{display:block;font-size:10px;color:var(--muted);font-weight:700;margin-top:2px}
-.pilot-status-chip{display:inline-flex;border-radius:999px;padding:5px 9px;font-size:10px;font-weight:900;background:#eef2ef;color:#5b6961;margin-left:6px;border:1px solid #cbd3cf;white-space:nowrap}
-.pilot-status-chip.waiting{background:#f2f4f3;color:#4f6057;border-color:#c9d0cc}
-.pilot-status-chip.progress{background:#fff3d6;color:#7b5205;border-color:#e5bd55}
-.pilot-status-chip.done{background:#e6f6eb;color:#24613a;border-color:#8bc49a}
-.pilot-status-chip.issue{background:#fde9e6;color:#96372d;border-color:#e39a90}
-.pilot-status-select{font-weight:900;border-width:2px!important;transition:background .15s,border-color .15s,color .15s}
-.pilot-status-select.waiting{background:#f2f4f3!important;border-color:#c9d0cc!important;color:#4f6057!important}
-.pilot-status-select.progress{background:#fff3d6!important;border-color:#e5bd55!important;color:#7b5205!important}
-.pilot-status-select.done{background:#e6f6eb!important;border-color:#8bc49a!important;color:#24613a!important}
-.pilot-status-select.issue{background:#fde9e6!important;border-color:#e39a90!important;color:#96372d!important}
-.pilot-body{border-top:1px solid var(--line);padding:14px}
-.pilot-goal{background:var(--mint2);border-radius:13px;padding:10px 12px;font-size:12px;margin-bottom:10px}
-.pilot-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px}.pilot-grid label{font-size:11px;margin:3px 0}.pilot-grid .wide{grid-column:1/-1}
-.pilot-checks{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0}
-.pilot-check{display:flex;align-items:center;gap:7px;background:#f8faf8;border:1px solid var(--line);border-radius:11px;padding:8px;font-size:11px;font-weight:800}
-.pilot-check input{width:18px;height:18px;min-height:0;margin:0}
-.pilot-feedback{background:#fbfaf6;border:1px dashed #d7d8cf;border-radius:13px;padding:11px;margin-top:10px}
-.pilot-feedback b{display:block;margin-bottom:6px}.pilot-feedback label{font-size:11px;margin:7px 0 4px}
-.pilot-link-btn{margin-top:10px!important}
-.pilot-private-note{font-size:10px;color:var(--muted);margin:8px 0 0}
-@media(max-width:620px){.pilot-summary{grid-template-columns:repeat(2,1fr)}.pilot-toolbar,.pilot-grid{grid-template-columns:1fr}.pilot-grid .wide{grid-column:auto}.pilot-checks{grid-template-columns:1fr}}
+/* V2.7.16.3 · 2026 한가위 인사 + AI 척척박사 준비중 */
+.chuseok-greeting{position:relative;overflow:hidden;margin:14px 14px 18px;padding:18px 17px 17px;border:1px solid #ead8b5;border-radius:22px;background:linear-gradient(145deg,#fffaf0 0%,#fff4da 52%,#f3ead6 100%);box-shadow:0 12px 30px rgba(123,92,40,.10);color:#493b28}
+.chuseok-greeting::before{content:"";position:absolute;right:-18px;top:-22px;width:118px;height:118px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fffef1 0%,#ffe7a9 58%,#f2c86d 100%);box-shadow:0 0 35px rgba(235,190,92,.28)}
+.chuseok-greeting::after{content:"";position:absolute;left:-10%;right:-10%;bottom:-54px;height:95px;border-radius:50% 50% 0 0;background:linear-gradient(180deg,#6f947c,#3f6855);opacity:.16}
+.chuseok-greeting>*{position:relative;z-index:1}.chuseok-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.72);border:1px solid rgba(177,134,63,.22);font-size:11px;font-weight:900;color:#8a6124}
+.chuseok-greeting h3{margin:11px 92px 7px 0;font-size:21px;line-height:1.34;letter-spacing:-.035em;color:#5a4223}.chuseok-greeting p{margin:0 82px 9px 0;font-size:13px;line-height:1.7;color:#695942}.chuseok-from{display:block;font-size:12px;font-weight:900;color:#456655;margin-top:7px}
+.ai-highlight.ai-coming-soon{background:linear-gradient(145deg,#26473e,#53786b)}.ai-highlight.ai-coming-soon:after{content:"SOON";font-size:62px;right:-8px;bottom:-16px}.ai-coming-pill{display:inline-flex;padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);font-size:10px;font-weight:900;color:#e6f3ee}.ai-start[disabled],.secondary[disabled],.method-card[disabled]{cursor:not-allowed;opacity:.62;filter:saturate(.65)}
+@media(max-width:480px){.chuseok-greeting h3{font-size:19px;margin-right:74px}.chuseok-greeting p{margin-right:54px}.chuseok-greeting::before{width:100px;height:100px;right:-20px}}
 
 </style>
 </head>
@@ -635,8 +582,11 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
   <span class="poster-start-hint" aria-hidden="true">내 피부 신호 확인하기</span>
  </div>
 
- <div class="home-direct-consult-wrap">
-   <button class="home-direct-consult" type="button" onclick="openConsultWithoutSkin()">☎ 피부체크 없이 바로 상담하기 →<small>13문항을 하지 않아도 전화·카카오·방문 상담을 신청할 수 있어요.</small></button>
+ <div class="chuseok-greeting" role="note" aria-label="2026 한가위 인사">
+  <span class="chuseok-badge">🌕 2026 한가위 인사</span>
+  <h3>풍성하고 행복한 추석 보내세요</h3>
+  <p>소중한 가족과 함께 건강과 웃음이 가득한 한가위 되시길 바랍니다.</p>
+  <span class="chuseok-from">MAIIM 천안신부센터 드림</span>
  </div>
 
  <div class="counselor-home-new">
@@ -733,7 +683,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  <div class="card"><h3>지금 피부가 보내는 신호</h3><p id="signalText"></p></div>
  <div class="card"><h3>이 상태는 어떻게 만들어졌을까요?</h3><p id="causeText"></p></div>
  <div class="card soft"><h3>지금부터 관리한다면</h3><p id="positiveText"></p></div>
- <div class="ai-highlight"><div class="eyebrow" style="color:#cdeadd">AI VOICE CONSULTATION</div><h3>결과가 궁금하면 바로 물어보세요.</h3><p>AI 피부박사가 방금 나온 피부결과를 알고 있습니다. 전화하듯 말하면 음성으로 답하고, 이어서 다시 질문할 수 있습니다.</p><button class="ai-start" onclick="openAiConsult()">🎙 AI 피부박사와 음성상담 시작 →</button></div>
+ <div class="ai-highlight ai-coming-soon"><span class="ai-coming-pill">COMING SOON</span><h3>AI 척척박사는 지금 준비 중입니다.</h3><p>더 편리한 피부상담을 위해 기능을 준비하고 있습니다. 현재는 전화·카카오톡·센터 방문 상담을 이용해 주세요.</p><button class="ai-start" type="button" disabled aria-disabled="true">🤖 AI 척척박사 · 곧 만나요</button></div>
  <div class="product-preview-wrap">
    <span class="ref-badge">상담 후 안내 예정 제품</span>
    <h3 class="product-preview-title">내 피부결과에 따라 달라지는 제품 안내</h3>
@@ -750,13 +700,13 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 <section id="ai" class="view">
  <div class="ai-shell">
   <div class="eyebrow">AI SKIN DOCTOR · VOICE</div>
-  <h2 class="page-title">AI 피부박사와<br>말로 상담하세요.</h2>
+  <h2 class="page-title">AI 척척박사는<br>현재 준비 중입니다.</h2>
   <p class="lead">질문하면 음성으로 답하고, 답변 도중 다시 말하면 자연스럽게 이어서 대화하도록 설계했습니다.</p>
   <div class="ai-result-chip" id="aiResultChips"></div>
   <div class="call-card">
    <div class="call-status"><span class="call-dot" id="callDot"></span><span id="callStatus">연결 전</span></div>
    <div class="voice-orb"><div class="voice-wave" id="voiceWave"><i></i><i></i><i></i><i></i><i></i></div></div>
-   <h3 style="margin:4px 0">MAIIM AI 피부박사</h3>
+   <h3 style="margin:4px 0">MAIIM AI 척척박사</h3>
    <p style="font-size:12px;color:rgba(255,255,255,.78);margin:5px auto;max-width:420px">“왜 복합 고민형인가요?”, “수분과 탄력 중 무엇을 먼저 관리할까요?”처럼 편하게 말씀해 보세요.</p>
    <audio id="remoteAudio" autoplay></audio>
    <div class="call-actions"><button class="call-btn start" id="startCallBtn" onclick="requestAiConsent()">통화 시작</button><button class="call-btn end" id="endCallBtn" onclick="endAiCall()" disabled>통화 종료</button></div>
@@ -773,7 +723,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  <div class="eyebrow">STEP 4 · HUMAN CONSULTATION</div>
  <div class="stepnav" aria-label="피부체크 진행 단계"><button type="button" tabindex="-1">1 기본정보</button><button type="button" tabindex="-1">2 피부체크</button><button type="button" tabindex="-1">3 결과</button><button class="on" type="button" tabindex="-1">4 상담</button></div>
  <h2 class="page-title">원하는 방법으로<br>사람 상담을 신청하세요.</h2>
- <p class="lead">AI 상담을 먼저 이용해도 되고, 바로 담당자 상담을 신청해도 됩니다.</p>
+ <p class="lead">전화·카카오톡·센터 방문 중 편한 방법으로 담당자 상담을 신청해 주세요.</p>
  <div class="consult-hours" id="consultHoursBox">
    <span class="ico">🕘</span>
    <div>
@@ -793,7 +743,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
   <button class="method-card on" data-method="전화" onclick="selectMethod('전화')"><b>☎ 전화</b><span>지금 바로 전화하거나 상담을 신청합니다.</span></button>
   <button class="method-card" data-method="카카오톡" onclick="selectMethod('카카오톡')"><b>💬 카카오톡</b><span>꿀광피부 채널 1:1 상담으로 바로 연결합니다.</span></button>
   <button class="method-card" data-method="센터 방문" onclick="selectMethod('센터 방문')"><b>⌂ 센터 방문</b><span>센터 위치를 확인하고 방문상담을 신청합니다.</span></button>
-  <button class="method-card" data-method="AI 후 사람상담" onclick="selectMethod('AI 후 사람상담')"><b>◎ AI 후 사람상담</b><span>AI 연결 완료 후 사람 상담으로 이어집니다.</span></button>
+  <button class="method-card" type="button" disabled aria-disabled="true"><b>◎ AI 척척박사</b><span>현재 준비 중입니다. 곧 더 편리한 상담으로 찾아뵙겠습니다.</span></button>
  </div>
  <input type="hidden" id="consultMethod" value="전화">
  <div id="directContactPanel" class="card soft" style="margin-top:12px"></div>
@@ -808,7 +758,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
    <p class="mini" style="margin:7px 0 0">이름·전화번호를 입력하고, 위의 <b>필수 동의 2개</b>를 체크한 뒤 아래 버튼을 눌러 주세요. 접수 완료 화면에서 바로 제품 상세보기로 이어집니다.</p>
  </div>
  <button class="cta" type="button" id="consultSubmitBtn" onclick="submitConsult()">상담 신청하고 제품 안내로 계속 →</button>
- <button class="secondary" onclick="openAiConsult()">AI 피부박사와 먼저 대화하기</button>
+ <button class="secondary" type="button" disabled aria-disabled="true">🤖 AI 척척박사 · 준비 중</button>
  <button class="secondary" onclick="goStep('result')">내 피부결과 다시 보기</button>
  <div class="counselor-home-new" style="margin-top:18px">
    <div class="counselor-home-band">
@@ -832,7 +782,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  <div class="eyebrow">CONSULTATION RECEIVED</div><div class="ok">✓</div>
  <h2 class="page-title" style="text-align:center">상담 신청이 접수되었습니다.</h2>
  <div class="card soft"><b>신청 완료</b><p id="completeText"></p></div>
- <div class="card"><h3>이후 진행 순서</h3><p>① 담당자가 피부체크 결과 확인</p><p>② 전화·카카오·방문 또는 AI로 상담 진행</p><p>③ 현재 피부상태와 사용 중인 제품을 함께 확인</p><p>④ 상담 결과에 따라 필요한 관리와 제품을 연결</p><p class="mini">제품 구매 의무는 없습니다. 제품 안내는 피부체크 결과만으로 확정하지 않습니다.</p></div>
+ <div class="card"><h3>이후 진행 순서</h3><p>① 담당자가 피부체크 결과 확인</p><p>② 선택한 방법으로 상담 진행</p><p>③ 현재 피부상태와 사용 중인 제품을 함께 확인</p><p>④ 상담 결과에 따라 필요한 관리와 제품을 연결</p><p class="mini">제품 구매 의무는 없습니다. 제품 안내는 피부체크 결과만으로 확정하지 않습니다.</p></div>
  <div class="product-bridge" id="completeProductBridge">
    <span class="ref-badge">PRODUCT GUIDE</span>
    <h3>이제 내 피부결과에 맞는 제품을 확인하세요</h3>
@@ -1083,8 +1033,8 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 </section>
 
 <section id="admin" class="view">
- <div class="eyebrow">CENTER ADMIN · TEST</div><div class="role-title-line"><span class="role-badge manager">센터장/매니저</span><h2 class="page-title" style="margin:0">10명 테스트 관리</h2></div>
- <div class="card warn"><b>① Google 중앙저장 연결</b><p class="mini">센터관리용 연결정보입니다. <b>고객 상담신청은 새 고객 휴대폰에서도 공개 접수 주소로 자동 중앙저장</b>되며, 전송 키는 고객 링크에 넣거나 공개하지 않습니다.</p><label>Apps Script Web App URL</label><input id="googleUrl" placeholder="https://script.google.com/macros/s/.../exec"><label>전송 키</label><input id="googleKey" type="password"><button class="secondary" onclick="saveGoogleConfig()">Google 연결설정 저장</button><span class="status-pill" id="googleStatus">미설정</span></div>
+ <div class="eyebrow">CENTER ADMIN · TEST</div><h2 class="page-title">10명 테스트 관리</h2>
+ <div class="card warn"><b>① Google 중앙저장 연결</b><p class="mini">상담신청을 한곳에 모으는 주소와 전송 키입니다. 이 브라우저에만 저장됩니다.</p><label>Apps Script Web App URL</label><input id="googleUrl" placeholder="https://script.google.com/macros/s/.../exec"><label>전송 키</label><input id="googleKey" type="password"><button class="secondary" onclick="saveGoogleConfig()">Google 연결설정 저장</button><span class="status-pill" id="googleStatus">미설정</span></div>
  <div class="counselor-central-card">
    <b>①-1 카운셀러 중앙상태 연결 · 휴대폰 공용</b>
    <p class="mini">카운셀러가 활동 중인지 중지 상태인지 다른 휴대폰에서도 확인하기 위한 전용 중앙상태 서버입니다.</p>
@@ -1113,33 +1063,9 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
    <h3>⑥ 카운셀러 신청 승인 관리</h3>
    <p class="mini">카운셀러 활동 안내를 신청한 분을 센터장이 확인하고 승인하는 단계입니다.</p>
    <div class="duplicate-rule-note">동일한 전화번호는 <b>한 사람으로 관리</b>합니다. 같은 번호로 다시 신청해도 새 신청이 추가되지 않으며, 기존 테스트 중복 신청도 자동으로 1건으로 정리됩니다.</div>
-   <div class="card soft" style="margin:10px 0 12px">
-     <b>Google 중앙 신청 자동 동기화</b>
-     <p class="mini" style="margin:6px 0 8px">센터관리 화면을 열면 새 카운셀러 신청을 Google 중앙저장에서 자동으로 불러옵니다.</p>
-     <button class="secondary" type="button" onclick="loadCentralCounselorApplications({silent:false})">중앙 신청 새로 불러오기</button>
-     <span class="status-pill" id="counselorApprovalSyncStatus">대기</span>
-   </div>
    <div class="counselor-approval-summary" id="counselorApprovalSummary"></div>
    <div class="counselor-approval-list" id="counselorApprovalList"></div>
    <div class="counselor-approval-note">센터장이 승인하면 <b>C001, C002… 형식의 개인 코드와 개인 공유링크가 즉시 자동 발급</b>됩니다. 승인 후에는 <b>활동 중지·재개</b>도 이 화면에서 관리합니다.</div>
- </div>
- <div class="card soft" id="consultationCentralSyncCard">
-   <b>⑦ 고객 상담 중앙저장 자동 동기화</b>
-   <p class="mini" style="margin:6px 0 8px">센터관리 화면을 열면 다른 휴대폰·시크릿 창에서 접수된 고객 상담신청도 Google 중앙저장에서 자동으로 불러옵니다.</p>
-   <button class="secondary" type="button" onclick="loadCentralConsultations({silent:false})">중앙 상담 새로 불러오기</button>
-   <span class="status-pill" id="consultationCentralSyncStatus">대기</span>
- </div>
-
- <div class="pilot-admin" id="pilotAdminBox">
-   <div class="eyebrow">10-PERSON PILOT · V2.7.30</div>
-   <h3>⑧ 10명 실제 테스트 기록표</h3>
-   <p class="mini" style="margin:5px 0 0">T01부터 한 명씩 진행하면서 성공 여부와 고객 반응을 바로 기록합니다. <b>실제 전화번호는 꼭 필요할 때만 기록</b>하고, 참가자는 앱에서 본인 정보를 직접 입력합니다.</p>
-   <div class="pilot-summary" id="pilotSummary"></div>
-   <div class="pilot-toolbar">
-     <button class="secondary" type="button" onclick="copyPilotSummary()">10명 결과 요약 복사</button>
-     <button class="secondary" type="button" onclick="resetPilotTests()">테스트 기록 초기화</button>
-   </div>
-   <div id="pilotTestList"></div>
  </div>
  <div id="adminList"></div>
  <button class="secondary" onclick="show('home')">고객화면으로</button>
@@ -1149,12 +1075,12 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 
 <nav id="bottomNav" class="bottom-nav hidden" aria-label="결과 이후 이동 메뉴" style="display:none"><button onclick="show('home')"><b>⌂</b>홈</button><button onclick="show('info')"><b>≡</b>피부정보</button><button onclick="show('history')"><b>↺</b>지난결과</button><button onclick="show('basic')"><b>◉</b>다시체크</button><button onclick="openConsult()"><b>☎</b>상담</button></nav>
 
-<div id="aiConsentModal" class="modal hidden"><div class="modal-card"><div class="eyebrow">AI VOICE CONSENT</div><h3>AI 음성상담을 시작할까요?</h3><p class="lead" style="font-size:14px">피부체크 결과와 대화 내용이 AI 상담 처리를 위해 전송됩니다. 이름과 전화번호는 AI 상담에 보내지 않습니다.</p><div class="card soft"><p class="mini" style="margin:0">AI는 의료인이 아니며 피부질환을 진단하거나 치료하지 않습니다. 심한 붓기·통증·진물·수포·눈 주변 증상 등은 피부과 등 의료기관 상담이 필요합니다.</p></div><div class="modal-actions"><button class="secondary" onclick="closeAiConsent()">취소</button><button class="cta" onclick="acceptAiConsent()">동의하고 시작</button></div></div></div>
+<div id="aiConsentModal" class="modal hidden"><div class="modal-card"><div class="eyebrow">AI VOICE CONSENT</div><h3>AI 척척박사는 준비 중입니다.</h3><p class="lead" style="font-size:14px">피부체크 결과와 대화 내용이 AI 상담 처리를 위해 전송됩니다. 이름과 전화번호는 AI 상담에 보내지 않습니다.</p><div class="card soft"><p class="mini" style="margin:0">AI는 의료인이 아니며 피부질환을 진단하거나 치료하지 않습니다. 심한 붓기·통증·진물·수포·눈 주변 증상 등은 피부과 등 의료기관 상담이 필요합니다.</p></div><div class="modal-actions"><button class="secondary" onclick="closeAiConsent()">취소</button><button class="cta" onclick="acceptAiConsent()">동의하고 시작</button></div></div></div>
 
 <script>
 const $=id=>document.getElementById(id);
 const Q=[
-["💧 세안 후 아무것도 바르기 전, 피부가 건조하고 땅기는 느낌이 있나요?","hydration"],
+["💧 세안 후 아무것도 바르기 전, 피부가 당기거나 땅기나요?","hydration"],
 ["💦 시간이 지나면 피부가 건조하거나 푸석하게 느껴지나요?","hydration"],
 ["✨ 피부결이 거칠거나 화장이 들뜨는 편인가요?","hydration"],
 ["🌿 오후가 되면 이마·코·볼에 유분이 많이 생기나요?","pores"],
@@ -1183,7 +1109,6 @@ const ARTICLES=[["세안 후 얼굴이 당기면 건성 피부인가요?","세�
 const ARTICLE_DETAILS=[["세안 후 얼굴이 당기면 건성 피부인가요?","세안 직후의 당김만으로 건성 피부라고 단정할 수는 없습니다. 세안제의 세정력, 물 온도, 세안 시간, 세안 후 보습까지 걸린 시간도 영향을 줍니다.","피부 표면의 유분과 수분이 빠르게 줄거나 피부 장벽이 예민해지면 세안 직후 당김이 더 잘 느껴질 수 있습니다. 평소에는 지성·복합성 피부여도 강한 세안 뒤에는 당길 수 있습니다.","미지근한 물과 순한 세안제를 사용하고, 세안 후에는 피부가 완전히 마르기 전에 보습제를 가볍게 발라보세요."],["수분과 보습은 같은 말인가요?","수분은 피부에 물을 보충하는 개념이고, 보습은 그 수분이 쉽게 빠져나가지 않도록 돕는 관리까지 포함합니다.","피부는 수분만 채운다고 오래 촉촉한 상태가 유지되는 것은 아닙니다. 피부 표면의 보호막과 유분 균형이 함께 유지되어야 수분 증발을 줄일 수 있습니다.","수분감 있는 제품 뒤에 내 피부에 맞는 보습제를 적당량 사용해 수분이 오래 머물도록 도와주세요."],["피부가 번들거리는데 속은 당길 수 있나요?","가능합니다. 겉에 유분이 많아 보여도 피부 속 수분감이 부족해 당김을 느낄 수 있습니다.","피지는 피부를 보호하기 위한 유분이고, 피부 수분과는 다른 요소입니다. 과도한 세안이나 건조한 환경에서는 유분은 늘면서 당김이 함께 느껴질 수 있습니다.","유분을 완전히 없애려 하기보다 순한 세안과 가벼운 수분·보습으로 균형을 맞추는 것이 좋습니다."],["민감 피부는 새 화장품을 어떻게 시작하나요?","새 제품은 여러 개를 동시에 바꾸기보다 한 번에 하나씩 천천히 시작하는 것이 좋습니다.","여러 제품을 한꺼번에 바꾸면 피부가 불편해졌을 때 어떤 제품이 원인인지 구분하기 어렵습니다. 민감할 때는 작은 변화에도 반응이 나타날 수 있습니다.","처음에는 소량으로 사용하고, 따가움·붉어짐·가려움이 지속되면 사용을 중단하세요. 증상이 심하거나 오래가면 전문가 상담이 필요합니다."],["모공은 왜 더 눈에 띄나요?","모공은 피지량, 피부 탄력, 피부결, 건조함, 조명과 메이크업 상태에 따라 더 도드라져 보일 수 있습니다.","피지가 많으면 모공 입구가 눈에 띌 수 있고, 탄력이 떨어지면 모공이 세로로 길어 보일 수 있습니다. 피부가 거칠거나 건조해도 음영 때문에 더 커 보일 수 있습니다.","과도한 압출이나 강한 스크럽보다 부드러운 세안, 보습, 자외선 차단을 기본으로 꾸준히 관리하세요."],["피부톤이 칙칙해 보이는 이유는?","피부톤은 자외선, 수면, 피로, 건조함, 각질 상태, 혈색 등 여러 요인의 영향을 받습니다.","피부 표면이 건조하고 거칠면 빛 반사가 고르지 않아 칙칙해 보일 수 있고, 자외선 노출이 누적되면 색소 차이가 눈에 띌 수 있습니다.","자외선 차단, 충분한 수면, 규칙적인 보습을 기본으로 하면서 과도한 각질 제거는 피하세요."],["탄력 관리는 언제 시작해야 하나요?","특정 나이부터 시작해야 한다기보다 피부가 건조해지거나 탄력이 줄어드는 신호가 느껴질 때부터 꾸준히 관리하는 것이 좋습니다.","탄력은 나이뿐 아니라 자외선, 수면, 건조함, 생활습관의 영향을 함께 받습니다. 갑자기 한 번에 좋아지기보다 장기간의 관리가 중요합니다.","보습과 자외선 차단을 기본으로 하고, 규칙적인 생활과 충분한 수면을 함께 챙겨주세요."],["자외선 차단제는 매일 필요한가요?","실내외 생활환경에 따라 차이는 있지만, 일상적인 자외선 노출도 누적될 수 있어 생활에 맞는 차단 습관이 도움이 됩니다.","UVA는 창문을 통과할 수 있고, 야외 활동이 길수록 자외선 노출량도 늘어납니다. 다만 활동량과 계절에 따라 필요한 사용량은 달라질 수 있습니다.","외출 전 자외선 차단제를 바르고, 야외 활동이 길거나 땀을 많이 흘렸다면 상황에 맞게 덧바르는 것을 고려하세요."],["세안은 자주 할수록 좋은가요?","꼭 그렇지는 않습니다. 세안을 너무 자주 하거나 강하게 하면 피부의 보호막과 수분 균형이 불편해질 수 있습니다.","피부 표면의 유분은 불필요한 것만 있는 것이 아니라 피부를 보호하는 역할도 합니다. 지나친 세정은 건조함과 민감함을 키울 수 있습니다.","피부 상태에 맞는 순한 세안제를 사용하고, 문지르는 시간을 줄이며 미지근한 물로 부드럽게 세안하세요."],["각질 제거는 얼마나 자주 해야 하나요?","피부 타입과 제품에 따라 달라서 '모두에게 같은 횟수'가 정답은 아닙니다.","각질은 자연스럽게 떨어져 나가지만 피부 상태에 따라 거칠게 느껴질 수 있습니다. 너무 잦은 각질 제거는 오히려 피부 장벽을 자극할 수 있습니다.","민감하거나 건조한 날에는 쉬고, 처음 사용하는 제품은 낮은 빈도부터 시작하세요. 따갑거나 붉어지면 사용을 줄이세요."],["수면이 피부에 영향을 주나요?","수면 부족이나 불규칙한 생활은 피부가 푸석하거나 피곤해 보이는 느낌과 함께 나타날 수 있습니다.","잠이 부족하면 회복 리듬과 스트레스 조절이 흐트러질 수 있고, 생활습관 변화가 세안·보습 같은 관리에도 영향을 줄 수 있습니다.","가능한 일정한 취침·기상 시간을 유지하고, 며칠간의 수면 패턴과 피부 컨디션을 함께 기록해보세요."],["물을 많이 마시면 피부가 바로 좋아지나요?","물을 충분히 마시는 것은 전신 건강에 중요하지만, 피부 보습이 바로 좋아진다고 단정할 수는 없습니다.","피부 촉촉함은 수분 섭취뿐 아니라 피부 장벽, 실내 습도, 세안 습관, 보습제 사용 등 여러 요소의 영향을 받습니다.","갈증을 참지 말고 충분히 수분을 섭취하면서, 피부에는 순한 세안과 보습 관리도 함께 해주세요."],["화장품은 많이 바를수록 좋은가요?","제품 수가 많다고 반드시 관리 효과가 좋아지는 것은 아닙니다. 오히려 피부가 예민할 때는 자극 원인을 찾기 어려워질 수 있습니다.","각 제품에는 여러 성분이 들어 있기 때문에 여러 제품을 겹쳐 쓰면 피부가 부담을 느낄 수도 있습니다.","세안·보습·자외선 차단처럼 기본 루틴을 먼저 안정적으로 유지하고, 필요한 제품만 하나씩 추가해보세요."],["남성 피부도 보습이 필요한가요?","네. 남성 피부도 세안과 면도 후 건조함이나 당김이 생길 수 있어 보습이 도움이 될 수 있습니다.","면도는 피부 표면에 반복적인 자극을 줄 수 있고, 강한 세안은 유분과 수분 균형을 흐트러뜨릴 수 있습니다.","면도 후 따갑지 않은 순한 보습제를 사용하고, 번들거림이 부담되면 가벼운 제형부터 시작해보세요."],["계절이 바뀌면 화장품도 바꿔야 하나요?","반드시 전부 바꿀 필요는 없지만 온도와 습도 변화에 따라 사용량이나 제형을 조절할 수 있습니다.","겨울에는 건조함이 심해지고 여름에는 땀과 피지가 늘 수 있어 같은 제품도 계절에 따라 다르게 느껴질 수 있습니다.","기본 제품은 유지하면서 건조한 계절에는 보습을 조금 더, 더운 계절에는 가벼운 제형으로 조절해보세요."],["피부가 붉을 때 무엇을 먼저 해야 하나요?","새로운 자극을 줄이고 평소보다 단순한 관리로 피부 상태를 살펴보는 것이 좋습니다.","붉어짐은 온도 변화, 마찰, 새 제품, 면도, 자외선 등 다양한 이유로 나타날 수 있습니다. 원인을 단정하기보다 최근 변화부터 확인하는 것이 좋습니다.","새 제품·스크럽·강한 마사지는 잠시 쉬고, 붉어짐이 심하거나 통증·부종이 동반되거나 오래 지속되면 의료진과 상담하세요."],["기초 화장품은 어떤 순서로 쓰나요?","일반적으로는 가벼운 제형에서 무거운 제형 순으로 사용하는 경우가 많습니다.","제형이 가벼운 제품을 먼저 바르면 다음 제품을 고르게 바르기 쉽습니다. 다만 제품마다 권장 사용법이 다를 수 있습니다.","제품 설명의 사용 순서를 우선 따르고, 너무 많은 제품을 겹쳐 쓰기보다 피부가 편안한 기본 루틴을 유지하세요."],["피부체크 결과는 진단인가요?","아닙니다. 이 피부체크는 현재 느끼는 피부 상태와 생활습관을 바탕으로 관리 방향을 참고하도록 만든 생활관리 도구입니다.","설문형 피부체크만으로 피부질환을 진단하거나 치료방법을 결정할 수는 없습니다. 피부질환은 증상과 피부 상태를 직접 확인하는 과정이 필요할 수 있습니다.","통증, 심한 가려움, 진물, 갑작스러운 발진, 빠르게 악화되는 변화가 있다면 피부과 등 의료기관의 진료를 받는 것이 좋습니다."],["피부 타입과 피부 상태는 어떻게 다른가요?","피부 타입은 건성·지성·복합성처럼 비교적 오래 유지되는 경향을 말하고, 피부 상태는 건조함·민감함·붉어짐처럼 그때그때 달라질 수 있는 컨디션을 말합니다.","같은 사람도 계절, 수면, 스트레스, 세안 습관, 실내 습도 등에 따라 피부 상태가 달라질 수 있습니다. 그래서 한 번의 체크 결과가 평생 같은 피부를 뜻하는 것은 아닙니다.","피부 타입은 기본 관리 방향을 정하는 참고로 쓰고, 실제 제품 사용량과 루틴은 그날의 피부 상태에 맞춰 조절해보세요."],["피부 장벽이 약해졌다는 건 무슨 뜻인가요?","피부 장벽은 피부 속 수분이 너무 빨리 빠져나가지 않도록 돕고 외부 자극으로부터 피부를 보호하는 역할을 합니다. 이 기능이 불편해지면 당김·따가움·건조함·붉어짐이 쉽게 느껴질 수 있습니다.","강한 세안, 잦은 각질 제거, 건조한 환경, 여러 제품을 한꺼번에 바꾸는 습관 등이 피부에 부담을 줄 수 있습니다. 다만 불편감의 원인은 다양하므로 장벽 문제라고 단정할 수는 없습니다.","자극적인 관리를 줄이고 순한 세안과 보습 위주로 단순하게 관리해보세요. 통증·진물·심한 가려움이 지속되면 의료진의 진료가 필요합니다."],["갑자기 트러블이 생기면 어떻게 해야 하나요?","갑자기 뾰루지나 붉은 반응이 생겼다면 우선 최근에 새로 사용한 화장품, 세안제, 마스크, 생활습관 변화를 확인해보는 것이 좋습니다.","트러블은 피지, 마찰, 수면, 스트레스, 화장품, 호르몬 변화 등 여러 원인과 관련될 수 있습니다. 무조건 짜거나 여러 제품을 겹쳐 바르면 오히려 자극이 커질 수 있습니다.","새 제품과 강한 스크럽은 잠시 쉬고 손으로 만지거나 짜는 행동을 줄여보세요. 반복되거나 아프고 염증이 심하면 피부과 상담을 권합니다."],["마스크팩은 매일 해도 되나요?","마스크팩을 매일 써도 편안한 사람이 있는 반면, 어떤 피부에는 답답함이나 자극이 생길 수 있어 모든 사람에게 매일 사용을 권할 수는 없습니다.","마스크팩은 제품마다 성분과 사용 시간이 다르고 피부 상태도 매일 다릅니다. 특히 민감하거나 붉은 날에는 평소 잘 맞던 제품도 부담스럽게 느껴질 수 있습니다.","제품에 적힌 사용시간을 지키고, 따갑거나 붉어지면 바로 떼어내세요. 피부가 편안한 횟수를 기준으로 사용하고 보습의 기본은 일상적인 스킨케어로 유지하는 것이 좋습니다."],["화장품 유통기한과 개봉 후 사용기간은 왜 중요한가요?","화장품은 개봉 전 유통기한과 별도로 개봉 후 권장 사용기간이 표시될 수 있습니다. 개봉 후에는 공기와 손, 온도 변화에 노출되면서 제품의 상태가 달라질 수 있습니다.","오래된 제품은 향·색·제형이 변하거나 사용감이 달라질 수 있습니다. 특히 손가락을 직접 넣어 사용하는 용기는 위생 관리에 더 신경 쓰는 것이 좋습니다.","용기 표시와 개봉 후 사용기간을 확인하고, 냄새·색·제형이 눈에 띄게 변했거나 오염이 의심되면 사용을 중단하세요. 직사광선과 고온을 피해서 보관하세요."],["새 화장품은 어떻게 테스트해 보면 좋나요?","새 화장품은 처음부터 얼굴 전체에 많은 양을 바르기보다 작은 부위와 적은 양으로 시작해 피부 반응을 살펴보는 것이 좋습니다.","피부 반응은 즉시 나타나기도 하지만 시간이 지나 나타날 수도 있습니다. 다만 집에서 하는 소량 테스트만으로 알레르기 여부를 정확히 진단할 수는 없습니다.","처음에는 한 번에 한 제품만 추가하고, 따가움·붉어짐·부종·가려움이 나타나면 사용을 중단하세요. 반응이 심하거나 반복되면 의료진과 상담하세요."]];
 let infoDetailIndex=0;
 let qi=0,answers=new Array(13),currentResult=null,pc=null,dc=null,localStream=null,assistantDraft="";
-let consultWithoutSkin=false; // V2.7.30 첫 화면 바로 상담에서는 이전 피부결과를 상담에 붙이지 않음
 function storeGet(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch{return null}}
 function storeSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch{return false}}
 
@@ -1234,7 +1159,7 @@ function renderPersonalHello(){
  const box=$('personalHelloBox'),txt=$('personalHelloName');
  if(!box||!txt)return;
  if(name){
-   txt.innerHTML='<span class="role-badge customer">고객</span>'+escapeHtml(name)+'님, 안녕하세요 👋';
+   txt.textContent=name+'님, 안녕하세요 👋';
    box.style.display='block';
  }else{
    box.style.display='none';
@@ -1243,7 +1168,7 @@ function renderPersonalHello(){
 function renderWelcomeHeadline(){
  const name=getWelcomeName(),h=$('welcomeHeadline');
  if(!h)return;
- h.innerHTML=name ? '<span class="role-badge customer">고객</span>'+escapeHtml(name)+'님, 안녕하세요 👋' : '피부에 관심이 많으신가 봐요';
+ h.textContent=name ? name+'님, 안녕하세요 👋' : '피부에 관심이 많으신가 봐요';
 }
 function renderConsultHours(){
  const box=$('consultHoursBox'),txt=$('consultHoursText');
@@ -1312,16 +1237,6 @@ function checkCounselorStatusCentral(code){
 }
 function clearCounselorRefFromAddress(){
  const p=new URLSearchParams(location.search);p.delete('ref');const qs=p.toString();try{history.replaceState({},'',location.pathname+(qs?'?'+qs:'')+location.hash)}catch(e){}
-}
-/* V2.7.30 · 센터 공용 주소로 새로 들어오면 이전 카운셀러 추천정보를 남기지 않습니다.
-   카운셀러 공유링크에는 ref=C00X가 있으므로 해당 연결은 그대로 보존합니다. */
-function clearStaleCounselorRefForPublicEntry(){
- const p=new URLSearchParams(location.search);
- const ref=normalizeCounselorCode(p.get('ref'));
- if(ref)return;
- storeSet(COUNSELOR_REF_KEY,'');
- storeSet(COUNSELOR_REF_BLOCKED_KEY,null);
- storeSet(COUNSELOR_REMOTE_STATUS_KEY,null);
 }
 async function importCounselorRef(){
  const p=new URLSearchParams(location.search);
@@ -1605,16 +1520,11 @@ function submitCounselorApply(){
  show('counselorPending');
 
  const c=getGoogleConfig();
- const hasProtectedConfig=!!(c.url&&c.key);
- const url=hasProtectedConfig?c.url:PUBLIC_CONSULTATION_WEB_APP_URL;
- if(url){
-   const payload=hasProtectedConfig
-     ? {key:c.key,action:'counselor_application',data:item}
-     : {action:'counselor_application_public',appId:PUBLIC_CONSULTATION_APP_ID,data:item};
-   fetch(url,{
-     method:'POST',mode:'no-cors',cache:'no-store',
+ if(c.url&&c.key){
+   fetch(c.url,{
+     method:'POST',mode:'no-cors',
      headers:{'Content-Type':'text/plain;charset=utf-8'},
-     body:JSON.stringify(payload)
+     body:JSON.stringify({key:c.key,action:'counselor_application',data:item})
    }).catch(()=>{});
  }
 }
@@ -1794,11 +1704,8 @@ const viewHistoryStack=[];
 let suppressViewHistory=false;
 function updateGlobalBackButton(id){
  const w=$('globalBackWrap');
- const b=$('globalBackBtn');
  if(!w)return;
  w.classList.toggle('hidden',id==='home');
- // 질문 화면에서는 ‘이전 질문’ 버튼과 헷갈리지 않도록 목적지를 분명히 표시한다.
- if(b)b.textContent=id==='question'?'← 기본정보로':'← 이전 화면';
 }
 function goPreviousView(){
  let prev=null;
@@ -1839,7 +1746,7 @@ function show(id){
  if(id==='counselorPending')renderCounselorPending();
  if(id==='counselorCode'){restoreMyCounselorCode();renderCounselorTestNote();}
  if(id==='counselorShareDone')renderShareDone();
- if(id==='admin'){renderAdmin();setTimeout(()=>{loadCentralCounselorApplications({silent:true});loadCentralConsultations({silent:true});},60);}
+ if(id==='admin')renderAdmin();
  window.scrollTo(0,0);
 }
 function hasBasic(){return !!($('age').value&&$('gender').value&&$('concern').value)}
@@ -1873,14 +1780,8 @@ function goStep(step){if(step==='question'){if(!hasBasic()){alert('먼저 기본
 const CENTER_CONTACT={landline:'041-622-4646',mobile:'010-4923-9989',address:'천안시 동남구 신부 10길 8 남양빌딩 304호'};
 const KAKAO_ID='kojuboo';
 const KAKAO_CHAT_URL='https://pf.kakao.com/_KqkxaX/chat';
-/* V2.7.21 카운셀러 신청 관리: 승인 대기 신청을 거절 또는 삭제하고 중앙저장에 동기화 */
-/* V2.7.20 카운셀러 중앙승인 동기화: 새 신청을 중앙저장하고 센터관리에서 자동 불러오기 */
-/* V2.7.18 역할 구분: 센터장/매니저 · 카운셀러 코드 · 고객 배지 표시 */
-/* V2.7.17 새 고객 중앙저장: 공개 접수 주소만 앱에 포함하며 전송 키는 포함하지 않음 */
-const PUBLIC_CONSULTATION_WEB_APP_URL='https://script.google.com/macros/s/AKfycbxMqpStgSVH-HOVwIvvGMwNrEoNu6ld-T-QDST9J1tGrPDvN1wIuCU1OAnJckscoi-OrQ/exec';
-const PUBLIC_CONSULTATION_APP_ID='maiim-cheonan-shinbu-v1';
 function renderConsultContext(){
- const x=consultWithoutSkin?null:storeGet('latestResult'),box=$('consultContext'),row=$('skinAgreeRow'),skin=$('skinAgree');
+ const x=storeGet('latestResult'),box=$('consultContext'),row=$('skinAgreeRow'),skin=$('skinAgree');
  if(!box)return;
  if(x&&x.result){
   currentResult=x.result;
@@ -1890,39 +1791,26 @@ function renderConsultContext(){
   if(row)row.style.display='flex';
  }else{
   currentResult=null;
-  box.innerHTML=`<b>피부체크 없이 바로 상담할 수 있습니다.</b><p class="mini" style="margin:7px 0 0">전화·카카오톡·센터 방문 상담은 13문항을 먼저 하지 않아도 이용할 수 있습니다. 맞춤형 피부결과가 필요하면 나중에 피부체크를 진행하셔도 됩니다.</p><button class="secondary" style="margin-top:10px" onclick="consultWithoutSkin=false;show('basic')">피부체크부터 하고 상담하기</button>`;
+  box.innerHTML=`<b>피부체크 없이 바로 상담할 수 있습니다.</b><p class="mini" style="margin:7px 0 0">전화·카카오톡·센터 방문 상담은 13문항을 먼저 하지 않아도 이용할 수 있습니다. 맞춤형 피부결과가 필요하면 나중에 피부체크를 진행하셔도 됩니다.</p><button class="secondary" style="margin-top:10px" onclick="show('basic')">피부체크부터 하고 상담하기</button>`;
   if(row)row.style.display='none';
   if(skin)skin.checked=false;
  }
 }
-function openConsult(){consultWithoutSkin=false;const x=storeGet('latestResult');currentResult=x?.result||null;show('consult');renderConsultContext();renderDirectContact()}
-function openConsultWithoutSkin(){consultWithoutSkin=true;currentResult=null;show('consult');renderConsultContext();renderDirectContact();if($('consultName'))$('consultName').focus()}
+function openConsult(){const x=storeGet('latestResult');currentResult=x?.result||null;show('consult');renderConsultContext();renderDirectContact()}
 function selectMethod(method){$('consultMethod').value=method;document.querySelectorAll('.method-card').forEach(b=>b.classList.toggle('on',b.dataset.method===method));renderDirectContact()}
 function getKakaoConfig(){const saved=storeGet('kakaoConfig')||{};return {url:saved.url||KAKAO_CHAT_URL}}
 async function copyKakaoId(){try{await navigator.clipboard.writeText(KAKAO_ID);alert('카카오톡 ID '+KAKAO_ID+' 를 복사했습니다. 카카오톡 친구 검색에 붙여넣어 주세요.')}catch{prompt('아래 카카오톡 ID를 복사해 주세요.',KAKAO_ID)}}
 function telHref(v){return 'tel:'+String(v).replace(/[^0-9+]/g,'')}
 function mapHref(provider){const q=encodeURIComponent(CENTER_CONTACT.address);return provider==='kakao'?'https://map.kakao.com/link/search/'+q:'https://map.naver.com/p/search/'+q}
 function renderDirectContact(){const box=$('directContactPanel');if(!box)return;const method=$('consultMethod').value||'전화';if(method==='전화'){box.innerHTML='<b>지금 바로 전화하기</b><p class="mini">스마트폰에서는 아래 번호를 누르면 전화 화면이 열립니다.</p><a class="cta" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="'+telHref(CENTER_CONTACT.mobile)+'">📱 휴대전화 010-4923-9989</a><a class="secondary" style="display:block;text-align:center;text-decoration:none;margin-top:8px" href="'+telHref(CENTER_CONTACT.landline)+'">☎ 일반전화 041-622-4646</a>';return}if(method==='카카오톡'){const k=getKakaoConfig();box.innerHTML='<b>꿀광피부 카카오 1:1 상담</b><p class="mini">아래 버튼을 누르면 카카오톡 꿀광피부 채널의 1:1 채팅으로 바로 이동합니다.</p><a class="cta" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="'+escapeHtml(k.url)+'" target="_blank" rel="noopener">💬 카카오 상담 시작하기 →</a><p class="mini" style="margin-top:10px">검색용 아이디: <b>'+KAKAO_ID+'</b></p>';return}if(method==='센터 방문'){box.innerHTML='<b>천안 신부센터 방문</b><p style="margin:8px 0 4px">'+escapeHtml(CENTER_CONTACT.address)+'</p><p class="mini">지도에서 위치를 확인한 뒤 방문상담을 신청해 주세요.</p><a class="cta" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="'+mapHref('naver')+'" target="_blank" rel="noopener">🗺 네이버지도에서 보기 →</a><a class="secondary" style="display:block;text-align:center;text-decoration:none;margin-top:8px" href="'+mapHref('kakao')+'" target="_blank" rel="noopener">카카오맵에서 보기</a>';return}box.innerHTML='<b>AI 후 사람상담</b><p class="mini">AI 척척 박사 음성상담 서버 연결이 완료되면 AI 상담 내용 요약을 참고해 전화·카카오·센터 방문 상담으로 자연스럽게 이어지도록 연결합니다. 현재는 사람 상담 신청을 먼저 접수할 수 있습니다.</p>'}
-async function sendGoogle(item){
- const c=getGoogleConfig();
- const hasProtectedConfig=!!(c.url&&c.key);
- const url=hasProtectedConfig?c.url:PUBLIC_CONSULTATION_WEB_APP_URL;
- if(!url)return false;
- const payload=hasProtectedConfig
-   ? {key:c.key,action:'consultation',data:item}
-   : {action:'consultation_public',appId:PUBLIC_CONSULTATION_APP_ID,data:item};
- try{
-   await fetch(url,{method:'POST',mode:'no-cors',cache:'no-store',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
-   return true
- }catch{return false}
-}
+async function sendGoogle(item){const c=getGoogleConfig();if(!c.url||!c.key)return false;try{await fetch(c.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:c.key,action:'consultation',data:item})});return true}catch{return false}}
 async function submitConsult(){
  const name=$('consultName').value.trim(),phone=formatKoreanPhone($('consultPhone').value);
  if($('consultPhone'))$('consultPhone').value=phone;
  if(!name){alert('이름 또는 닉네임을 입력해 주세요.');$('consultName').focus();return}
  if(!phone){alert('전화번호를 입력해 주세요.');$('consultPhone').focus();return}
 
- const latest=consultWithoutSkin?null:storeGet('latestResult');
+ const latest=storeGet('latestResult');
  if(!$('privacyAgree').checked){
    alert('“개인정보 수집·이용 동의 (필수)”를 체크해 주세요.');
    $('privacyAgree').scrollIntoView({behavior:'smooth',block:'center'});
@@ -2250,270 +2138,6 @@ function sendCounselorStatusCentral(item){
  return fetch(cfg.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:cfg.key,action:'counselor_status_upsert',data})}).then(()=>true).catch(()=>false);
 }
 
-let counselorCentralSyncPromise=null;
-function mergeCentralCounselorApplications(remote){
- const local=storeGet('counselorApplications')||[];
- const remoteList=Array.isArray(remote)?remote:[];
- const remoteIds=new Set(remoteList.map(r=>String(r?.id||'')).filter(Boolean));
- const byId=new Map();
- // V2.7.21: 이전에 중앙에서 불러온 항목이 중앙에서 삭제되었다면 이 브라우저에서도 제거합니다.
- local.forEach(x=>{
-   if(!x||!x.id)return;
-   const id=String(x.id);
-   if(x.centralSynced===true&&!remoteIds.has(id))return;
-   byId.set(id,{...x});
- });
- remoteList.forEach(r=>{
-   if(!r)return;
-   const id=String(r.id||'');
-   let prev=id?byId.get(id):null;
-   if(!prev&&r.phone){
-     const pk=counselorPhoneKey(r.phone);
-     prev=[...byId.values()].find(x=>pk&&counselorPhoneKey(x.phone)===pk)||null;
-   }
-   let merged=prev?{...prev,...r}:{...r};
-   // 중앙값이 아직 승인 대기여도 이 브라우저에서 이미 승인 완료된 정보는 뒤로 되돌리지 않습니다.
-   if(prev?.status==='승인 완료'&&r.status!=='승인 완료'){
-     merged={...r,...prev,status:'승인 완료'};
-   }
-   merged.centralSynced=true;
-   if(id)byId.set(id,merged);
-   else byId.set('phone:'+counselorPhoneKey(merged.phone),merged);
- });
- const arr=[...byId.values()];
- storeSet('counselorApplications',arr);
- prepareCounselorApplications();
- renderCounselorApprovals();
- return arr;
-}
-function loadCentralCounselorApplications(options){
- const silent=options?.silent===true;
- const cfg=getGoogleConfig();
- const status=$('counselorApprovalSyncStatus');
- if(!cfg.url||!cfg.key){
-   if(status){status.textContent='Google 연결 필요';status.className='status-pill'}
-   if(!silent)alert('먼저 ① Google 중앙저장 연결의 주소와 전송 키를 저장해 주세요.');
-   return Promise.resolve(false);
- }
- if(counselorCentralSyncPromise)return counselorCentralSyncPromise;
- if(status){status.textContent='불러오는 중…';status.className='status-pill'}
- counselorCentralSyncPromise=new Promise(resolve=>{
-   const cb='__maiimCounselorApps'+Date.now();
-   const script=document.createElement('script');
-   let done=false;
-   const cleanup=()=>{if(done)return;done=true;try{delete window[cb]}catch(e){window[cb]=undefined}script.remove();clearTimeout(timer);counselorCentralSyncPromise=null};
-   const finish=(ok,msg)=>{cleanup();if(status){status.textContent=msg;status.className='status-pill '+(ok?'ok':'')}resolve(ok)};
-   window[cb]=payload=>{
-     if(payload?.ok&&Array.isArray(payload.applications)){
-       mergeCentralCounselorApplications(payload.applications);
-       finish(true,'동기화 '+payload.applications.length+'건');
-     }else{
-       finish(false,'동기화 실패');
-       if(!silent)alert('중앙 신청을 불러오지 못했습니다. Google 연결설정을 확인해 주세요.');
-     }
-   };
-   script.onerror=()=>{finish(false,'연결 실패');if(!silent)alert('중앙 신청 불러오기에 실패했습니다. 잠시 후 다시 시도해 주세요.')};
-   const u=new URL(cfg.url);
-   u.searchParams.set('action','counselor_applications');
-   u.searchParams.set('key',cfg.key);
-   u.searchParams.set('callback',cb);
-   u.searchParams.set('_',String(Date.now()));
-   script.src=u.toString();
-   document.head.appendChild(script);
-   const timer=setTimeout(()=>{finish(false,'시간 초과');if(!silent)alert('중앙 신청 불러오기가 지연되고 있습니다. 다시 눌러 주세요.')},12000);
- });
- return counselorCentralSyncPromise;
-}
-function syncCounselorApplicationCentral(item){
- const cfg=getGoogleConfig();
- if(!cfg.url||!cfg.key||!item)return Promise.resolve(false);
- return fetch(cfg.url,{method:'POST',mode:'no-cors',cache:'no-store',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:cfg.key,action:'counselor_application',data:item})}).then(()=>true).catch(()=>false);
-}
-function deleteCounselorApplicationCentral(item){
- const cfg=getGoogleConfig();
- if(!cfg.url||!cfg.key||!item?.id)return Promise.resolve(false);
- return fetch(cfg.url,{method:'POST',mode:'no-cors',cache:'no-store',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:cfg.key,action:'counselor_application_delete',data:{id:item.id,phone:item.phone||''}})}).then(()=>true).catch(()=>false);
-}
-
-let consultationCentralSyncPromise=null;
-function mergeCentralConsultations(remote){
- const local=storeGet('consultations')||[];
- const remoteList=Array.isArray(remote)?remote:[];
- const byId=new Map();
- local.forEach(x=>{
-   if(!x||!x.id)return;
-   byId.set(String(x.id),{...x});
- });
- remoteList.forEach(r=>{
-   if(!r||!r.id)return;
-   const id=String(r.id);
-   const prev=byId.get(id)||{};
-   byId.set(id,{...prev,...r,centralSynced:true});
- });
- const arr=[...byId.values()].sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
- storeSet('consultations',arr);
- renderAdminConsultations();
- return arr;
-}
-function loadCentralConsultations(options){
- const silent=options?.silent===true;
- const cfg=getGoogleConfig();
- const status=$('consultationCentralSyncStatus');
- if(!cfg.url||!cfg.key){
-   if(status){status.textContent='Google 연결 필요';status.className='status-pill'}
-   if(!silent)alert('먼저 ① Google 중앙저장 연결의 주소와 전송 키를 저장해 주세요.');
-   return Promise.resolve(false);
- }
- if(consultationCentralSyncPromise)return consultationCentralSyncPromise;
- if(status){status.textContent='불러오는 중…';status.className='status-pill'}
- consultationCentralSyncPromise=new Promise(resolve=>{
-   const cb='__maiimConsultations'+Date.now();
-   const script=document.createElement('script');
-   let done=false;
-   let timer=null;
-   const cleanup=()=>{if(done)return;done=true;try{delete window[cb]}catch(e){window[cb]=undefined}script.remove();if(timer)clearTimeout(timer);consultationCentralSyncPromise=null};
-   const finish=(ok,msg)=>{cleanup();if(status){status.textContent=msg;status.className='status-pill '+(ok?'ok':'')}resolve(ok)};
-   window[cb]=payload=>{
-     if(payload?.ok&&Array.isArray(payload.consultations)){
-       mergeCentralConsultations(payload.consultations);
-       finish(true,'동기화 '+payload.consultations.length+'건');
-     }else{
-       finish(false,'동기화 실패');
-       if(!silent)alert('중앙 상담신청을 불러오지 못했습니다. Google 연결설정을 확인해 주세요.');
-     }
-   };
-   script.onerror=()=>{finish(false,'연결 실패');if(!silent)alert('중앙 상담신청 불러오기에 실패했습니다. 잠시 후 다시 시도해 주세요.')};
-   const u=new URL(cfg.url);
-   u.searchParams.set('action','consultations');
-   u.searchParams.set('key',cfg.key);
-   u.searchParams.set('callback',cb);
-   u.searchParams.set('_',String(Date.now()));
-   script.src=u.toString();
-   document.head.appendChild(script);
-   timer=setTimeout(()=>{finish(false,'시간 초과');if(!silent)alert('중앙 상담신청 불러오기가 지연되고 있습니다. 다시 눌러 주세요.')},12000);
- });
- return consultationCentralSyncPromise;
-}
-function renderAdminConsultations(){
- const apps=prepareCounselorApplications();
- const arr=(storeGet('consultations')||[]).slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
- const box=$('adminList');
- if(!box)return;
- const centralCount=arr.filter(x=>x.centralSynced===true).length;
- box.innerHTML='<div class="card"><b>고객 상담신청 '+arr.length+'건</b><p class="mini" style="margin:6px 0 0">Google 중앙저장 동기화 '+centralCount+'건 포함 · 개인 공유링크 고객은 담당 카운셀러 코드가 함께 표시됩니다.</p></div>';
- arr.forEach(x=>{
-   const d=document.createElement('div');d.className='card';
-   const ref=normalizeCounselorCode(x.referrerCode||'');
-   const counselor=ref?apps.find(a=>normalizeCounselorCode(a.counselorCode||'')===ref):null;
-   const refHtml=ref
-     ? '<div class="admin-consult-ref"><span class="role-badge counselor">카운셀러 '+escapeHtml(ref)+'</span>'+(counselor?.name?escapeHtml(counselor.name)+' · ':'')+'담당</div>'
-     : '<div class="admin-consult-ref center"><span class="role-badge manager">센터</span>공용 상담</div>';
-   const sourceHtml=x.centralSynced===true?'<span class="status-pill ok" style="margin-left:6px">중앙저장</span>':'';
-   let when='';
-   try{when=x.date?new Date(x.date).toLocaleString('ko-KR'):''}catch(e){when=String(x.date||'')}
-   const skinBits=[];
-   if(x.skinType)skinBits.push('피부 '+escapeHtml(x.skinType));
-   if(x.condition!==undefined&&x.condition!==null&&String(x.condition)!=='')skinBits.push('컨디션 '+escapeHtml(x.condition)+'점');
-   const skinHtml=skinBits.length?'<div class="mini" style="margin-top:5px">'+skinBits.join(' · ')+'</div>':'';
-   d.innerHTML='<div class="admin-customer-title"><span class="role-badge customer">고객</span>'+escapeHtml(x.name)+' · '+escapeHtml(x.method)+sourceHtml+'</div><div>'+escapeHtml(x.phone)+'</div>'+refHtml+skinHtml+'<div class="mini" style="margin-top:6px">'+escapeHtml(when)+'</div>';
-   box.appendChild(d)
- });
-}
-
-
-/* V2.7.30 · 10명 파일럿 테스트 기록표 */
-const PILOT_TEST_KEY='maiimPilotTestsV2724';
-const PILOT_TEST_SPECS=[
- {id:'T01',testName:'테스트고객01',age:'30대',gender:'여성',device:'갤럭시',route:'센터 공용',goal:'기본 전체 흐름 · 이름 → 기본정보 → 13문항 → 결과 → 상담 → 제품'},
- {id:'T02',testName:'테스트고객02',age:'40대',gender:'여성',device:'아이폰',route:'센터 공용',goal:'질문 이동 · 이전 질문 사용 → 기본정보로 이동 → 질문 복귀 → 완료'},
- {id:'T03',testName:'테스트고객03',age:'50대',gender:'여성',device:'갤럭시',route:'센터 공용',goal:'결과 이해도 · 결과 설명을 끝까지 읽고 상담·제품까지 진행'},
- {id:'T04',testName:'테스트고객04',age:'30대',gender:'남성',device:'아이폰',route:'센터 공용',goal:'남성 흐름 · 남성 기본정보 → 피부체크 → 남성 제품 추천 확인'},
- {id:'T05',testName:'테스트고객05',age:'50대',gender:'남성',device:'갤럭시',route:'센터 공용',goal:'제품 연결 · 피부체크 → 상담 → 제품 → 마임 공식 상세페이지'},
- {id:'T06',testName:'테스트고객06',age:'40대',gender:'여성',device:'갤럭시',route:'C002 공유링크',goal:'카운셀러 연결 · C002 공유링크 → 상담 신청 → C002 담당 표시 확인'},
- {id:'T07',testName:'테스트고객07',age:'30대',gender:'여성',device:'아이폰',route:'C002 공유링크',goal:'추천 고객 전체 흐름 · C002 링크 → 피부체크 → 상담 → 제품'},
- {id:'T08',testName:'테스트고객08',age:'50대',gender:'여성',device:'갤럭시',route:'C002 공유링크',goal:'관리자 연결 · 상담 완료 후 센터관리에서 C002 담당·중앙저장 확인'},
- {id:'T09',testName:'테스트고객09',age:'40대',gender:'남성',device:'갤럭시',route:'센터 공용',goal:'상담하지 않는 고객 · 피부체크와 결과까지만 보고 자연스럽게 종료'},
- {id:'T10',testName:'테스트고객10',age:'40대',gender:'여성',device:'아이폰',route:'센터 공용',goal:'피부체크 없이 상담 · 첫 화면 → 바로 상담 → 접수 → 중앙저장 확인'}
-];
-function newPilotRecord(spec){return Object.assign({},spec,{participantName:spec.testName,phone:'',status:'대기',firstScreen:false,skinCheck:false,result:false,consult:false,product:false,official:false,managerCheck:false,q1:'미확인',q2:'미확인',q3:'미확인',q4:'미확인',q5:'',rating:'',notes:''})}
-function getPilotTests(){
- const saved=storeGet(PILOT_TEST_KEY);
- if(Array.isArray(saved)&&saved.length===PILOT_TEST_SPECS.length){
-   return PILOT_TEST_SPECS.map(spec=>Object.assign(newPilotRecord(spec),saved.find(x=>x&&x.id===spec.id)||{},spec,{participantName:(saved.find(x=>x&&x.id===spec.id)||{}).participantName||spec.testName}));
- }
- const fresh=PILOT_TEST_SPECS.map(newPilotRecord);storeSet(PILOT_TEST_KEY,fresh);return fresh;
-}
-function pilotStatusClass(status){return status==='완료'?'done':status==='문제발견'?'issue':status==='진행중'?'progress':'waiting'}
-function pilotStatusLabel(status){return status==='완료'?'✓ 완료':status==='문제발견'?'⚠ 문제발견':status==='진행중'?'▶ 진행중':'○ 대기'}
-function pilotStatusOptions(current){return ['대기','진행중','완료','문제발견'].map(v=>'<option value="'+v+'"'+(v===current?' selected':'')+'>'+pilotStatusLabel(v)+'</option>').join('')}
-function pilotSelectOptions(values,current){return values.map(v=>'<option value="'+escapeHtml(v)+'"'+(String(v)===String(current)?' selected':'')+'>'+escapeHtml(v)+'</option>').join('')}
-function updatePilotSummary(records){
- const box=$('pilotSummary');if(!box)return;
- const waiting=records.filter(x=>x.status==='대기').length,progress=records.filter(x=>x.status==='진행중').length,done=records.filter(x=>x.status==='완료').length,issue=records.filter(x=>x.status==='문제발견').length;
- box.innerHTML='<span class="waiting"><b>'+waiting+'</b>○ 대기</span><span class="progress"><b>'+progress+'</b>▶ 진행중</span><span class="done"><b>'+done+'</b>✓ 완료</span><span class="issue"><b>'+issue+'</b>⚠ 문제발견</span>';
-}
-function renderPilotTests(){
- const records=getPilotTests(),box=$('pilotTestList');if(!box)return;updatePilotSummary(records);
- const checks=[['firstScreen','첫 화면 이해'],['skinCheck','피부체크'],['result','결과 확인'],['consult','상담 신청'],['product','제품 안내'],['official','공식 페이지'],['managerCheck','관리자 확인']];
- box.innerHTML=records.map((r,idx)=>{
-   const statusClass=pilotStatusClass(r.status);
-   const checkHtml=checks.map(([field,label])=>'<label class="pilot-check"><input type="checkbox" data-pilot-id="'+r.id+'" data-pilot-field="'+field+'" '+(r[field]?'checked':'')+'><span>'+label+'</span></label>').join('');
-   const ans=['미확인','예','보통','아니오'];
-   return '<details class="pilot-item" '+(r.status==='진행중'?'open':'')+'><summary><span class="pilot-summary-main">'+r.id+' · '+escapeHtml(r.participantName||r.testName)+'<small>'+escapeHtml(r.route)+' · '+escapeHtml(r.goal)+'</small></span><span class="pilot-status-chip '+statusClass+'">'+pilotStatusLabel(r.status)+'</span></summary><div class="pilot-body">'+
-    '<div class="pilot-goal"><b>이번 사람의 시험 목적</b><br>'+escapeHtml(r.goal)+'</div>'+
-    '<div class="pilot-grid">'+
-      '<div><label>참가자 이름/닉네임</label><input data-pilot-id="'+r.id+'" data-pilot-field="participantName" value="'+escapeHtml(r.participantName)+'"></div>'+
-      '<div><label>연락처 메모 · 선택</label><input data-pilot-id="'+r.id+'" data-pilot-field="phone" value="'+escapeHtml(r.phone)+'" placeholder="필요할 때만 입력"></div>'+
-      '<div><label>연령대</label><select data-pilot-id="'+r.id+'" data-pilot-field="age">'+pilotSelectOptions(['20대','30대','40대','50대','60대 이상'],r.age)+'</select></div>'+
-      '<div><label>성별</label><select data-pilot-id="'+r.id+'" data-pilot-field="gender">'+pilotSelectOptions(['여성','남성'],r.gender)+'</select></div>'+
-      '<div><label>휴대폰</label><select data-pilot-id="'+r.id+'" data-pilot-field="device">'+pilotSelectOptions(['갤럭시','아이폰','기타'],r.device)+'</select></div>'+
-      '<div><label>접속 경로</label><select data-pilot-id="'+r.id+'" data-pilot-field="route">'+pilotSelectOptions(['센터 공용','C002 공유링크'],r.route)+'</select></div>'+
-      '<div class="wide"><label>진행 상태</label><select class="pilot-status-select '+statusClass+'" data-pilot-id="'+r.id+'" data-pilot-field="status">'+pilotStatusOptions(r.status)+'</select></div>'+
-    '</div>'+
-    '<div class="pilot-checks">'+checkHtml+'</div>'+
-    '<div class="pilot-feedback"><b>참가자에게 마지막으로 물어볼 5가지</b>'+
-      '<label>1. 첫 화면에서 무엇을 해야 하는지 바로 알았나요?</label><select data-pilot-id="'+r.id+'" data-pilot-field="q1">'+pilotSelectOptions(ans,r.q1)+'</select>'+
-      '<label>2. 13문항은 적당한 길이와 난이도로 편하게 답할 수 있었나요?</label><select data-pilot-id="'+r.id+'" data-pilot-field="q2">'+pilotSelectOptions(ans,r.q2)+'</select>'+
-      '<label>3. 피부 결과가 본인 이야기처럼 느껴졌나요?</label><select data-pilot-id="'+r.id+'" data-pilot-field="q3">'+pilotSelectOptions(ans,r.q3)+'</select>'+
-      '<label>4. 상담이나 제품 안내를 더 받아보고 싶었나요?</label><select data-pilot-id="'+r.id+'" data-pilot-field="q4">'+pilotSelectOptions(ans,r.q4)+'</select>'+
-      '<label>5. 가장 헷갈리거나 고쳤으면 하는 부분</label><textarea data-pilot-id="'+r.id+'" data-pilot-field="q5" placeholder="고객 말을 가능한 그대로 적어 주세요">'+escapeHtml(r.q5)+'</textarea>'+
-      '<label>전체 만족도 · 5점 만점</label><select data-pilot-id="'+r.id+'" data-pilot-field="rating">'+pilotSelectOptions(['','5','4','3','2','1'],r.rating)+'</select>'+
-      '<label>센터장 메모</label><textarea data-pilot-id="'+r.id+'" data-pilot-field="notes" placeholder="오류, 망설인 지점, 다시 확인할 내용">'+escapeHtml(r.notes)+'</textarea>'+
-    '</div>'+
-    '<button class="secondary pilot-link-btn" type="button" onclick="copyPilotTestLink(\''+r.id+'\')">'+r.id+' 테스트 링크 복사</button>'+
-    '<p class="pilot-private-note">기록은 현재 센터관리 브라우저에 자동 저장됩니다. 테스트 참가자는 실제 앱에서 본인 정보를 직접 입력합니다.</p>'+
-   '</div></details>';
- }).join('');
- box.querySelectorAll('[data-pilot-id][data-pilot-field]').forEach(el=>{
-   const eventName=el.type==='checkbox'?'change':'change';
-   el.addEventListener(eventName,()=>savePilotField(el.dataset.pilotId,el.dataset.pilotField,el.type==='checkbox'?el.checked:el.value));
-   if(el.tagName==='INPUT'&&el.type!=='checkbox'||el.tagName==='TEXTAREA')el.addEventListener('input',()=>savePilotField(el.dataset.pilotId,el.dataset.pilotField,el.value,{rerender:false}));
- });
-}
-function savePilotField(id,field,value,options){
- const records=getPilotTests(),idx=records.findIndex(x=>x.id===id);if(idx<0)return;
- records[idx][field]=value;storeSet(PILOT_TEST_KEY,records);updatePilotSummary(records);
- if(options?.rerender===false)return;
- if(field==='status'||field==='participantName'||field==='route')renderPilotTests();
-}
-async function copyPilotTestLink(id){
- const records=getPilotTests(),r=records.find(x=>x.id===id);if(!r)return;
- let url='https://kojuboo5324-ui.github.io/maiim-skin-check-customer/';
- if(r.route==='C002 공유링크')url=counselorShareUrl('C002');
- try{await navigator.clipboard.writeText(url);alert(id+' 테스트 링크를 복사했습니다. 새 시크릿 창에서 붙여넣어 테스트해 주세요.')}catch(e){prompt(id+' 테스트 링크를 복사해 주세요.',url)}
-}
-async function copyPilotSummary(){
- const records=getPilotTests();
- const lines=['천안신부 피부앱 10명 파일럿 테스트 결과'];
- records.forEach(r=>lines.push([r.id,r.participantName||r.testName,r.route,r.status,'만족도 '+(r.rating||'-')+'/5',r.q5||r.notes||'메모 없음'].join(' | ')));
- const txt=lines.join('\n');
- try{await navigator.clipboard.writeText(txt);alert('10명 테스트 결과 요약을 복사했습니다.')}catch(e){prompt('아래 결과를 복사해 주세요.',txt)}
-}
-function resetPilotTests(){
- if(!confirm('10명 파일럿 테스트 기록을 모두 초기화할까요?\n\n입력한 참가자 메모와 체크 결과가 지워집니다.'))return;
- const fresh=PILOT_TEST_SPECS.map(newPilotRecord);storeSet(PILOT_TEST_KEY,fresh);renderPilotTests();alert('10명 테스트 기록을 초기화했습니다.');
-}
-
 function getAiConfig(){return storeGet('aiConfig')||{}}
 function saveGoogleConfig(){const url=$('googleUrl').value.trim(),key=$('googleKey').value.trim();if(!url||!key){alert('Apps Script 주소와 전송 키를 모두 입력해 주세요.');return}storeSet('googleConfig',{url,key});renderAdmin();alert('Google 중앙저장 설정을 저장했습니다.')}
 function saveKakaoConfig(){const url=$('kakaoUrl').value.trim();if(!url){alert('카카오 상담 링크를 입력해 주세요.');return}if(!/^https?:\/\//i.test(url)){alert('https:// 로 시작하는 카카오 상담 링크를 입력해 주세요.');return}storeSet('kakaoConfig',{url});renderAdmin();alert('카카오 상담 링크를 저장했습니다.')}
@@ -2524,47 +2148,35 @@ function renderCounselorApprovals(){
  const consultations=storeGet('consultations')||[];
  const list=$('counselorApprovalList'),summary=$('counselorApprovalSummary');
  if(!list||!summary)return;
- const pending=arr.filter(x=>(x.status||'승인 대기')==='승인 대기');
- const rejected=arr.filter(x=>x.status==='거절');
+ const pending=arr.filter(x=>x.status!=='승인 완료');
  const approved=arr.filter(x=>x.status==='승인 완료');
  const active=approved.filter(x=>x.activityStatus!=='활동중지');
  const paused=approved.filter(x=>x.activityStatus==='활동중지');
- summary.innerHTML='<span class="pending">승인 대기 '+pending.length+'명</span><span>거절 '+rejected.length+'명</span><span class="active">활동중 '+active.length+'명</span><span class="paused">활동중지 '+paused.length+'명</span><span>전체 '+arr.length+'명</span>';
+ summary.innerHTML='<span class="pending">승인 대기 '+pending.length+'명</span><span class="active">활동중 '+active.length+'명</span><span class="paused">활동중지 '+paused.length+'명</span><span>전체 '+arr.length+'명</span>';
  list.innerHTML='';
  if(!arr.length){list.innerHTML='<div class="counselor-approval-empty">아직 카운셀러 활동 안내 신청이 없습니다.<br>카운셀러 신청 화면에서 테스트 신청을 한 뒤 이곳에서 승인할 수 있습니다.</div>';return}
  arr.forEach(x=>{
    const approvedState=x.status==='승인 완료';
-   const rejectedState=x.status==='거절';
-   const pendingState=!approvedState&&!rejectedState;
    const pausedState=approvedState&&x.activityStatus==='활동중지';
    const d=document.createElement('div');
-   d.className='counselor-approval-item'+(approvedState?' approved':'')+(pausedState?' paused':'')+(rejectedState?' rejected':'');
+   d.className='counselor-approval-item'+(approvedState?' approved':'')+(pausedState?' paused':'');
    const when=x.date?new Date(x.date).toLocaleString('ko-KR'):'날짜 없음';
    const approvedWhen=x.approvedAt?new Date(x.approvedAt).toLocaleString('ko-KR'):'';
-   const rejectedWhen=x.rejectedAt?new Date(x.rejectedAt).toLocaleString('ko-KR'):'';
    const safeId=String(x.id||'').replace(/'/g,'');
    const code=normalizeCounselorCode(x.counselorCode||'');
    const customerCount=code?consultations.filter(c=>normalizeCounselorCode(c.referrerCode||'')===code).length:0;
    const issued=approvedState&&x.counselorCode?'<div class="issued-mini"><b>개인 코드 '+escapeHtml(x.counselorCode)+'</b><div class="mini" style="margin-top:4px;word-break:break-all">'+escapeHtml(x.shareLink||counselorShareUrl(x.counselorCode))+'</div><span class="counselor-customer-count">연결 고객 '+customerCount+'명</span><button class="counselor-copy-issued" type="button" onclick="copyIssuedCounselorLink(\''+safeId+'\')">개인 공유링크 복사하기</button></div>':'';
    const history=pausedState&&x.pausedAt?'<div class="counselor-activity-history">활동 중지 '+escapeHtml(new Date(x.pausedAt).toLocaleString('ko-KR'))+'</div>':(!pausedState&&x.resumedAt?'<div class="counselor-activity-history">활동 재개 '+escapeHtml(new Date(x.resumedAt).toLocaleString('ko-KR'))+'</div>':'');
-   const statusText=approvedState?(pausedState?'활동 중지':'활동중'):(rejectedState?'거절':'승인 대기');
-   let action='',actionsClass='counselor-approval-actions';
-   if(pendingState){
-     actionsClass+=' multi';
-     action='<button class="counselor-approve-btn" type="button" onclick="approveCounselorApplication(\''+safeId+'\')">센터장 승인하고 코드 자동발급</button>'+
-       '<button class="counselor-reject-btn" type="button" onclick="rejectCounselorApplication(\''+safeId+'\')">신청 거절</button>'+
-       '<button class="counselor-delete-btn" type="button" onclick="deleteCounselorApplication(\''+safeId+'\')">신청 삭제</button>';
-   }else if(rejectedState){
-     action='<button class="counselor-delete-btn" type="button" onclick="deleteCounselorApplication(\''+safeId+'\')">거절 신청 삭제</button>';
+   const statusText=approvedState?(pausedState?'활동 중지':'활동중'):'승인 대기';
+   let action='';
+   if(!approvedState){
+     action='<button class="counselor-approve-btn" type="button" onclick="approveCounselorApplication(\''+safeId+'\')">센터장 승인하고 코드 자동발급</button>';
    }else if(pausedState){
      action='<button class="counselor-activity-btn resume" type="button" onclick="setCounselorActivity(\''+safeId+'\',\'활동중\')">활동 재개</button>';
    }else{
      action='<button class="counselor-activity-btn pause" type="button" onclick="setCounselorActivity(\''+safeId+'\',\'활동중지\')">활동 중지</button>';
    }
-   const roleLabel=approvedState
-     ? '<span class="role-badge counselor">카운셀러 '+escapeHtml(code||'')+'</span>'
-     : '<span class="role-badge applicant">카운셀러 신청자</span>';
-   d.innerHTML='<div class="counselor-approval-head"><div><div class="counselor-role-line">'+roleLabel+'<div class="counselor-approval-name">'+escapeHtml(x.name||'이름 없음')+'</div></div><div class="counselor-approval-meta">연락처 '+escapeHtml(x.phone||'-')+'<br>관심 활동 '+escapeHtml(x.interest||'-')+'<br>신청 '+escapeHtml(when)+(approvedWhen?'<br>승인 '+escapeHtml(approvedWhen):'')+(rejectedWhen?'<br>거절 '+escapeHtml(rejectedWhen):'')+'</div>'+history+'</div><span class="counselor-approval-status">'+statusText+'</span></div>'+issued+'<div class="'+actionsClass+'">'+action+'</div>';
+   d.innerHTML='<div class="counselor-approval-head"><div><div class="counselor-approval-name">'+escapeHtml(x.name||'이름 없음')+'</div><div class="counselor-approval-meta">연락처 '+escapeHtml(x.phone||'-')+'<br>관심 활동 '+escapeHtml(x.interest||'-')+'<br>신청 '+escapeHtml(when)+(approvedWhen?'<br>승인 '+escapeHtml(approvedWhen):'')+'</div>'+history+'</div><span class="counselor-approval-status">'+statusText+'</span></div>'+issued+'<div class="counselor-approval-actions">'+action+'</div>';
    list.appendChild(d);
  });
 }
@@ -2588,48 +2200,9 @@ function approveCounselorApplication(id){
    storeSet('latestCounselorApplication',arr[idx]);
    storeSet(MY_COUNSELOR_CODE_KEY,code);
  }
- syncCounselorApplicationCentral(arr[idx]);
  sendCounselorStatusCentral(arr[idx]);
  renderCounselorApprovals();
  alert('승인 완료되었습니다.\n\n개인 카운셀러 코드 '+code+'와 개인 공유링크가 자동 발급되었습니다.');
-}
-function rejectCounselorApplication(id){
- const arr=prepareCounselorApplications();
- const idx=arr.findIndex(x=>String(x.id)===String(id));
- if(idx<0){alert('신청 정보를 찾지 못했습니다.');return}
- if(arr[idx].status==='승인 완료'){alert('이미 승인된 카운셀러는 거절 처리할 수 없습니다. 활동 중지 기능을 이용해 주세요.');return}
- if(arr[idx].status==='거절'){alert('이미 거절 처리된 신청입니다.');return}
- const ok=confirm((arr[idx].name||'신청자')+' 님의 카운셀러 활동 신청을 거절하시겠습니까?\n\n거절 기록은 남고, 개인 코드는 발급되지 않습니다.');
- if(!ok)return;
- const now=new Date().toISOString();
- arr[idx]={...arr[idx],status:'거절',rejectedAt:now,counselorCode:null,shareLink:null,activityStatus:null};
- storeSet('counselorApplications',arr);
- const latest=storeGet('latestCounselorApplication');
- if(latest&&(String(latest.id)===String(id)||counselorPhoneKey(latest.phone)===counselorPhoneKey(arr[idx].phone)))storeSet('latestCounselorApplication',arr[idx]);
- syncCounselorApplicationCentral(arr[idx]);
- renderCounselorApprovals();
- alert('신청을 거절 처리했습니다. 중앙저장에도 거절 상태를 반영했습니다.');
-}
-function deleteCounselorApplication(id){
- const arr=prepareCounselorApplications();
- const idx=arr.findIndex(x=>String(x.id)===String(id));
- if(idx<0){alert('신청 정보를 찾지 못했습니다.');return}
- const item=arr[idx];
- if(item.status==='승인 완료'){
-   alert('승인 완료된 카운셀러는 삭제할 수 없습니다. 고객 연결 기록과 개인 코드 보호를 위해 활동 중지 기능을 이용해 주세요.');
-   return;
- }
- const cfg=getGoogleConfig();
- if(!cfg.url||!cfg.key){alert('중앙저장에서도 삭제하려면 먼저 ① Google 중앙저장 연결을 확인해 주세요.');return}
- const ok=confirm((item.name||'신청자')+' 님의 신청을 삭제하시겠습니까?\n\n센터관리 화면과 Google 중앙저장의 신청 기록에서 제거됩니다. 이 작업은 되돌리기 어렵습니다.');
- if(!ok)return;
- deleteCounselorApplicationCentral(item);
- const next=arr.filter((_,i)=>i!==idx);
- storeSet('counselorApplications',next);
- const latest=storeGet('latestCounselorApplication');
- if(latest&&(String(latest.id)===String(id)||counselorPhoneKey(latest.phone)===counselorPhoneKey(item.phone)))storeSet('latestCounselorApplication',null);
- renderCounselorApprovals();
- alert('신청 삭제를 요청했습니다. 중앙저장에서도 제거되며, 다시 불러오면 최신 상태가 확인됩니다.');
 }
 function setCounselorActivity(id,nextStatus){
  const arr=prepareCounselorApplications();
@@ -2655,7 +2228,6 @@ function setCounselorActivity(id,nextStatus){
  if(cfg.url&&cfg.key){
    fetch(cfg.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:cfg.key,action:'counselor_activity_status',data:{id:arr[idx].id,phone:arr[idx].phone,counselorCode:code,activityStatus:arr[idx].activityStatus,changedAt:now}})}).catch(()=>{});
  }
- syncCounselorApplicationCentral(arr[idx]);
  sendCounselorStatusCentral(arr[idx]);
  renderCounselorApprovals();
  alert(pause?'활동 중지로 변경했습니다. 기존 코드와 기록은 보존됩니다.':'활동중으로 다시 변경했습니다. 기존 코드와 공유링크를 그대로 사용합니다.');
@@ -2669,16 +2241,27 @@ function renderAdmin(){
  $('kakaoStatus').textContent=k.url?'연결됨':'미설정';$('kakaoStatus').className='status-pill '+(k.url?'ok':'');
  $('aiStatus').textContent=a.url&&a.key?'연결정보 저장됨':'미설정';$('aiStatus').className='status-pill '+(a.url&&a.key?'ok':'');
  renderCounselorApprovals();
- renderAdminConsultations();
- renderPilotTests();
+ const apps=prepareCounselorApplications();
+ const arr=storeGet('consultations')||[],box=$('adminList');
+ box.innerHTML='<div class="card"><b>이 기기에 저장된 상담신청 '+arr.length+'건</b><p class="mini" style="margin:6px 0 0">개인 공유링크로 들어온 고객은 담당 카운셀러 코드가 함께 표시됩니다.</p></div>';
+ arr.forEach(x=>{
+   const d=document.createElement('div');d.className='card';
+   const ref=normalizeCounselorCode(x.referrerCode||'');
+   const counselor=ref?apps.find(a=>normalizeCounselorCode(a.counselorCode||'')===ref):null;
+   const refHtml=ref
+     ? '<div class="admin-consult-ref">담당 카운셀러 · '+escapeHtml(ref)+(counselor?.name?' · '+escapeHtml(counselor.name):'')+'</div>'
+     : '<div class="admin-consult-ref center">센터 공용 상담</div>';
+   d.innerHTML='<b>'+escapeHtml(x.name)+' · '+escapeHtml(x.method)+'</b><div>'+escapeHtml(x.phone)+'</div>'+refHtml+'<div class="mini" style="margin-top:6px">'+new Date(x.date).toLocaleString('ko-KR')+'</div>';
+   box.appendChild(d)
+ });
 }
-async function copyTestLink(){const k=getKakaoConfig();const u=new URL(location.href);u.search='';u.hash='';u.searchParams.set('test','1');if(k.url&&k.url!==KAKAO_CHAT_URL)u.searchParams.set('kakaourl',k.url);try{await navigator.clipboard.writeText(u.toString());$('copyMessage').textContent='테스트 링크가 복사되었습니다. 중앙저장 전송 키는 링크에 포함하지 않습니다.'}catch{$('copyMessage').textContent='복사가 안 되면 주소창의 현재 주소를 복사해 주세요.'}}
+async function copyTestLink(){const g=getGoogleConfig(),k=getKakaoConfig(),a=getAiConfig();if(!g.url||!g.key){alert('먼저 Google 중앙저장 설정을 저장해 주세요.');return}const u=new URL(location.href);u.search='';u.hash='';u.searchParams.set('test','1');u.searchParams.set('gsurl',g.url);u.searchParams.set('gskey',g.key);if(k.url)u.searchParams.set('kakaourl',k.url);if(a.url&&a.key){u.searchParams.set('aiurl',a.url);u.searchParams.set('aikey',a.key)}try{await navigator.clipboard.writeText(u.toString());$('copyMessage').textContent='테스트 링크가 복사되었습니다.'}catch{$('copyMessage').textContent='복사가 안 되면 주소창의 현재 주소를 복사해 주세요.'}}
 function importConfigFromQuery(){const p=new URLSearchParams(location.search);const gu=p.get('gsurl'),gk=p.get('gskey'),ku=p.get('kakaourl'),au=p.get('aiurl'),ak=p.get('aikey');if(gu&&gk)storeSet('googleConfig',{url:gu,key:gk});if(ku)storeSet('kakaoConfig',{url:ku});if(au&&ak)storeSet('aiConfig',{url:au.replace(/\/$/,''),key:ak});if(gu||gk||ku||au||ak){['gsurl','gskey','kakaourl','aiurl','aikey'].forEach(k=>p.delete(k));const qs=p.toString();history.replaceState({},'',location.pathname+(qs?'?'+qs:'')+location.hash)}}
 function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 /* AI */
 function buildSkinContext(){const x=storeGet('latestResult');if(!x)return null;return{age:x.basic?.age||'',gender:x.basic?.gender||'',selfConcern:LABEL[x.basic?.concern]||x.basic?.concern||'',maiim:x.basic?.maiim||'',currentProduct:x.basic?.currentProduct||'',pastProduct:x.basic?.pastProduct||'',skinType:TYPE[x.result?.type]?.[0]||x.result?.type||'',condition:x.result?.condition,primary:LABEL[x.result?.primary]||'',secondary:LABEL[x.result?.secondary]||'',scores:x.result?.scores||{}}}
 function renderAiChips(){const c=buildSkinContext(),box=$('aiResultChips');box.innerHTML='';if(!c)return;[c.skinType,'컨디션 '+c.condition+'점','1순위 '+c.primary,'2순위 '+c.secondary].forEach(t=>{const s=document.createElement('span');s.textContent=t;box.appendChild(s)})}
-function openAiConsult(){const x=storeGet('latestResult');if(!x){alert('AI 상담 전에 피부체크를 먼저 완료해 주세요.');show('basic');return}currentResult=x.result;renderAiChips();show('ai')}
+function openAiConsult(){alert('AI 척척박사는 현재 준비 중입니다.\n\n지금은 전화·카카오톡·센터 방문 상담을 이용해 주세요.');return}
 function requestAiConsent(){$('aiConsentModal').classList.remove('hidden')}
 function closeAiConsent(){$('aiConsentModal').classList.add('hidden')}
 function acceptAiConsent(){closeAiConsent();startAiCall()}
@@ -2691,7 +2274,7 @@ function endAiCall(){try{dc?.close()}catch{}try{pc?.close()}catch{}try{localStre
 async function sendAiText(){const input=$('aiText'),text=input.value.trim();if(!text)return;input.value='';addBubble('user',text);if(dc&&dc.readyState==='open'){dc.send(JSON.stringify({type:'conversation.item.create',item:{type:'message',role:'user',content:[{type:'input_text',text}]}}));dc.send(JSON.stringify({type:'response.create'}));return}const cfg=getAiConfig();if(!cfg.url||!cfg.key){addBubble('system','AI 상담 서버가 아직 연결되지 않았습니다.');return}try{setCallStatus('답변 작성 중…',true);const res=await fetch(cfg.url.replace(/\/$/,'')+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json','X-MAIIM-CLIENT':cfg.key},body:JSON.stringify({message:text,skinContext:buildSkinContext(),history:getTextHistory()})});const data=await res.json();if(!res.ok)throw new Error(data.error||'AI 오류');addBubble('ai',data.answer||'답변을 받지 못했습니다.');saveAiSummary();setCallStatus('글자 상담 가능',false)}catch(err){console.error(err);addBubble('system','AI 글자상담 연결에 실패했습니다.');setCallStatus('연결 오류',false)}}
 function getTextHistory(){return Array.from(document.querySelectorAll('#aiChat .bubble')).filter(b=>b.classList.contains('user')||b.classList.contains('ai')).slice(-8).map(b=>({role:b.classList.contains('user')?'user':'assistant',text:b.textContent}))}
 function saveAiSummary(){const hist=getTextHistory();storeSet('aiTranscriptSummary',hist.slice(-6))}
-async function init(){if($('welcomeName'))$('welcomeName').value=getWelcomeName();renderWelcomeHeadline();importConfigFromQuery();importCounselorStatusUrlFromQuery();clearStaleCounselorRefForPublicEntry();await importCounselorRef();bindBasicAutosave();restoreBasicDraft();restoreCounselorApplyDraft();bindPhoneAutoFormat();bindCounselorApplyAutosave();renderInfo();show('home');const p=new URLSearchParams(location.search);if(p.get('view')==='ai'){const demo=storeGet('latestResult');if(demo){currentResult=demo.result;renderAiChips();show('ai')}}}
+async function init(){if($('welcomeName'))$('welcomeName').value=getWelcomeName();renderWelcomeHeadline();importConfigFromQuery();importCounselorStatusUrlFromQuery();await importCounselorRef();bindBasicAutosave();restoreBasicDraft();restoreCounselorApplyDraft();bindPhoneAutoFormat();bindCounselorApplyAutosave();renderInfo();show('home');const p=new URLSearchParams(location.search);if(p.get('view')==='ai'){const demo=storeGet('latestResult');if(demo){currentResult=demo.result;renderAiChips();show('ai')}}}
 document.addEventListener('DOMContentLoaded',init);window.addEventListener('beforeunload',endAiCall);
 </script>
 </body>
