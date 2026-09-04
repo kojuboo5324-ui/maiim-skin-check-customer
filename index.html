@@ -857,6 +857,8 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
   .poster-start-hint{display:none}
 }
 
+
+/* V2.7.30 · 카카오 인앱 브라우저 저장 보완 */
 </style>
 </head>
 <body class="home-mode">
@@ -2358,22 +2360,68 @@ async function buildA4ReportCanvas(){
  ctx.fillStyle='#8a948e';ctx.font='18px sans-serif';ctx.fillText('본 결과는 피부관리 참고용이며 의료적 진단이나 치료를 위한 결과가 아닙니다.',620,1695);
  return c;
 }
+function openReportSavePreview(dataUrl,fileName){
+ const old=document.getElementById('reportSavePreview');
+ if(old)old.remove();
+ const wrap=document.createElement('div');
+ wrap.id='reportSavePreview';
+ wrap.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(20,34,28,.72);display:flex;align-items:flex-start;justify-content:center;padding:18px;overflow:auto';
+ const box=document.createElement('div');
+ box.style.cssText='width:min(520px,100%);background:#fff;border-radius:22px;padding:16px;box-shadow:0 18px 50px rgba(0,0,0,.25);margin:auto';
+ const title=document.createElement('div');
+ title.style.cssText='font-size:18px;font-weight:900;color:#214c40;margin:2px 0 8px';
+ title.textContent='피부 결과표 저장';
+ const msg=document.createElement('div');
+ msg.style.cssText='font-size:13px;line-height:1.65;color:#4e5e56;margin-bottom:12px';
+ msg.innerHTML='카카오톡 안의 인터넷에서는 파일 다운로드가 제대로 저장되지 않는 경우가 있습니다.<br><b>아래 결과표 이미지를 길게 눌러 ‘이미지 저장’</b>을 선택해 주세요.<br>저장이 보이지 않으면 카카오 브라우저 메뉴에서 <b>다른 브라우저로 열기(Chrome)</b> 후 다시 저장해 주세요.';
+ const img=document.createElement('img');
+ img.src=dataUrl; img.alt='저장용 MAIIM 피부 결과표';
+ img.style.cssText='display:block;width:100%;height:auto;border:1px solid #e2e9e4;border-radius:14px;background:#fff';
+ const name=document.createElement('div');
+ name.style.cssText='font-size:11px;color:#7a8580;margin:9px 2px 12px;word-break:break-all';
+ name.textContent='파일 이름: '+fileName;
+ const close=document.createElement('button');
+ close.type='button'; close.textContent='확인했습니다 · 닫기';
+ close.style.cssText='width:100%;min-height:48px;border:0;border-radius:14px;background:#214c40;color:#fff;font-weight:900;font-size:14px';
+ close.onclick=()=>wrap.remove();
+ box.append(title,msg,img,name,close); wrap.appendChild(box); document.body.appendChild(wrap);
+}
 async function saveA4ReportToPhone(){
  try{
   if(!getSkinReportData()){alert('먼저 피부체크 결과를 확인해 주세요.');return}
   const canvas=await buildA4ReportCanvas();
+  const d=new Date(),stamp=d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+  const fileName='MAIIM_피부결과_'+stamp+'.png';
+  const ua=navigator.userAgent||'';
+  const isKakao=/KAKAOTALK/i.test(ua);
+  if(isKakao){
+   const dataUrl=canvas.toDataURL('image/png',0.96);
+   openReportSavePreview(dataUrl,fileName);
+   return;
+  }
   const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png',0.96));
   if(!blob)throw new Error('blob_failed');
-  const d=new Date(),stamp=d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
-  const file=new File([blob],'MAIIM_피부결과_'+stamp+'.png',{type:'image/png'});
+  const file=new File([blob],fileName,{type:'image/png'});
   if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-   try{await navigator.share({files:[file],title:'나의 MAIIM 피부 리포트',text:'오늘의 피부체크 결과입니다.'});return}catch(e){if(e&&e.name==='AbortError')return}
+   try{
+    await navigator.share({files:[file],title:'나의 MAIIM 피부 리포트',text:'오늘의 피부체크 결과입니다.'});
+    return;
+   }catch(e){if(e&&e.name==='AbortError')return}
   }
-  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=file.name;document.body.appendChild(a);a.click();a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),2500);
-  alert('피부 결과표 이미지를 저장했습니다.');
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=fileName;a.style.display='none';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),120000);
+  alert('다운로드 요청을 보냈습니다.\n파일 이름: '+fileName+'\n\n내 파일 → 다운로드에서 확인해 주세요.');
  }catch(e){
-  console.error(e);alert('저장이 바로 되지 않았습니다. A4 결과표 보기에서 화면을 확인한 뒤 다시 시도해 주세요.');
+  console.error(e);
+  try{
+   const canvas=await buildA4ReportCanvas();
+   const d=new Date(),stamp=d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+   openReportSavePreview(canvas.toDataURL('image/png',0.96),'MAIIM_피부결과_'+stamp+'.png');
+  }catch(_){
+   alert('저장이 바로 되지 않았습니다. A4 결과표 보기에서 화면을 확인한 뒤 다시 시도해 주세요.');
+  }
  }
 }
 
