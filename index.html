@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 한가위 인사 · V2.7.20</title>
+<title>MAIIM 피부체크 · 한가위 인사 · V2.7.21</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, 원하는 방법으로 상담을 신청해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -67,6 +67,75 @@ label{display:block;font-weight:850;margin:13px 0 6px}input,select,textarea{widt
 .stepnav{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0 20px}.stepnav button{min-height:42px;border:1px solid var(--line);border-radius:999px;background:#e9eeea;color:#59665f;font-size:11px;font-weight:900}.stepnav button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
 .progress{height:9px;background:#e2e8e3;border-radius:999px;overflow:hidden;margin:15px 0}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand2),#8caf9e);transition:width .25s}
 .score-card{display:grid;grid-template-columns:128px 1fr;gap:18px;align-items:center}.score-ring{width:120px;height:120px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--brand) 0deg,var(--brand) var(--scoredeg,0deg),#dfe8e2 var(--scoredeg,0deg));position:relative}.score-ring:before{content:"";position:absolute;inset:9px;border-radius:50%;background:#fff}.score-number{position:relative;font-size:38px;font-weight:950;color:var(--brand)}.score-number small{font-size:13px}
+
+/* V2.7.21 A4 피부리포트 · 폰 저장 */
+.report-page-wrap{max-width:760px;margin:0 auto}
+.report-toolbar{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0}
+.report-toolbar button{flex:1;min-width:150px}
+.skin-report-a4{
+  position:relative;overflow:hidden;background:linear-gradient(160deg,#fffdf8 0%,#fbfdf9 52%,#f5fbf7 100%);
+  border:1px solid #dfe8e1;border-radius:26px;padding:28px 26px 22px;box-shadow:0 18px 52px rgba(42,76,62,.10);
+  color:#263c33;aspect-ratio:210/297;min-height:970px
+}
+.skin-report-a4:before,.skin-report-a4:after{
+  content:"";position:absolute;width:240px;height:240px;border-radius:50%;filter:blur(1px);opacity:.23;pointer-events:none
+}
+.skin-report-a4:before{left:-100px;top:-110px;background:radial-gradient(circle,#dcefdc 0%,transparent 68%)}
+.skin-report-a4:after{right:-100px;bottom:-95px;background:radial-gradient(circle,#f4ddca 0%,transparent 68%)}
+.report-leaf{position:absolute;color:#7cab83;opacity:.18;font-size:62px;line-height:1}
+.report-leaf.one{left:12px;top:18px;transform:rotate(-24deg)}
+.report-leaf.two{right:16px;top:70px;transform:rotate(34deg)}
+.report-head{position:relative;text-align:center;border-bottom:1px solid #e6ece8;padding-bottom:16px}
+.report-brand{font-size:15px;letter-spacing:.22em;font-weight:900;color:#3d765f}
+.report-head h2{font-family:Georgia,'Times New Roman',serif;font-size:34px;letter-spacing:-.04em;margin:7px 0 5px;color:#1e4435}
+.report-head p{margin:0;color:#7a867f;font-size:12px}
+.report-date{position:absolute;right:0;top:0;font-size:10px;color:#78847e;background:#fff;border:1px solid #e0e7e2;border-radius:999px;padding:6px 9px}
+.report-hero{position:relative;display:grid;grid-template-columns:170px 1fr 150px;gap:18px;align-items:center;margin:20px 0 16px;background:rgba(255,255,255,.86);border:1px solid #e0e8e2;border-radius:24px;padding:18px}
+.report-score-ring{width:152px;height:152px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#60aa86 var(--reportdeg,280deg),#e7ede9 0);position:relative}
+.report-score-ring:after{content:"";position:absolute;inset:12px;border-radius:50%;background:#fff}
+.report-score-text{position:relative;z-index:2;text-align:center;color:#3b805f}
+.report-score-text strong{font-size:52px;letter-spacing:-.04em}.report-score-text span{font-size:14px;font-weight:800}.report-score-text small{display:block;font-size:10px;color:#87928c}
+.report-message .tag{display:inline-block;background:#edf7f1;border:1px solid #d5e8dc;border-radius:999px;padding:5px 9px;font-size:10px;font-weight:900;color:#41705c}
+.report-message h3{font-size:25px;line-height:1.25;margin:9px 0 6px;color:#275540}
+.report-message p{font-size:12px;line-height:1.65;margin:0;color:#67756e}
+.report-one-line{margin-top:11px;background:#f7faf8;border:1px solid #e1e8e3;border-radius:13px;padding:9px 11px;font-size:10px;color:#7b877f}
+.report-one-line b{display:block;font-size:12px;color:#355f4e;margin-top:3px}
+.report-mascot img{display:block;width:135px;max-height:170px;object-fit:contain;margin:auto}
+.report-mascot p{text-align:center;margin:2px 0 0;font-size:9px;color:#728077}
+.report-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 15px}
+.report-mini-card{background:rgba(255,255,255,.88);border:1px solid #e0e8e2;border-radius:18px;padding:14px 12px;text-align:center;min-height:125px}
+.report-mini-card .mini-icon{font-size:29px}.report-mini-card b{display:block;margin:7px 0 4px;font-size:12px;color:#315d4a}
+.report-mini-card strong{display:block;font-size:13px;line-height:1.5;color:#283a32}
+.report-care-box{background:rgba(255,255,255,.88);border:1px solid #e1e8e3;border-radius:20px;padding:15px 14px;margin-bottom:15px}
+.report-care-box h3{text-align:center;margin:0 0 13px;font-size:16px;color:#315e4b}
+.report-care-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.report-care{display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 5px;border-right:1px solid #e8ede9}
+.report-care:last-child{border-right:0}.report-care span{font-size:24px}.report-care b{font-size:12px;color:#3b624f}
+.report-contact{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:rgba(255,255,255,.9);border:1px solid #e1e7e3;border-radius:19px;padding:14px 10px;margin-top:14px}
+.report-contact div{text-align:center;border-right:1px solid #e7ebe8;font-size:10px;color:#6d7973;line-height:1.45}
+.report-contact div:last-child{border-right:0}.report-contact b{display:block;font-size:11px;color:#315b4a;margin-bottom:3px}
+.report-footer{text-align:center;margin-top:12px;font-size:9px;color:#8a948e}
+.report-save-note{text-align:center;font-size:10px;color:#6c7972;margin:7px 0 0}
+@media(max-width:640px){
+ .skin-report-a4{min-height:0;padding:20px 14px 17px;border-radius:20px}
+ .report-head h2{font-size:26px}.report-date{position:static;display:inline-block;margin-top:7px}
+ .report-hero{grid-template-columns:105px 1fr 80px;gap:9px;padding:12px}
+ .report-score-ring{width:98px;height:98px}.report-score-ring:after{inset:9px}
+ .report-score-text strong{font-size:36px}.report-message h3{font-size:18px}
+ .report-message p{font-size:10px}.report-one-line{padding:7px;font-size:9px}.report-one-line b{font-size:10px}
+ .report-mascot img{width:75px;max-height:100px}.report-mascot p{display:none}
+ .report-mini-card{padding:10px 5px;min-height:106px}.report-mini-card .mini-icon{font-size:22px}.report-mini-card b{font-size:10px}.report-mini-card strong{font-size:10px}
+ .report-care-box{padding:11px 6px}.report-care-box h3{font-size:14px}.report-care{gap:3px;padding:6px 2px}.report-care span{font-size:19px}.report-care b{font-size:9px}
+ .report-contact{padding:10px 4px}.report-contact div{font-size:8px}.report-contact b{font-size:9px}
+}
+@media print{
+ body *{visibility:hidden!important}
+ #reportA4,#reportA4 *{visibility:visible!important}
+ #reportA4{position:absolute;left:0;top:0;width:100%;margin:0}
+ #reportA4 .report-toolbar,#reportA4 .report-save-note,#reportA4>.eyebrow,#reportA4>.page-title,#reportA4>.lead{display:none!important}
+ #skinReportA4{width:210mm;height:297mm;min-height:297mm;box-shadow:none;border:0;border-radius:0}
+}
+
 /* V2.7.20 결과화면 간결화 · AI 척척 결과 안내 */
 .result-hero-simple{
   --state-color:#58a984;
@@ -825,8 +894,65 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
    <div class="product-preview-grid" id="resultProductPreviewGrid"></div>
    <div class="product-lock-note">🔒 제품 이미지·상세설명은 상담 신청 후 확인할 수 있습니다.</div>
  </div>
- <button class="cta" onclick="openConsult()">상담하고 내게 맞는 제품 확인하기 →</button>
+ <div class="report-toolbar">
+ <button class="secondary" type="button" onclick="openA4Report()">📄 A4 피부 결과표 보기</button>
+ <button class="cta" type="button" onclick="saveA4ReportToPhone()">⬇ 내 폰에 저장하기</button>
+</div>
+<p class="report-save-note">결과표는 A4 비율의 이미지로 저장됩니다. 스마트폰에서는 저장·공유 창이 열릴 수 있습니다.</p>
+<button class="cta" onclick="openConsult()">상담하고 내게 맞는 제품 확인하기 →</button>
  <button class="secondary" onclick="show('history')">지난 피부결과 보기</button>
+</section>
+
+<section id="reportA4" class="view">
+ <div class="eyebrow">MY SKIN REPORT · A4</div>
+ <h2 class="page-title">나의 피부 결과표</h2>
+ <p class="lead">딱딱한 진단서가 아니라, 오늘 내 피부를 한눈에 보는 뷰티 리포트입니다.</p>
+ <div class="report-page-wrap">
+  <div class="report-toolbar">
+   <button class="secondary" type="button" onclick="show('result')">← 결과 화면으로</button>
+   <button class="cta" type="button" onclick="saveA4ReportToPhone()">⬇ 내 폰에 저장하기</button>
+  </div>
+
+  <article class="skin-report-a4" id="skinReportA4">
+   <span class="report-leaf one">❧</span><span class="report-leaf two">❧</span>
+   <header class="report-head">
+    <div class="report-brand">MAIIM · 천안신부센터</div>
+    <h2>나의 피부 리포트</h2>
+    <p>오늘 내 피부가 보내는 신호를 보기 쉽게 정리했어요.</p>
+    <div class="report-date" id="reportDate"></div>
+   </header>
+
+   <div class="report-hero">
+    <div class="report-score-ring" id="reportScoreRing"><div class="report-score-text"><strong id="reportScore">-</strong><span>점</span><small>/ 100</small></div></div>
+    <div class="report-message">
+     <span class="tag">AI 척척과 함께 보는 피부결과</span>
+     <h3 id="reportMoodTitle">오늘 피부 컨디션이 좋아요!</h3>
+     <p id="reportMoodText">지금의 좋은 관리 습관을 꾸준히 이어가세요.</p>
+     <div class="report-one-line">오늘의 피부 한마디<b id="reportOneLine">지금처럼만 관리해도 좋아요!</b></div>
+    </div>
+    <div class="report-mascot"><img id="reportMascot" alt="AI 피부박사 척척"><p>피부체크 결과를<br>보기 쉽게 정리했어요</p></div>
+   </div>
+
+   <div class="report-mini-grid">
+    <div class="report-mini-card"><div class="mini-icon">🌿</div><b>내 피부 유형</b><strong id="reportType">-</strong></div>
+    <div class="report-mini-card"><div class="mini-icon">🎯</div><b>주요 고민 TOP 2</b><strong id="reportConcern">-</strong></div>
+    <div class="report-mini-card"><div class="mini-icon">💧</div><b>현재 피부 상태</b><strong id="reportCondition">-</strong></div>
+   </div>
+
+   <div class="report-care-box">
+    <h3>지금 필요한 관리 포인트</h3>
+    <div class="report-care-row" id="reportCareRow"></div>
+   </div>
+
+   <div class="report-contact">
+    <div><b>☎ 전화 상담</b><span id="reportPhone">-</span></div>
+    <div><b>💬 카카오톡 상담</b><span id="reportKakao">-</span></div>
+    <div><b>⌂ 센터 방문 상담</b><span id="reportAddress">-</span></div>
+   </div>
+   <div class="report-footer">본 결과는 피부관리 참고용이며 의료적 진단이나 치료를 위한 결과가 아닙니다.</div>
+  </article>
+  <p class="report-save-note">저장된 이미지는 카카오톡으로 공유하거나 휴대폰에 보관하실 수 있습니다.</p>
+ </div>
 </section>
 
 <section id="ai" class="view">
@@ -1937,7 +2063,7 @@ function renderResult(){
    pores:['🫧','모공 케어'],
    sensitive:['🍃','진정 케어'],
    elasticity:['✨','탄력 케어'],
-   tone:['☀️','피부톤 케어']
+   tone:['☀️','자외선 차단']
  };
  let careKeys=[currentResult.primary,currentResult.secondary];
  if(!careKeys.includes('tone')) careKeys.push('tone'); else careKeys.push('lifestyle');
@@ -1954,6 +2080,174 @@ function renderResult(){
  $('positiveText').textContent=t[4];
  renderResultProductPreview();
 }
+
+function getSkinReportData(){
+ const x=storeGet('latestResult');
+ const r=(x&&x.result)||currentResult;
+ if(!r)return null;
+ const t=TYPE[r.type]||['피부 결과','','','',''];
+ const score=Number(r.condition||0);
+ const state=score>=70?'good':(score>=50?'average':'care');
+ const copy={
+   good:{title:'오늘 피부 컨디션이 좋아요!',text:'지금의 좋은 관리 습관을 꾸준히 이어가세요.',one:'지금처럼만 관리해도 좋아요!'},
+   average:{title:'오늘 피부 컨디션은 보통이에요.',text:'조금만 더 신경 쓰면 더 좋은 컨디션을 유지할 수 있어요.',one:'지금 컨디션을 꾸준히 관리해 주세요.'},
+   care:{title:'오늘은 피부가 조금 쉬고 싶어 해요.',text:'수분과 진정 중심으로 부드럽게 관리해 주세요.',one:'오늘은 피부에게 편안한 휴식을 선물해 주세요.'}
+ }[state];
+ const careMap={
+   hydration:['💧','수분 보충'],
+   pores:['🫧','모공 케어'],
+   sensitive:['🍃','진정 케어'],
+   elasticity:['✨','탄력 케어'],
+   tone:['☀️','자외선 차단'],
+   lifestyle:['🌙','생활 리듬']
+ };
+ let careKeys=[r.primary,r.secondary];
+ if(!careKeys.includes('tone'))careKeys.push('tone');else careKeys.push('lifestyle');
+ return {
+   item:x,result:r,score,state,copy,type:t[0],
+   primary:LABEL[r.primary]||'-',secondary:LABEL[r.secondary]||'-',
+   condition:score>=70?'양호':(score>=50?'보통':'관리 필요'),
+   cares:careKeys.slice(0,3).map(k=>careMap[k]||['🌿','기본 관리'])
+ };
+}
+function renderA4Report(){
+ const d=getSkinReportData();if(!d)return false;
+ const dt=d.item?.date?new Date(d.item.date):new Date();
+ $('reportDate').textContent=dt.toLocaleDateString('ko-KR');
+ $('reportScore').textContent=d.score;
+ $('reportScoreRing').style.setProperty('--reportdeg',(d.score*3.6)+'deg');
+ $('reportMoodTitle').textContent=d.copy.title;
+ $('reportMoodText').textContent=d.copy.text;
+ $('reportOneLine').textContent=d.copy.one;
+ $('reportType').textContent=d.type;
+ $('reportConcern').innerHTML=escapeHtml(d.primary)+'<br><span style="font-weight:600;color:#7d8982">＋ '+escapeHtml(d.secondary)+'</span>';
+ $('reportCondition').textContent=d.condition;
+ const src=document.querySelector('.result-mascot img')?.src||'';
+ if(src)$('reportMascot').src=src;
+ const row=$('reportCareRow');row.innerHTML='';
+ d.cares.forEach(v=>{const el=document.createElement('div');el.className='report-care';el.innerHTML='<span>'+v[0]+'</span><b>'+escapeHtml(v[1])+'</b>';row.appendChild(el)});
+ $('reportPhone').textContent=CENTER_CONTACT.mobile+' / '+CENTER_CONTACT.landline;
+ $('reportKakao').textContent='카카오톡 ID '+KAKAO_ID;
+ $('reportAddress').textContent=CENTER_CONTACT.address;
+ return true;
+}
+function openA4Report(){
+ if(!renderA4Report()){alert('먼저 피부체크 결과를 확인해 주세요.');return}
+ show('reportA4');
+}
+function canvasRoundRect(ctx,x,y,w,h,r,fill,stroke){
+ r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();
+ if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke()}
+}
+function canvasWrap(ctx,text,x,y,maxWidth,lineHeight,maxLines){
+ const words=String(text||'').split(/\s+/);let line='',lines=[];
+ words.forEach(word=>{const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word}else line=test});
+ if(line)lines.push(line);if(maxLines)lines=lines.slice(0,maxLines);
+ lines.forEach((ln,i)=>ctx.fillText(ln,x,y+i*lineHeight));
+ return y+lines.length*lineHeight;
+}
+function loadImageForCanvas(src){
+ return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=src});
+}
+async function buildA4ReportCanvas(){
+ const d=getSkinReportData();if(!d)throw new Error('no_result');
+ const W=1240,H=1754,ctx=document.createElement('canvas').getContext('2d'),c=ctx.canvas;c.width=W;c.height=H;
+ ctx.fillStyle='#fcfbf6';ctx.fillRect(0,0,W,H);
+ // soft background circles
+ ctx.globalAlpha=.14;ctx.fillStyle='#b9ddc6';ctx.beginPath();ctx.arc(40,80,230,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#f2cdb5';ctx.beginPath();ctx.arc(1200,1680,250,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+
+ ctx.textAlign='center';ctx.fillStyle='#397259';ctx.font='700 28px sans-serif';ctx.fillText('M A I I M   천안신부센터',W/2,82);
+ ctx.fillStyle='#1e4435';ctx.font='700 58px serif';ctx.fillText('나의 피부 리포트',W/2,150);
+ ctx.fillStyle='#7a867f';ctx.font='24px sans-serif';ctx.fillText('오늘 내 피부가 보내는 신호를 한눈에 확인해 보세요',W/2,194);
+
+ const dt=d.item?.date?new Date(d.item.date):new Date();
+ ctx.textAlign='right';ctx.fillStyle='#7d8982';ctx.font='20px sans-serif';ctx.fillText(dt.toLocaleDateString('ko-KR'),1150,88);
+
+ // hero
+ canvasRoundRect(ctx,70,245,1100,420,34,'#ffffff','#dfe8e1');
+ // score ring
+ const cx=260,cy=455,R=145;
+ ctx.strokeStyle='#e5ece7';ctx.lineWidth=28;ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.stroke();
+ ctx.strokeStyle=d.state==='good'?'#60aa86':(d.state==='average'?'#d7a54d':'#d8786d');ctx.lineCap='round';
+ ctx.beginPath();ctx.arc(cx,cy,R,-Math.PI/2,-Math.PI/2+Math.PI*2*(d.score/100));ctx.stroke();ctx.lineCap='butt';
+ ctx.fillStyle='#3b805f';ctx.textAlign='center';ctx.font='700 92px sans-serif';ctx.fillText(String(d.score),cx,470);
+ ctx.font='700 26px sans-serif';ctx.fillText('점',cx+80,470);ctx.fillStyle='#8a948e';ctx.font='20px sans-serif';ctx.fillText('/ 100',cx,520);
+
+ // message
+ ctx.textAlign='left';canvasRoundRect(ctx,445,305,360,50,24,'#edf7f1','#d5e8dc');
+ ctx.fillStyle='#41705c';ctx.font='700 20px sans-serif';ctx.fillText('AI 척척과 함께 보는 피부결과',470,337);
+ ctx.fillStyle='#275540';ctx.font='700 43px sans-serif';canvasWrap(ctx,d.copy.title,445,415,390,52,2);
+ ctx.fillStyle='#66756e';ctx.font='24px sans-serif';canvasWrap(ctx,d.copy.text,445,530,400,36,3);
+ canvasRoundRect(ctx,435,575,390,62,18,'#f7faf8','#e1e8e3');
+ ctx.fillStyle='#355f4e';ctx.font='700 22px sans-serif';ctx.fillText(d.copy.one,460,614);
+
+ // mascot
+ try{
+  const src=document.querySelector('.result-mascot img')?.src||'';
+  if(src){const img=await loadImageForCanvas(src);ctx.drawImage(img,860,315,250,290)}
+ }catch(e){}
+
+ // 3 summary cards
+ const cards=[
+  ['내 피부 유형',d.type],
+  ['주요 고민 TOP 2',d.primary+'  ·  '+d.secondary],
+  ['현재 피부 상태',d.condition]
+ ];
+ cards.forEach((v,i)=>{
+  const x=70+i*370;canvasRoundRect(ctx,x,700,350,230,28,'#ffffff','#e0e8e2');
+  ctx.textAlign='center';ctx.fillStyle='#315d4a';ctx.font='700 25px sans-serif';ctx.fillText(v[0],x+175,760);
+  ctx.fillStyle='#283a32';ctx.font='700 30px sans-serif';canvasWrap(ctx,v[1],x+175,835,290,40,2);
+ });
+
+ // care points
+ canvasRoundRect(ctx,70,970,1100,255,30,'#ffffff','#e0e8e2');
+ ctx.textAlign='center';ctx.fillStyle='#315e4b';ctx.font='700 30px sans-serif';ctx.fillText('지금 필요한 관리 포인트',620,1035);
+ d.cares.forEach((v,i)=>{
+  const x=245+i*370;
+  ctx.font='46px sans-serif';ctx.fillText(v[0],x,1110);
+  ctx.fillStyle='#3b624f';ctx.font='700 24px sans-serif';ctx.fillText(v[1],x,1165);
+ });
+
+ // message strip
+ canvasRoundRect(ctx,70,1265,1100,135,28,'#f2f8f4','#dce9e0');
+ ctx.fillStyle='#49725f';ctx.textAlign='center';ctx.font='700 22px sans-serif';ctx.fillText('오늘의 피부 한마디',620,1310);
+ ctx.fillStyle='#254e3e';ctx.font='700 31px sans-serif';ctx.fillText(d.copy.one,620,1360);
+
+ // contact footer
+ canvasRoundRect(ctx,70,1445,1100,190,28,'#ffffff','#e0e7e3');
+ const contact=[
+  ['전화 상담',CENTER_CONTACT.mobile+' / '+CENTER_CONTACT.landline],
+  ['카카오톡 상담','ID '+KAKAO_ID],
+  ['센터 방문 상담',CENTER_CONTACT.address]
+ ];
+ contact.forEach((v,i)=>{
+  const x=70+i*(1100/3),mid=x+1100/6;
+  ctx.textAlign='center';ctx.fillStyle='#315b4a';ctx.font='700 22px sans-serif';ctx.fillText(v[0],mid,1510);
+  ctx.fillStyle='#707c75';ctx.font='19px sans-serif';canvasWrap(ctx,v[1],mid,1555,300,28,3);
+ });
+ ctx.fillStyle='#8a948e';ctx.font='18px sans-serif';ctx.fillText('본 결과는 피부관리 참고용이며 의료적 진단이나 치료를 위한 결과가 아닙니다.',620,1695);
+ return c;
+}
+async function saveA4ReportToPhone(){
+ try{
+  if(!getSkinReportData()){alert('먼저 피부체크 결과를 확인해 주세요.');return}
+  const canvas=await buildA4ReportCanvas();
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png',0.96));
+  if(!blob)throw new Error('blob_failed');
+  const d=new Date(),stamp=d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+  const file=new File([blob],'MAIIM_피부결과_'+stamp+'.png',{type:'image/png'});
+  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+   try{await navigator.share({files:[file],title:'나의 MAIIM 피부 리포트',text:'오늘의 피부체크 결과입니다.'});return}catch(e){if(e&&e.name==='AbortError')return}
+  }
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=file.name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),2500);
+  alert('피부 결과표 이미지를 저장했습니다.');
+ }catch(e){
+  console.error(e);alert('저장이 바로 되지 않았습니다. A4 결과표 보기에서 화면을 확인한 뒤 다시 시도해 주세요.');
+ }
+}
+
 function editSkinCheckAnswers(){const x=restoreLatestBasicForRecheck();if(!hasBasic()){alert('먼저 기본정보를 확인해 주세요.');show('basic');return}if(x?.answers?.length===13){answers=[...x.answers]}else{answers=new Array(13)}qi=0;questionSessionActive=true;questionResumeQi=0;show('question');renderQuestion()}
 function restartSkinCheck(){restoreLatestBasicForRecheck();if(!hasBasic()){alert('먼저 기본정보를 확인해 주세요.');show('basic');return}answers=new Array(13);qi=0;questionSessionActive=true;questionResumeQi=0;show('question');renderQuestion()}
 function goStep(step){if(step==='question'){if(!hasBasic()){alert('먼저 기본정보를 입력해 주세요.');show('basic')}else{show('question');renderQuestion()}return}if(step==='result'){const x=storeGet('latestResult');if(!x){alert('아직 피부체크 결과가 없습니다.');return}currentResult=x.result;answers=x.answers||[];renderResult();show('result');return}if(step==='consult')openConsult()}
