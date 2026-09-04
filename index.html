@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 피부체크 · 한가위 인사 · V2.7.21</title>
+<title>MAIIM 피부체크 · 한가위 인사 · V2.7.22</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, 원하는 방법으로 상담을 신청해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -705,14 +705,42 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .ref-checking{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:#eef7f2;color:#315247;font-size:11px;font-weight:850}
 
 
-/* V2.7.19 · 2026 한가위 인사 + AI 척척박사 준비중 */
-.chuseok-greeting{position:relative;overflow:hidden;margin:14px 14px 18px;padding:18px 17px 17px;border:1px solid #ead8b5;border-radius:22px;background:linear-gradient(145deg,#fffaf0 0%,#fff4da 52%,#f3ead6 100%);box-shadow:0 12px 30px rgba(123,92,40,.10);color:#493b28}
-.chuseok-greeting::before{content:"";position:absolute;right:-18px;top:-22px;width:118px;height:118px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fffef1 0%,#ffe7a9 58%,#f2c86d 100%);box-shadow:0 0 35px rgba(235,190,92,.28)}
-.chuseok-greeting::after{content:"";position:absolute;left:-10%;right:-10%;bottom:-54px;height:95px;border-radius:50% 50% 0 0;background:linear-gradient(180deg,#6f947c,#3f6855);opacity:.16}
-.chuseok-greeting>*{position:relative;z-index:1}.chuseok-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.72);border:1px solid rgba(177,134,63,.22);font-size:11px;font-weight:900;color:#8a6124}
-.chuseok-greeting h3{margin:11px 92px 7px 0;font-size:21px;line-height:1.34;letter-spacing:-.035em;color:#5a4223}.chuseok-greeting p{margin:0 82px 9px 0;font-size:13px;line-height:1.7;color:#695942}.chuseok-from{display:block;font-size:12px;font-weight:900;color:#456655;margin-top:7px}
-.ai-highlight.ai-coming-soon{background:linear-gradient(145deg,#26473e,#53786b)}.ai-highlight.ai-coming-soon:after{content:"SOON";font-size:62px;right:-8px;bottom:-16px}.ai-coming-pill{display:inline-flex;padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);font-size:10px;font-weight:900;color:#e6f3ee}.ai-start[disabled],.secondary[disabled],.method-card[disabled]{cursor:not-allowed;opacity:.62;filter:saturate(.65)}
-@media(max-width:480px){.chuseok-greeting h3{font-size:19px;margin-right:74px}.chuseok-greeting p{margin-right:54px}.chuseok-greeting::before{width:100px;height:100px;right:-20px}}
+/* V2.7.22 · 2026 한가위 인사 카드 여백/가을 분위기 정리 */
+.chuseok-greeting{
+ position:relative;overflow:hidden;width:calc(100% - 44px);max-width:470px;margin:18px auto 24px;padding:15px 16px 14px;
+ border:1px solid #ead8b5;border-radius:20px;
+ background:linear-gradient(145deg,#fffaf1 0%,#fff5df 58%,#f6efdf 100%);
+ box-shadow:0 9px 24px rgba(123,92,40,.08);color:#493b28
+}
+.chuseok-greeting::before{
+ content:"";position:absolute;right:-7px;top:-18px;width:86px;height:86px;border-radius:50%;
+ background:radial-gradient(circle at 35% 35%,#fffef4 0%,#ffe6a6 60%,#efc46e 100%);
+ box-shadow:0 0 26px rgba(235,190,92,.22)
+}
+.chuseok-greeting::after{
+ content:"🍂  〰  🌾";position:absolute;right:12px;bottom:10px;
+ font-size:20px;letter-spacing:2px;opacity:.48;transform:rotate(-4deg);white-space:nowrap
+}
+.chuseok-greeting>*{position:relative;z-index:1}
+.chuseok-badge{
+ display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:999px;
+ background:rgba(255,255,255,.76);border:1px solid rgba(177,134,63,.20);
+ font-size:10px;font-weight:900;color:#8a6124
+}
+.chuseok-greeting h3{
+ margin:9px 70px 5px 0;font-size:18px;line-height:1.34;letter-spacing:-.035em;color:#5a4223
+}
+.chuseok-greeting p{
+ margin:0 66px 7px 0;font-size:11px;line-height:1.65;color:#695942
+}
+.chuseok-from{display:block;font-size:10px;font-weight:900;color:#456655;margin-top:5px}
+@media(max-width:480px){
+ .chuseok-greeting{width:calc(100% - 34px);margin:16px auto 22px;padding:14px 14px 13px}
+ .chuseok-greeting h3{font-size:17px;margin-right:58px}
+ .chuseok-greeting p{margin-right:48px;font-size:10.5px}
+ .chuseok-greeting::before{width:74px;height:74px;right:-8px;top:-13px}
+ .chuseok-greeting::after{right:9px;bottom:8px;font-size:17px}
+}.chuseok-greeting p{margin-right:54px}.chuseok-greeting::before{width:100px;height:100px;right:-20px}}
 
 
 /* V2.7.19 · 첫 화면 이미지의 기존 AI 안내를 준비중 안내로 명확히 덮어 표시 */
