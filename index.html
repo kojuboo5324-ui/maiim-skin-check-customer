@@ -938,6 +938,25 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .record-clear-btn:active{transform:scale(.99)}
 .record-clear-box .mini{margin:8px 0 0;color:#876c66;line-height:1.5}
 
+
+/* V2.7.36 · 기본정보 화면에도 내 기록 모두 지우기 버튼 추가 */
+.basic-clear-box{
+  margin:18px 0 4px;
+  padding:14px;
+  border-radius:16px;
+  border:1px solid #ead8d4;
+  background:#fff9f7;
+  text-align:center;
+}
+.basic-clear-box .record-clear-btn{
+  width:100%;
+}
+.basic-clear-box .mini{
+  margin:8px 0 0;
+  color:#876c66;
+  line-height:1.5;
+}
+
 </style>
 </head>
 <body class="home-mode">
@@ -1036,6 +1055,11 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
  <div id="pastBox" class="hidden"><label>과거 사용 제품 또는 중단 이유</label><textarea id="pastProduct" placeholder="기억나는 만큼만 적어 주세요"></textarea></div>
  <p class="basic-resume-note hidden" id="basicResumeNote">피부체크 진행 중입니다. 기본정보를 수정한 뒤 기존 질문 위치로 바로 돌아갈 수 있습니다.</p>
  <button class="cta" id="basicActionBtn" onclick="handleBasicAction()">13문항 피부체크 시작하기 →</button>
+
+<div class="basic-clear-box">
+  <button class="record-clear-btn" type="button" onclick="clearMySkinRecords()">내 기록 모두 지우기</button>
+  <p class="mini">이 기기에 저장된 기본정보와 피부체크 결과를 모두 지웁니다.</p>
+</div>
 </section>
 
 <section id="question" class="view">
