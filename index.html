@@ -2081,10 +2081,9 @@ function openShareDoneLink(){
 async function makeCounselorShareLink(){
  const code=normalizeCounselorCode($('counselorCodeInput').value);
  if(!code){alert('카운셀러 코드를 입력해 주세요.');return}
- const u=new URL('https://kojuboo5324-ui.github.io/maiim-skin-check-customer/');
- u.searchParams.set('ref',code);
- $('counselorShareLink').textContent=u.toString();
- try{await navigator.clipboard.writeText(u.toString());alert('개인 공유링크를 복사했습니다.')}catch{}
+ const link=counselorShareUrl(code);
+ $('counselorShareLink').textContent=link;
+ try{await navigator.clipboard.writeText(link);alert('개인 공유링크를 복사했습니다.')}catch{}
 }
 
 
@@ -3087,8 +3086,17 @@ function getPublicCentralUrl(){
 async function sendPublicCentral(action,data){
  const url=getPublicCentralUrl();
  if(!url)return false;
+ const body=JSON.stringify({appId:MAIIM_PUBLIC_APP_ID,action,data});
+ // 모바일 Chrome/카카오 인앱브라우저에서도 Apps Script로 안정적으로 보내기 위해
+ // sendBeacon을 우선 사용하고, 지원되지 않거나 큐 등록에 실패하면 fetch로 재시도합니다.
  try{
-  await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({appId:MAIIM_PUBLIC_APP_ID,action,data})});
+  if(navigator.sendBeacon){
+   const queued=navigator.sendBeacon(url,body);
+   if(queued)return true;
+  }
+ }catch(err){console.warn('MAIIM public central beacon failed',err)}
+ try{
+  await fetch(url,{method:'POST',mode:'no-cors',redirect:'follow',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body});
   return true;
  }catch(err){console.warn('MAIIM public central send failed',err);return false}
 }
@@ -3342,8 +3350,10 @@ async function copyTestLink(){
  if(!publicUrl){alert('먼저 Google 중앙저장 설정을 한 번 저장해 주세요.');return}
  const u=new URL('https://kojuboo5324-ui.github.io/maiim-skin-check-customer/');
  u.searchParams.set('gsurl',publicUrl);
+ const statusUrl=String(getCounselorStatusConfig().url||'').trim();
+ if(statusUrl)u.searchParams.set('statusurl',statusUrl);
  if(k.url)u.searchParams.set('kakaourl',k.url);
- try{await navigator.clipboard.writeText(u.toString());$('copyMessage').textContent='중앙저장 공개 링크가 복사되었습니다. 비밀 전송키는 포함되지 않습니다.'}
+ try{await navigator.clipboard.writeText(u.toString());$('copyMessage').textContent='중앙저장 공개 링크가 복사되었습니다. 비밀 전송키·상태관리 키는 포함되지 않습니다.'}
  catch{$('copyMessage').textContent='복사가 안 되면 다시 시도해 주세요.'}
 }
 function importConfigFromQuery(){
