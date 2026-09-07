@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MAIIM 전체골격 검토본 · 사무실 듀얼모니터용</title>
+<title>꿀광피부 · 천안신부 피부체크</title>
 <meta name="description" content="13가지 질문으로 지금 내 피부의 관리 1순위와 피부 컨디션을 확인하고, 원하는 방법으로 상담을 신청해 보세요.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://kojuboo5324-ui.github.io/maiim-skin-check-customer/">
@@ -961,7 +961,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 /* V2.7.37 · 센터관리 화면 제목 변경 */
 
 
-/* V2.8.2 전체 골격 검토본 · 콘텐츠 허브/피부정보/제품·센터소식/마음쉼음악/센터소개 */
+/* V2.9.0 콘텐츠 등록관리 · 피부정보/제품·센터소식/마음쉼음악/센터소개 */
 .content-hub-v280{width:calc(100% - 22px);max-width:680px;margin:18px auto 28px;padding:18px;border:1px solid #dce9df;border-radius:24px;background:linear-gradient(145deg,#fbfffc 0%,#fffaf4 100%);box-shadow:0 12px 28px rgba(55,91,72,.08);box-sizing:border-box}
 .content-hub-v280 .hub-kicker{font-size:11px;font-weight:900;letter-spacing:.08em;color:#4d8a68;margin-bottom:6px}
 .content-hub-v280 h3{margin:0;color:#244d3d;font-size:20px;letter-spacing:-.035em}
@@ -993,7 +993,23 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
 .center-contact-grid-v280{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
 .center-contact-grid-v280 a{display:block;border:1px solid #d7e5db;border-radius:14px;background:#fff;padding:12px;text-align:center;text-decoration:none;color:#315c49;font-weight:850;font-size:12px}
 .content-note-v280{font-size:11px;color:#778179;line-height:1.65;margin-top:12px}
-@media(max-width:520px){.content-list-v280,.center-contact-grid-v280{grid-template-columns:1fr}}
+.content-thumb-v290{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;margin-bottom:10px;background:#eef3ef;display:block}
+.content-social-preview-v291{position:relative;width:100%;border-radius:14px;overflow:hidden;background:#eef3ef;margin-bottom:10px}
+.content-social-preview-v291.youtube{aspect-ratio:16/9}
+.content-social-preview-v291.vertical{aspect-ratio:9/16;max-height:440px}
+.content-social-preview-v291 iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;background:#f3f5f3}
+.content-social-fallback-v291{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:7px;background:linear-gradient(145deg,#f7faf8,#eef4f0);color:#426252;font-weight:900;text-align:center;padding:18px}
+.content-social-fallback-v291 small{font-size:11px;color:#7a887f;font-weight:700}
+.content-item-v280[data-clickable="1"]{cursor:pointer}
+.content-item-v280:focus-visible{outline:3px solid rgba(69,117,86,.24);outline-offset:2px}
+.content-item-v280:hover{border-color:#a9cbb5;box-shadow:0 10px 24px rgba(59,86,70,.1)}
+.content-admin-v290{margin-top:18px;border:1px solid #cfe1d5;border-radius:22px;background:linear-gradient(145deg,#f9fff9,#fffaf4);padding:16px}
+.content-admin-v290 h3{margin:4px 0 6px;color:#28523f}.content-admin-v290 .admin-help{font-size:11px;line-height:1.65;color:#6d7a72;margin:0 0 12px}
+.content-admin-v290 textarea{width:100%;min-height:74px;resize:vertical;box-sizing:border-box}
+.content-admin-actions-v290{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.content-admin-actions-v290 .cta,.content-admin-actions-v290 .secondary{margin:0}
+.content-admin-list-v290{display:grid;gap:8px;margin-top:12px}.content-admin-item-v290{border:1px solid #dce6df;border-radius:15px;background:#fff;padding:12px}.content-admin-item-v290 b{display:block;color:#2c5140}.content-admin-item-v290 .mini{margin-top:4px}.content-admin-item-actions-v290{display:flex;gap:7px;margin-top:9px}.content-admin-item-actions-v290 button{flex:1;border:0;border-radius:11px;padding:9px;font-weight:850;cursor:pointer}.content-admin-edit-v290{background:#edf8f0;color:#356d4c}.content-admin-delete-v290{background:#fff0ec;color:#a44e39}
+.content-admin-badge-v290{display:inline-flex;font-size:10px;font-weight:900;padding:4px 7px;border-radius:999px;background:#eef8f1;color:#3f7857;margin-bottom:5px}
+@media(max-width:520px){.content-list-v280,.center-contact-grid-v280{grid-template-columns:1fr}.content-admin-actions-v290{grid-template-columns:1fr}}
 
 </style>
 
@@ -1486,8 +1502,10 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
       <a href="tel:0416224646">☎ 041-622-4646</a>
       <a href="javascript:void(0)" onclick="openConsult();return false">📝 상담 신청</a>
     </div>
-    <p class="content-note-v280">센터 주소·소개 문구·사진은 최종 확정 단계에서 이 자리만 채우면 됩니다.</p>
+    <p class="content-note-v280">센터 주소·소개 문구·사진은 필요할 때 이 자리에서 보완할 수 있습니다.</p>
   </div>
+  <div class="content-section-title-v280"><h3>센터 소개 영상 · 안내</h3><span class="pill" id="centerIntroCountV290">0개</span></div>
+  <div id="centerIntroListV290" class="content-list-v280"></div>
   <button class="secondary" type="button" onclick="show('home')">홈으로</button>
 </section>
 
@@ -1665,6 +1683,28 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
    <div class="counselor-approval-summary" id="counselorApprovalSummary"></div>
    <div class="counselor-approval-list" id="counselorApprovalList"></div>
    <div class="counselor-approval-note">센터장이 승인하면 <b>C001, C002… 형식의 개인 코드와 개인 공유링크가 즉시 자동 발급</b>됩니다. 승인 후에는 <b>활동 중지·재개</b>도 이 화면에서 관리합니다.</div>
+ </div>
+ <div class="content-admin-v290" id="contentAdminV290">
+   <div class="eyebrow" style="margin-bottom:4px">CONTENT MANAGER</div>
+   <h3>⑦ 영상·콘텐츠 주소 등록</h3>
+   <p class="admin-help">피부 정보·제품 안내·센터 소식·마음쉼 음악·센터 소개에 <b>YouTube · TikTok · Instagram 주소만 붙여넣어 등록</b>합니다. 제목이나 대표 이미지를 따로 만들 필요가 없습니다. 고객은 화면의 영상 카드를 누르면 원래 플랫폼이 새 탭에서 열립니다.</p>
+   <label>올릴 곳</label>
+   <select id="contentCategoryV290">
+     <option value="skin">피부 정보 · 피부 상식 영상</option>
+     <option value="product">제품 안내</option>
+     <option value="centerNews">천안신부 센터 소식</option>
+     <option value="music">쉼이 되는 음악 · 마음쉼 음악</option>
+     <option value="centerIntro">천안신부 센터 소개</option>
+   </select>
+   <label>영상 주소</label><input id="contentUrlV290" inputmode="url" placeholder="YouTube · TikTok · Instagram 영상 주소를 붙여넣으세요">
+   <p class="mini">주소를 붙여넣고 저장하면 됩니다. YouTube는 대표 화면을 자동 표시하고, TikTok·Instagram은 가능한 경우 원본 영상 미리보기를 표시합니다. 카드 전체를 누르면 원래 플랫폼이 새 탭에서 열립니다.</p>
+   <input id="contentEditIdV290" type="hidden">
+   <div class="content-admin-actions-v290">
+     <button class="cta" type="button" onclick="saveContentV290()">주소 등록하기</button>
+     <button class="secondary" type="button" onclick="resetContentEditorV290()">새 주소 등록</button>
+   </div>
+   <button class="secondary" type="button" onclick="loadAdminContentsV290(true)" style="margin-top:8px">등록 내용 새로고침</button>
+   <div id="contentAdminListV290" class="content-admin-list-v290"></div>
  </div>
  <div id="adminList"></div>
  <button class="secondary" onclick="show('home')">고객화면으로</button>
@@ -2306,9 +2346,9 @@ function goPreviousView(){
 }
 
 
-/* V2.8.2 전체 골격 검토본 · 콘텐츠 영역 분리
-   앞으로 콘텐츠를 추가할 때는 아래 배열만 채우고, 피부체크/상담/중앙저장 코드는 건드리지 않는 것을 원칙으로 합니다.
-   url은 유튜브·영상·공식 페이지 등 외부 주소를 넣으면 새 탭에서 열립니다. */
+/* V2.9.0 콘텐츠 중앙관리
+   센터 운영 관리 ⑦에서 제목·설명·영상/페이지 링크를 등록하면 Google 중앙저장에 보관되고
+   고객 휴대폰에서도 같은 콘텐츠가 표시됩니다. YouTube 링크는 대표이미지를 자동 표시합니다. */
 const MAIIM_CONTENT_V280={
   seasonal:{enabled:true},
   skinShorts:[],
@@ -2316,10 +2356,76 @@ const MAIIM_CONTENT_V280={
   centerNews:[],
   restMusic:[]
 };
+let centralContentItemsV290=[];
+const CONTENT_CATEGORY_LABELS_V290={skin:'피부 정보',product:'제품 안내',centerNews:'천안신부 센터 소식',music:'마음쉼 음악',centerIntro:'천안신부 센터 소개'};
 function escapeContentHtmlV280(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function safeExternalUrlV290(v){
+ try{const u=new URL(String(v||'').trim());return /^https?:$/i.test(u.protocol)?u.toString():''}catch{return ''}
+}
+function contentPlatformV291(v){
+ try{
+  const u=new URL(String(v||'').trim());
+  const host=u.hostname.replace(/^www\./,'').toLowerCase();
+  if(host==='youtu.be'||host==='youtube.com'||host==='m.youtube.com'||host.endsWith('.youtube.com'))return 'youtube';
+  if(host==='tiktok.com'||host==='m.tiktok.com'||host.endsWith('.tiktok.com'))return 'tiktok';
+  if(host==='instagram.com'||host.endsWith('.instagram.com'))return 'instagram';
+ }catch{}
+ return 'web';
+}
+function contentPlatformLabelV291(v){return ({youtube:'YouTube',tiktok:'TikTok',instagram:'Instagram',web:'외부 콘텐츠'})[contentPlatformV291(v)]||'외부 콘텐츠'}
+function youtubeVideoIdV290(v){
+ try{
+  const u=new URL(String(v||'').trim());
+  const host=u.hostname.replace(/^www\./,'').toLowerCase();
+  if(host==='youtu.be')return u.pathname.split('/').filter(Boolean)[0]||'';
+  if(host==='youtube.com'||host==='m.youtube.com'||host.endsWith('.youtube.com')){
+   if(u.pathname==='/watch')return u.searchParams.get('v')||'';
+   const parts=u.pathname.split('/').filter(Boolean);
+   if(['shorts','embed','live'].includes(parts[0]))return parts[1]||'';
+  }
+ }catch{}
+ return '';
+}
+function youtubeThumbV290(v){const id=youtubeVideoIdV290(v);return id?'https://i.ytimg.com/vi/'+encodeURIComponent(id)+'/hqdefault.jpg':''}
+function tiktokVideoIdV291(v){
+ try{const u=new URL(String(v||'').trim());const m=u.pathname.match(/\/video\/(\d+)/);return m?m[1]:''}catch{return ''}
+}
+function instagramEmbedUrlV291(v){
+ try{
+  const u=new URL(String(v||'').trim());
+  const parts=u.pathname.split('/').filter(Boolean);
+  if(['p','reel','tv'].includes(parts[0])&&parts[1])return 'https://www.instagram.com/'+parts[0]+'/'+encodeURIComponent(parts[1])+'/embed/';
+ }catch{}
+ return '';
+}
+function contentPreviewHtmlV291(url){
+ const platform=contentPlatformV291(url);
+ if(platform==='youtube'){
+  const thumb=youtubeThumbV290(url);
+  if(thumb)return '<div class="content-social-preview-v291 youtube"><img class="content-thumb-v290" style="margin:0;border-radius:0" src="'+escapeContentHtmlV280(thumb)+'" alt="YouTube 영상 미리보기" loading="lazy"></div>';
+ }
+ if(platform==='tiktok'){
+  const id=tiktokVideoIdV291(url);
+  if(id){
+   const src='https://www.tiktok.com/player/v1/'+encodeURIComponent(id)+'?controls=0&progress_bar=0&music_info=0&description=0&muted=1';
+   return '<div class="content-social-preview-v291 vertical"><iframe src="'+escapeContentHtmlV280(src)+'" title="TikTok 영상 미리보기" loading="lazy" allow="fullscreen"></iframe></div>';
+  }
+ }
+ if(platform==='instagram'){
+  const src=instagramEmbedUrlV291(url);
+  if(src)return '<div class="content-social-preview-v291 vertical"><iframe src="'+escapeContentHtmlV280(src)+'" title="Instagram 영상 미리보기" loading="lazy" scrolling="no"></iframe></div>';
+ }
+ const label=contentPlatformLabelV291(url);
+ return '<div class="content-social-preview-v291 youtube"><div class="content-social-fallback-v291">'+escapeContentHtmlV280(label)+'<small>눌러서 원본에서 보기</small></div></div>';
+}
+function contentItemsByCategoryV290(category,fallback){
+ const central=centralContentItemsV290.filter(x=>x&&x.category===category&&(x.url||x.title));
+ const local=Array.isArray(fallback)?fallback:[];
+ return [...central,...local];
+}
 function renderExternalContentV280(list,boxId,countId,countSuffix,emptyTitle,emptyText,typeLabel){
  const box=$(boxId),count=$(countId);if(!box)return;
- const items=Array.isArray(list)?list.filter(x=>x&&x.title):[];
+ const items=Array.isArray(list)?list.filter(x=>x&&(x.url||x.title)):[];
  if(count)count.textContent=items.length+(countSuffix||'개');
  box.innerHTML='';
  if(!items.length){
@@ -2328,23 +2434,119 @@ function renderExternalContentV280(list,boxId,countId,countSuffix,emptyTitle,emp
    box.appendChild(e);return;
  }
  items.forEach(item=>{
-   const url=String(item.url||'').trim();
-   const el=document.createElement(url?'a':'div');el.className='content-item-v280';
-   if(url){el.href=url;el.target='_blank';el.rel='noopener noreferrer'}
-   el.innerHTML='<span class="content-item-type">'+escapeContentHtmlV280(item.type||typeLabel||'콘텐츠')+'</span><b>'+escapeContentHtmlV280(item.title)+'</b><span>'+escapeContentHtmlV280(item.note||'')+'</span>';
+   const url=safeExternalUrlV290(item.url||'');
+   const el=document.createElement('div');el.className='content-item-v280';
+   if(url){
+    el.dataset.clickable='1';el.tabIndex=0;el.setAttribute('role','link');
+    el.setAttribute('aria-label',contentPlatformLabelV291(url)+' 원본 영상 새 탭에서 열기');
+    const open=()=>window.open(url,'_blank','noopener,noreferrer');
+    el.addEventListener('click',open);
+    el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
+   }
+   const preview=url?contentPreviewHtmlV291(url):'';
+   const platform=url?contentPlatformLabelV291(url):(item.type||typeLabel||'콘텐츠');
+   const legacyTitle=String(item.title||'').trim();
+   const isAutoTitle=/^(YouTube|TikTok|Instagram|외부 콘텐츠) 영상$/.test(legacyTitle);
+   const titleHtml=legacyTitle&&!isAutoTitle?'<b>'+escapeContentHtmlV280(legacyTitle)+'</b>':'';
+   const noteHtml=item.note?'<span>'+escapeContentHtmlV280(item.note)+'</span>':'';
+   el.innerHTML=preview+'<span class="content-item-type">'+escapeContentHtmlV280(platform)+'</span>'+titleHtml+noteHtml;
    box.appendChild(el);
  });
 }
 function renderSkinContentsV280(){
- renderExternalContentV280(MAIIM_CONTENT_V280.skinShorts,'skinShortsListV280','skinShortsCountV280','개','피부 상식 영상 공간을 준비해 두었습니다.','짧은 영상부터 자세한 설명 영상까지 피부 상식에 도움이 되는 영상을 차례로 추가할 수 있습니다.','SKIN KNOWLEDGE');
+ renderExternalContentV280(contentItemsByCategoryV290('skin',MAIIM_CONTENT_V280.skinShorts),'skinShortsListV280','skinShortsCountV280','개','피부 상식 영상 공간을 준비해 두었습니다.','YouTube·TikTok·Instagram 영상 주소를 등록하면 이곳에 차례로 나타납니다.','SKIN KNOWLEDGE');
 }
 function renderMusicRestV280(){
- renderExternalContentV280(MAIIM_CONTENT_V280.restMusic,'restMusicListV280','restMusicCountV280','곡','마음쉼 음악 공간을 준비해 두었습니다.','직접 만든 음악과 영상을 이곳에 하나씩 추가하면 됩니다.','REST MUSIC');
+ renderExternalContentV280(contentItemsByCategoryV290('music',MAIIM_CONTENT_V280.restMusic),'restMusicListV280','restMusicCountV280','곡','마음쉼 음악 공간을 준비해 두었습니다.','음악이나 찬양 영상 주소를 등록하면 이곳에서 바로 선택해 볼 수 있습니다.','REST MUSIC');
 }
 function renderBrandNewsV280(){
- renderExternalContentV280(MAIIM_CONTENT_V280.products,'productListV280','productCountV280','개','제품 안내 공간을 준비해 두었습니다.','제품 특징과 사용 안내를 한 건씩 추가하면 됩니다.','PRODUCT');
- renderExternalContentV280(MAIIM_CONTENT_V280.centerNews,'centerNewsListV280','centerNewsCountV280','개','천안신부 센터 소식 공간을 준비해 두었습니다.','센터의 행사와 안내를 필요할 때 추가하면 됩니다.','CENTER');
+ renderExternalContentV280(contentItemsByCategoryV290('product',MAIIM_CONTENT_V280.products),'productListV280','productCountV280','개','제품 안내 공간을 준비해 두었습니다.','제품 관련 영상 주소를 등록하면 이곳에 나타납니다.','PRODUCT');
+ renderExternalContentV280(contentItemsByCategoryV290('centerNews',MAIIM_CONTENT_V280.centerNews),'centerNewsListV280','centerNewsCountV280','개','천안신부 센터 소식 공간을 준비해 두었습니다.','센터 소식 영상 주소를 등록하면 이곳에 나타납니다.','CENTER');
 }
+function renderCenterIntroContentsV290(){
+ renderExternalContentV280(contentItemsByCategoryV290('centerIntro',[]),'centerIntroListV290','centerIntroCountV290','개','센터 소개 영상과 안내를 준비해 두었습니다.','센터 소개 영상 주소를 등록하면 이곳에 나타납니다.','CENTER INTRO');
+}
+function renderAllCentralContentsV290(){renderSkinContentsV280();renderBrandNewsV280();renderMusicRestV280();renderCenterIntroContentsV290()}
+function loadPublicContentsV290(showAlert){
+ const url=getPublicCentralUrl();
+ if(!url){if(showAlert)alert('중앙 콘텐츠 주소를 확인하지 못했습니다.');return Promise.resolve(false)}
+ return new Promise(resolve=>{
+  let done=false;
+  const cb='__maiimPublicContents_'+Date.now()+'_'+Math.floor(Math.random()*100000);
+  const script=document.createElement('script');
+  const cleanup=()=>{try{delete window[cb]}catch(e){window[cb]=undefined}try{script.remove()}catch(e){}};
+  const finish=ok=>{if(done)return;done=true;clearTimeout(timer);cleanup();resolve(ok)};
+  window[cb]=data=>{
+    if(!data||data.ok!==true||!Array.isArray(data.contents)){
+      if(showAlert)alert('등록된 콘텐츠를 불러오지 못했습니다.');finish(false);return;
+    }
+    centralContentItemsV290=data.contents.filter(x=>x&&CONTENT_CATEGORY_LABELS_V290[x.category]&&(x.url||x.title));
+    renderAllCentralContentsV290();renderAdminContentListV290();
+    if(showAlert)alert('등록된 콘텐츠 '+centralContentItemsV290.length+'건을 불러왔습니다.');
+    finish(true);
+  };
+  script.onerror=()=>{if(showAlert)alert('콘텐츠 중앙연결에 실패했습니다.');finish(false)};
+  const timer=setTimeout(()=>{if(showAlert)alert('콘텐츠 중앙서버 응답이 늦습니다.');finish(false)},7000);
+  const sep=url.includes('?')?'&':'?';
+  script.src=url+sep+'action=public_contents&callback='+encodeURIComponent(cb)+'&_='+Date.now();
+  document.head.appendChild(script);
+ });
+}
+function resetContentEditorV290(){
+ if($('contentEditIdV290'))$('contentEditIdV290').value='';
+ if($('contentUrlV290'))$('contentUrlV290').value='';
+ const btn=document.querySelector('#contentAdminV290 .content-admin-actions-v290 .cta');if(btn)btn.textContent='주소 등록하기';
+}
+function saveContentV290(){
+ const cfg=getGoogleConfig();if(!cfg.url||!cfg.key){alert('먼저 ① Google 중앙연결을 저장해 주세요.');return}
+ const category=String($('contentCategoryV290')?.value||'').trim();
+ const rawUrl=String($('contentUrlV290')?.value||'').trim();
+ const url=safeExternalUrlV290(rawUrl);
+ if(!url){alert('YouTube · TikTok · Instagram 영상 주소를 붙여넣어 주세요.');return}
+ const editId=String($('contentEditIdV290')?.value||'').trim();
+ const old=editId?centralContentItemsV290.find(x=>String(x.id)===editId):null;
+ const platform=contentPlatformV291(url);
+ const label=contentPlatformLabelV291(url);
+ const item={id:editId||('CONTENT-'+Date.now()+'-'+Math.floor(Math.random()*100000)),category,title:label+' 영상',note:'',url,createdAt:old?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};
+ sendProtectedCentral('content_upsert',item).then(ok=>{
+   if(!ok){alert('중앙저장 전송을 시작하지 못했습니다.');return}
+   const idx=centralContentItemsV290.findIndex(x=>String(x.id)===String(item.id));
+   if(idx>=0)centralContentItemsV290[idx]=item;else centralContentItemsV290.unshift(item);
+   renderAllCentralContentsV290();renderAdminContentListV290();resetContentEditorV290();
+   alert(label+' 주소를 등록했습니다. 고객 화면에서는 카드 전체를 누르면 원래 플랫폼이 새 탭에서 열립니다.');
+   setTimeout(()=>loadPublicContentsV290(false),1300);
+ });
+}
+function editContentV290(id){
+ const item=centralContentItemsV290.find(x=>String(x.id)===String(id));if(!item)return;
+ $('contentEditIdV290').value=item.id||'';$('contentCategoryV290').value=item.category||'skin';$('contentUrlV290').value=item.url||'';
+ const btn=document.querySelector('#contentAdminV290 .content-admin-actions-v290 .cta');if(btn)btn.textContent='수정 주소 저장하기';
+ $('contentAdminV290')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function deleteContentV290(id){
+ const item=centralContentItemsV290.find(x=>String(x.id)===String(id));if(!item)return;
+ const label=contentPlatformLabelV291(item.url||'');
+ if(!confirm(label+' 콘텐츠를 삭제하시겠습니까?'))return;
+ sendProtectedCentral('content_delete',{id:item.id}).then(ok=>{
+   if(!ok){alert('삭제 요청을 보내지 못했습니다.');return}
+   centralContentItemsV290=centralContentItemsV290.filter(x=>String(x.id)!==String(id));renderAllCentralContentsV290();renderAdminContentListV290();
+   alert('콘텐츠 삭제 요청을 중앙에 보냈습니다.');setTimeout(()=>loadPublicContentsV290(false),1300);
+ });
+}
+function renderAdminContentListV290(){
+ const box=$('contentAdminListV290');if(!box)return;box.innerHTML='';
+ if(!centralContentItemsV290.length){box.innerHTML='<div class="content-empty-v280"><b>아직 등록한 영상 주소가 없습니다.</b>위 입력칸에 YouTube·TikTok·Instagram 주소를 붙여넣어 첫 영상을 등록할 수 있습니다.</div>';return}
+ centralContentItemsV290.forEach(item=>{
+   const d=document.createElement('div');d.className='content-admin-item-v290';
+   const id=String(item.id||'').replace(/'/g,'');
+   const url=safeExternalUrlV290(item.url||'');
+   const platform=contentPlatformLabelV291(url);
+   let host='';try{host=new URL(url).hostname.replace(/^www\./,'')}catch{}
+   d.innerHTML='<span class="content-admin-badge-v290">'+escapeContentHtmlV280(CONTENT_CATEGORY_LABELS_V290[item.category]||item.category)+'</span><b>'+escapeContentHtmlV280(platform)+'</b><div class="mini">'+escapeContentHtmlV280(host||url||'')+'</div><div class="content-admin-item-actions-v290"><button class="content-admin-edit-v290" type="button" onclick="editContentV290(\''+id+'\')">주소 수정</button><button class="content-admin-delete-v290" type="button" onclick="deleteContentV290(\''+id+'\')">삭제</button></div>';
+   box.appendChild(d);
+ });
+}
+function loadAdminContentsV290(showAlert){return loadPublicContentsV290(showAlert)}
 function applyContentSettingsV280(){
  const enabled=!(MAIIM_CONTENT_V280.seasonal&&MAIIM_CONTENT_V280.seasonal.enabled===false);
  document.querySelectorAll('.seasonal-share-card,.chuseok-image-card-v24').forEach(el=>{el.style.display=enabled?'':'none'});
@@ -2374,6 +2576,7 @@ function show(id){
  if(id==='skinContents')renderSkinContentsV280();
  if(id==='brandNews')renderBrandNewsV280();
  if(id==='musicRest')renderMusicRestV280();
+ if(id==='centerIntro')renderCenterIntroContentsV290();
  if(id==='consult')renderCounselorRef();
  if(id==='productGuide')renderProductGuide();
  if(id==='complete'){const lc=storeGet('latestConsultation');if(lc){try{renderCompleteProductBridge(lc)}catch(err){console.error('product bridge error',err)}}}
@@ -3206,6 +3409,7 @@ function renderInfoDetail(){const d=ARTICLE_DETAILS[infoDetailIndex]||ARTICLE_DE
 function moveInfoDetail(delta){const next=infoDetailIndex+delta;if(next<0||next>=ARTICLE_DETAILS.length)return;infoDetailIndex=next;renderInfoDetail();window.scrollTo(0,0)}
 function getGoogleConfig(){return storeGet('googleConfig')||{}}
 const MAIIM_PUBLIC_APP_ID='maiim-cheonan-shinbu-v1';
+const DEFAULT_PUBLIC_CENTRAL_URL='https://script.google.com/macros/s/AKfycbxMqpStgSVH-HOVwIvvGMwNrEoNu6ld-T-QDST9J1tGrPDvN1wIuCU1OAnJckscoi-OrQ/exec';
 const PUBLIC_CENTRAL_URL_KEY='maiimPublicCentralUrlV279';
 function isMaiimAppsScriptUrl(url){return /^https:\/\/script\.google\.com\/macros\/s\/.+\/exec(?:[?#].*)?$/i.test(String(url||'').trim())}
 function rememberPublicCentralUrl(url){
@@ -3219,6 +3423,7 @@ function getPublicCentralUrl(){
  if(isMaiimAppsScriptUrl(saved))return saved;
  const admin=String(getGoogleConfig().url||'').trim();
  if(isMaiimAppsScriptUrl(admin))return rememberPublicCentralUrl(admin);
+ if(isMaiimAppsScriptUrl(DEFAULT_PUBLIC_CENTRAL_URL))return rememberPublicCentralUrl(DEFAULT_PUBLIC_CENTRAL_URL);
  return '';
 }
 async function sendPublicCentral(action,data){
@@ -3517,10 +3722,12 @@ function renderAdmin(){
  $('aiStatus').textContent=a.url&&a.key?'연결정보 저장됨':'미설정';$('aiStatus').className='status-pill '+(a.url&&a.key?'ok':'');
  renderCounselorApprovals();
  renderAdminConsultations(storeGet('consultations')||[],'이 기기 저장 기록');
+ renderAdminContentListV290();
  if(g.url&&g.key){
    setTimeout(()=>loadCentralCounselorApplications(false).then(()=>syncApprovedCounselorsToCentral().catch(()=>{})),0);
    setTimeout(()=>loadCentralConsultations(false),80);
  }
+ setTimeout(()=>loadPublicContentsV290(false),120);
 }
 async function copyTestLink(){
  const publicUrl=getPublicCentralUrl(),k=getKakaoConfig();
@@ -3557,7 +3764,7 @@ function endAiCall(){try{dc?.close()}catch{}try{pc?.close()}catch{}try{localStre
 async function sendAiText(){const input=$('aiText'),text=input.value.trim();if(!text)return;input.value='';addBubble('user',text);if(dc&&dc.readyState==='open'){dc.send(JSON.stringify({type:'conversation.item.create',item:{type:'message',role:'user',content:[{type:'input_text',text}]}}));dc.send(JSON.stringify({type:'response.create'}));return}const cfg=getAiConfig();if(!cfg.url||!cfg.key){addBubble('system','AI 상담 서버가 아직 연결되지 않았습니다.');return}try{setCallStatus('답변 작성 중…',true);const res=await fetch(cfg.url.replace(/\/$/,'')+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json','X-MAIIM-CLIENT':cfg.key},body:JSON.stringify({message:text,skinContext:buildSkinContext(),history:getTextHistory()})});const data=await res.json();if(!res.ok)throw new Error(data.error||'AI 오류');addBubble('ai',data.answer||'답변을 받지 못했습니다.');saveAiSummary();setCallStatus('글자 상담 가능',false)}catch(err){console.error(err);addBubble('system','AI 글자상담 연결에 실패했습니다.');setCallStatus('연결 오류',false)}}
 function getTextHistory(){return Array.from(document.querySelectorAll('#aiChat .bubble')).filter(b=>b.classList.contains('user')||b.classList.contains('ai')).slice(-8).map(b=>({role:b.classList.contains('user')?'user':'assistant',text:b.textContent}))}
 function saveAiSummary(){const hist=getTextHistory();storeSet('aiTranscriptSummary',hist.slice(-6))}
-async function init(){if($('welcomeName'))$('welcomeName').value=getWelcomeName();renderWelcomeHeadline();importConfigFromQuery();importCounselorStatusUrlFromQuery();await importCounselorRef();bindBasicAutosave();restoreBasicDraft();restoreCounselorApplyDraft();bindPhoneAutoFormat();bindCounselorApplyAutosave();renderInfo();applyContentSettingsV280();show('home');const p=new URLSearchParams(location.search);if(p.get('view')==='ai'){const demo=storeGet('latestResult');if(demo){currentResult=demo.result;renderAiChips();show('ai')}}}
+async function init(){if($('welcomeName'))$('welcomeName').value=getWelcomeName();renderWelcomeHeadline();importConfigFromQuery();importCounselorStatusUrlFromQuery();await importCounselorRef();bindBasicAutosave();restoreBasicDraft();restoreCounselorApplyDraft();bindPhoneAutoFormat();bindCounselorApplyAutosave();renderInfo();applyContentSettingsV280();show('home');setTimeout(()=>loadPublicContentsV290(false),80);const p=new URLSearchParams(location.search);if(p.get('view')==='ai'){const demo=storeGet('latestResult');if(demo){currentResult=demo.result;renderAiChips();show('ai')}}}
 document.addEventListener('DOMContentLoaded',init);window.addEventListener('beforeunload',endAiCall);
 </script>
 
