@@ -4944,9 +4944,7 @@ function openReportSavePreview(dataUrl,fileName,fileObj){
   try{
    const w=window.open();
    if(w){
-    w.document.write('<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>MAIIM 피부 결과표</title></head><body style="margin:0;background:#111;text-align:center"><img src="'+dataUrl+'" style="display:block;width:100%;height:auto;max-width:900px;margin:0 auto;background:#fff">
-<!-- V71 LUMI TURN-TAKING FIX: no auto greeting, no auto-resume after interruption -->
-</body></html>');
+    w.document.write('<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>MAIIM 피부 결과표</title></head><body style="margin:0;background:#111;text-align:center"><img src="'+dataUrl+'" style="display:block;width:100%;height:auto;max-width:900px;margin:0 auto;background:#fff"></body></html>');
     w.document.close();
    }else{
     location.href=dataUrl;
