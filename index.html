@@ -6204,7 +6204,7 @@ async function checkLumiAiServerStatus(){
 }
 
 const LUMI_AI_CONSENT_KEY='maiim_lumi_ai_voice_consent_v1';
-const LUMI_VOICE_UI_VERSION='v78-audio-watchdog';
+const LUMI_VOICE_UI_VERSION='v79-stable-no-watchdog';
 
 function hasLumiAiConsent(){
  const c=storeGet(LUMI_AI_CONSENT_KEY);
@@ -6311,46 +6311,9 @@ function bindRemoteAudioDiagnostics(audio){
 }
 function stopAiAudioWatchdog(){if(aiAudioWatchdog){clearInterval(aiAudioWatchdog);aiAudioWatchdog=null}}
 function startAiAudioWatchdog(){
+ // v79: 정상적인 Realtime 음성을 잘못 '멈춤'으로 판단해 response.cancel을 보내던 자동 감시를 비활성화합니다.
+ // 연결/재생 상태 표시는 WebRTC 및 Realtime의 실제 이벤트만 사용합니다.
  stopAiAudioWatchdog();
- aiAudioWatchdog=setInterval(async()=>{
-  if(aiCallManualEnd||!pc||!aiResponseActive)return;
-  ensureRemoteAudioPlaying();
-  try{
-   const stats=await pc.getStats();
-   let bytes=0,energy=0,found=false;
-   stats.forEach(r=>{
-    if(r&&r.type==='inbound-rtp'&&(r.kind==='audio'||r.mediaType==='audio')){
-     found=true;bytes+=Number(r.bytesReceived||0);energy+=Number(r.totalAudioEnergy||0);
-    }
-   });
-   const now=Date.now();
-   if(found){
-    const soundAdvanced=(energy>aiLastInboundEnergy+0.000001);
-    const bytesAdvanced=(bytes>aiLastInboundBytes);
-    if(soundAdvanced){aiLastSoundAt=now;aiResponseHadSound=true}
-    else if(!aiResponseHadSound&&bytesAdvanced){aiLastSoundAt=now}
-    aiLastInboundEnergy=energy;aiLastInboundBytes=bytes;
-   }
-   // 실제 음성이 한 번 나온 뒤 3.6초 이상 완전히 멈추고 response.done도 오지 않으면 한 번만 자동 이어말하기.
-   if(aiResponseHadSound&&aiLastSoundAt&&now-aiLastSoundAt>3600){
-    if(!aiAutoResumeUsed){
-     aiAutoResumeUsed=true;aiResponseActive=false;
-     setCallStatus('답변 음성이 잠시 멈췄습니다 · 자동으로 이어가는 중…',true);
-     try{if(dc&&dc.readyState==='open')dc.send(JSON.stringify({type:'response.cancel'}))}catch(e){}
-     setTimeout(()=>{
-      if(!dc||dc.readyState!=='open'||aiCallManualEnd)return;
-      const tail=String(assistantDraft||'').trim().slice(-180);
-      const hint=tail?(' 직전까지 말한 마지막 내용은 “'+tail+'”입니다.') : '';
-      try{dc.send(JSON.stringify({type:'response.create',response:{instructions:'음성 출력이 기술적으로 중간에 멈췄습니다.'+hint+' 이미 말한 부분을 처음부터 반복하지 말고, 아직 말하지 못한 핵심만 1~2문장으로 자연스럽게 이어서 완성하세요. 기술 문제 설명이나 긴 사과는 하지 마세요.'}}))}catch(e){}
-      aiResponseActive=true;aiResponseHadSound=false;aiLastSoundAt=Date.now();aiLastInboundEnergy=0;aiLastInboundBytes=0;
-     },220);
-    }else{
-     aiResponseActive=false;
-     setCallStatus('답변 음성이 멈췄습니다 · 다시 말씀해 주세요',true);
-    }
-   }
-  }catch(e){}
- },700);
 }
 function resetAiCallUi(){stopAiAudioWatchdog();aiResponseActive=false;aiResponseHadSound=false;aiAutoResumeUsed=false;aiLastSoundAt=0;aiLastInboundEnergy=0;aiLastInboundBytes=0;setCallStatus('연결 전',false);$('startCallBtn').disabled=false;$('endCallBtn').disabled=true;if(hasLumiAiConsent())$('startCallBtn').textContent='통화 다시 시작';else $('startCallBtn').textContent='통화 시작'}
 function clearAiTransport(stopTracks=true){
