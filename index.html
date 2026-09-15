@@ -6283,7 +6283,33 @@ function clearAiTransport(stopTracks=true){
  if(stopTracks)try{oldStream?.getTracks().forEach(t=>t.stop())}catch(e){}
 }
 function scheduleAiReconnect(reason){
- if(aiCallManualEnd||aiCallStarting||aiReconnectTimer)return;
+ if(aiCallManualEnd||aiCallStarting)return;
+
+ // V75: disconnected는 일시적인 네트워크 흔들림일 수 있으므로 즉시 통화를 뜯어고치지 않는다.
+ if(reason==='disconnected'){
+  if(aiReconnectTimer)return;
+  setCallStatus('네트워크가 잠시 흔들렸습니다 · 연결 유지 중…',true);
+  aiReconnectTimer=setTimeout(()=>{
+   aiReconnectTimer=null;
+   if(aiCallManualEnd||aiCallStarting)return;
+   if(pc&&(pc.connectionState==='connected'||pc.iceConnectionState==='connected'||pc.iceConnectionState==='completed')){
+    setCallStatus('루미 박사와 통화 중',true);
+    return;
+   }
+   if(aiReconnectAttempts>=3){
+    addBubble('system','음성 연결이 계속 불안정합니다. 통화 다시 시작 버튼을 눌러 주세요. 글자 상담은 계속 이용할 수 있습니다.');
+    clearAiTransport(true);resetAiCallUi();return;
+   }
+   aiReconnectAttempts++;
+   setCallStatus('음성 연결을 다시 잡는 중… ('+aiReconnectAttempts+'/3)',true);
+   clearAiTransport(true);
+   startAiCall(true);
+  },6000);
+  return;
+ }
+
+ // failed / data 오류는 실제 장애 가능성이 높으므로 더 빠르게 재연결한다.
+ if(aiReconnectTimer){clearTimeout(aiReconnectTimer);aiReconnectTimer=null;}
  if(aiReconnectAttempts>=3){
   addBubble('system','음성 연결이 계속 불안정합니다. 통화 다시 시작 버튼을 눌러 주세요. 글자 상담은 계속 이용할 수 있습니다.');
   clearAiTransport(true);resetAiCallUi();return;
@@ -6294,7 +6320,7 @@ function scheduleAiReconnect(reason){
   aiReconnectTimer=null;
   clearAiTransport(true);
   startAiCall(true);
- },reason==='disconnected'?2500:900);
+ },1200);
 }
 async function startAiCall(isReconnect=false){
  if(aiCallStarting)return;
@@ -6341,9 +6367,24 @@ async function startAiCall(isReconnect=false){
   pc.onconnectionstatechange=()=>{
    if(!pc)return;
    const state=pc.connectionState;
-   if(state==='connected'){clearTimeout(aiReconnectTimer);aiReconnectTimer=null;aiReconnectAttempts=0;setCallStatus('루미 박사와 통화 중',true)}
+   console.log('[LUMI WebRTC] connectionState =',state,'ice =',pc.iceConnectionState);
+   if(state==='connected'){
+    clearTimeout(aiReconnectTimer);aiReconnectTimer=null;aiReconnectAttempts=0;
+    setCallStatus('루미 박사와 통화 중',true);
+   }
    else if(state==='disconnected')scheduleAiReconnect('disconnected');
    else if(state==='failed')scheduleAiReconnect('failed');
+  };
+  pc.oniceconnectionstatechange=()=>{
+   if(!pc)return;
+   const ice=pc.iceConnectionState;
+   console.log('[LUMI WebRTC] iceConnectionState =',ice);
+   if(ice==='connected'||ice==='completed'){
+    clearTimeout(aiReconnectTimer);aiReconnectTimer=null;
+    if(!aiCallManualEnd)setCallStatus('루미 박사와 통화 중',true);
+   }else if(ice==='failed'){
+    scheduleAiReconnect('failed');
+   }
   };
   const offer=await pc.createOffer();await pc.setLocalDescription(offer);
   const h={'Content-Type':'application/json'};if(cfg.key)h['X-MAIIM-CLIENT']=cfg.key;
