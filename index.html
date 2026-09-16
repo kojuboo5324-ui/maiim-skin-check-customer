@@ -2558,7 +2558,7 @@ body.home-mode .wrap{max-width:520px;padding:10px 8px 16px}
   </div>
   <div class="lumi-product-link-box" id="lumiBasicProductLinkBox">
     <div class="lumi-product-link-head"><div><span class="lumi-kicker">MY PRODUCT GUIDE</span><h3>내 피부에 맞춰 먼저 확인할 화장품</h3></div><span class="pill">피부결과 연동</span></div>
-    <p class="lumi-product-link-sub">통합 기본 17문항 결과의 관리 우선순위를 바탕으로 먼저 확인할 제품을 보여드립니다. 정밀체크 결과는 상담에서 함께 참고합니다.</p>
+    <p class="lumi-product-link-sub">통합 기본 17문항의 선별 신호를 바탕으로 먼저 확인할 제품을 보여드립니다. 정밀체크 결과는 상담에서 함께 참고합니다.</p>
     <div class="lumi-product-link-grid" id="lumiBasicProductLinkGrid"></div>
     <div class="lumi-product-link-note" id="lumiBasicProductLinkNote">제품은 피부체크만으로 확정하지 않고, 현재 사용제품과 피부반응을 상담에서 함께 확인합니다.</div>
     <div class="lumi-product-link-actions"><button class="cta" type="button" onclick="openConsult()">상담하고 내게 맞는 제품 확인하기 →</button><button class="secondary" type="button" onclick="openProductGuide()">상담 후 제품 상세보기 →</button></div>
@@ -6145,9 +6145,9 @@ function buildLumiProductKnowledgePrompt(){
 function buildLumiConsultResultPrompt(){
  const c=buildSkinContext(),a=c?.lumi?.basicAnalysis||{},p=c?.lumi?.completedPrecision||[];
  const labels={barrier:'수분·장벽',sensitive:'민감·홍조',acne:'피지·트러블',pigment:'색소·피부톤',aging:'탄력·노화',scalp:'두피·모발',bodyitch:'전신 가려움',cosmetic:'제품 반응',lifestyle:'생활습관',hormone:'호르몬'};
- const scores=Object.keys(a.scores||{}).map(k=>(labels[k]||k)+' '+Number(a.scores[k]||0)+'점').join(', ');
+ const scores=Object.keys(a.scores||{}).map(k=>(labels[k]||k)+' 기본신호 '+Number(a.scores[k]||0)+'/100').join(', ');
  const precision=p.map(x=>x.title+' '+x.score+'점'+(x.urgentRisks?.length?'(즉시 확인 신호 있음)':x.risks?.length?'(주의 신호 있음)':'')).join(', ');
- return '\n고객과 함께 보고 있는 통합 결과표: 기본 17문항 완료. 맞춤 부위 '+(c?.lumi?.area||'전체 피부')+'. 기본 분석 ['+(scores||'저장 결과 있음')+']. 완료한 정밀체크 '+p.length+'개 ['+(precision||'없음')+']. 이 결과를 상담의 공통 자료로 사용하되 질병으로 단정하지 말고, 고객이 화면에서 같은 결과표를 보고 있다는 전제로 항목명을 정확히 짚어 설명하세요.';
+ return '\n고객과 함께 보고 있는 통합 결과표: 기본 17문항 완료. 맞춤 부위 '+(c?.lumi?.area||'전체 피부')+'. 기본 선별 신호 ['+(scores||'저장 결과 있음')+']. 완료한 정밀체크 '+p.length+'개 ['+(precision||'없음')+']. 이 결과를 상담의 공통 자료로 사용하되 질병으로 단정하지 말고, 고객이 화면에서 같은 결과표를 보고 있다는 전제로 항목명을 정확히 짚어 설명하세요.';
 }
 function renderAiChips(){
  const c=buildSkinContext(),box=$('aiResultChips');
@@ -6580,22 +6580,37 @@ const LUMI_INTEGRATED_17=[
  {id:'dry',text:'세안 후 얼굴 피부가 당기거나 건조하게 느껴지나요?',type:'severity'},
  {id:'oil',text:'얼굴에 번들거림이나 유분이 많이 생기나요?',type:'severity'},
  {id:'redness',text:'얼굴이 쉽게 붉어지거나 따갑고 화끈거리나요?',type:'severity'},
- {id:'acne',text:'여드름·좁쌀·뾰루지 같은 트러블이 생기나요?',type:'severity'},
+ {id:'acne',text:'여드름·좁쌀·붉은 뾰루지 같은 트러블이 반복되나요?',type:'severity'},
  {id:'pores',text:'모공·피지·블랙헤드가 신경 쓰이나요?',type:'severity2'},
  {id:'pigment',text:'기미·주근깨·잡티·검버섯처럼 보이는 반점·점 등 색소 변화가 신경 쓰이나요?',type:'severity2'},
  {id:'aging',text:'이마·눈가·팔자·입가 주름이나 피부 탄력 저하가 신경 쓰이나요?',type:'severity2'},
  {id:'eye',text:'다크서클·눈 밑 꺼짐·눈가 붓기 같은 변화가 신경 쓰이나요?',type:'severity2'},
- {id:'scalpFlake',text:'두피에 가려움·비듬·각질·붉어짐이 있나요?',type:'severity'},
- {id:'scalpOil',text:'두피의 유분·냄새·뾰루지가 신경 쓰이나요?',type:'severity'},
+ {id:'scalpFlake',text:'두피에 가려움·비듬·각질 또는 붉어짐 중 하나 이상이 있나요?',type:'severity'},
+ {id:'scalpOil',text:'두피가 쉽게 기름지거나 냄새·뾰루지가 반복되나요?',type:'severity'},
  {id:'scalpHairloss',text:'최근 머리카락이 가늘어지거나 빠지는 양이 늘었다고 느끼나요?',type:'severity'},
- {id:'bodyDry',text:'몸 피부가 건조하거나 가렵고 각질이 생기나요?',type:'severity'},
- {id:'bodyRash',text:'몸 피부에 붉어짐·트러블·색소 변화가 있나요?',type:'severity'},
- {id:'changes',text:'최근 피부에 영향을 줄 만한 생활 변화가 있었나요?',help:'가장 큰 변화 한 가지를 선택해 주세요. 선택하면 17번으로 자동 이동합니다.',type:'single',options:['수면 부족','스트레스','식습관 변화','호르몬 관련 변화','환경·계절 변화','특별히 없음']},
- {id:'productChanges',text:'최근 피부·두피에 사용하는 제품이나 관리가 바뀌었나요?',help:'가장 큰 변화 한 가지를 선택한 뒤 아래의 다음 단계 버튼을 눌러 주세요.',type:'single',options:['화장품','샴푸·두피제품','바디제품','염색·펌','피부관리·시술','특별히 없음']}
+ {id:'bodyDry',text:'몸 피부가 건조·가렵거나 각질이 반복되나요?',type:'severity'},
+ {id:'bodyRash',text:'몸 피부에 붉어짐·발진·뾰루지 또는 색 변화가 반복되나요?',type:'severity'},
+ {id:'changes',text:'최근 피부에 영향을 줄 만한 생활·몸 상태 변화가 있었나요?',help:'해당되는 변화가 있으면 최대 2개까지 선택해 주세요.',type:'multi',max:2,options:['수면 부족','스트레스','식습관·체중 변화','호르몬 관련 변화','환경·계절 변화','새 약·건강보조제','특별히 없음']},
+ {id:'productChanges',text:'최근 피부·두피에 사용하는 제품이나 관리가 바뀌었나요?',help:'해당되는 변화가 있으면 최대 2개까지 선택한 뒤 다음 단계로 이동해 주세요.',type:'multi',max:2,options:['화장품','샴푸·두피제품','바디제품','세제·섬유유연제','염색·펌','피부관리·시술','특별히 없음']}
 ];
 function getLumiBasicQuestions(){
  return LUMI_INTEGRATED_17;
 }
+(function migrateLumiBasicMultiV90(){
+ try{
+   const key=typeof LUMI_BASIC_KEY!=='undefined'?LUMI_BASIC_KEY:'maiimLumiBasicV1';
+   const raw=localStorage.getItem(key);
+   if(!raw)return;
+   const a=JSON.parse(raw)||{};
+   let changed=false;
+   ['changes','productChanges'].forEach(k=>{
+     if(typeof a[k]==='string'&&a[k]){
+       a[k]=[a[k]];changed=true;
+     }
+   });
+   if(changed)localStorage.setItem(key,JSON.stringify(a));
+ }catch(e){console.warn('V90 기본체크 다중선택 호환 변환 오류',e)}
+})();
 function clearLumiTailoredAnswers(){
  LUMI_INTEGRATED_17.forEach(q=>delete lumiBasicAnswers[q.id]);
 }
@@ -6741,13 +6756,13 @@ function renderLumiBasicQuestion(){
  renderSavedLumiBasicQuickBtn();
  const answered=lumiBasicAnswered(q);
  const next=$('lumiNextBtn');
- next.style.display=isLast?'block':'none';
- // 17번의 다음 단계 버튼은 항상 활성화합니다.
- // 답변 여부는 클릭할 때 확인하여 비활성 버튼으로 멈추는 일을 막습니다.
- next.disabled=isLast?false:!answered;
- next.textContent='다음 단계 알아보기 →';
- next.setAttribute('aria-disabled',isLast?'false':(answered?'false':'true'));
- next.onclick=()=>finishLumiIntegrated17(lumiQi);
+ const isMulti=q.type==='multi';
+ next.style.display=(isLast||isMulti)?'block':'none';
+ // 다중선택은 1개만 해당돼도 사용자가 직접 '선택 완료'로 다음 문항으로 갈 수 있습니다.
+ next.disabled=!answered;
+ next.textContent=isLast?'다음 단계 알아보기 →':(isMulti?'선택 완료 · 다음 →':'다음 →');
+ next.setAttribute('aria-disabled',answered?'false':'true');
+ next.onclick=isLast?(()=>finishLumiIntegrated17(lumiQi)):(isMulti?(()=>completeLumiMultiQuestion(lumiQi)):(()=>lumiNextQuestion()));
 }
 function lumiBasicAnswered(q){const v=lumiBasicAnswers[q.id];return q.type==='multi'?Array.isArray(v)&&v.length>0:v!==undefined&&v!==null&&v!==''}
 let lumiBasicAdvanceTimer=null;
@@ -6827,6 +6842,10 @@ function finishLumiIntegrated17(expectedIndex){
  clearTimeout(lumiBasicAdvanceTimer);
  const list=getLumiBasicQuestions(),q=list[lumiQi];
  if(expectedIndex!==lumiQi||lumiQi!==list.length-1||!q||q.id!=='productChanges')return false;
+ if(!lumiBasicAnswered(q)){
+   alert('해당되는 항목을 하나 이상 선택해 주세요. 변화가 없다면 “특별히 없음”을 선택해 주세요.');
+   return false;
+ }
  storeSet(LUMI_BASIC_KEY,lumiBasicAnswers);
  finishLumiBasicSafe();
  return true;
@@ -6848,20 +6867,45 @@ function lumiNextQuestion(){
  return true;
 }
 function lumiScore(ids){const vals=ids.map(id=>Number(lumiBasicAnswers[id]||0));return ids.length?Math.round(vals.reduce((a,b)=>a+b,0)/(ids.length*3)*100):0}
+function lumiScreenSignal(ids){
+ const vals=ids.map(id=>Math.max(0,Math.min(3,Number(lumiBasicAnswers[id]||0))));
+ if(!vals.length)return 0;
+ const max=Math.max(...vals)/3*100;
+ const avg=vals.reduce((a,b)=>a+b,0)/(vals.length*3)*100;
+ // 기본 17문항은 진단점수가 아니라 '정밀체크 우선순위'를 잡는 선별 단계입니다.
+ // 한 항목이 강하게 나타나도 단순 평균으로 희석되지 않도록 최댓값을 더 크게 반영합니다.
+ return Math.round(max*.72+avg*.28);
+}
+function lumiContextSignal(arr,one=45,two=65){
+ const n=(arr||[]).filter(x=>x&&x!=='특별히 없음').length;
+ return n>=2?two:n===1?one:0;
+}
 function buildLumiAnalysis(){
  const a=lumiBasicAnswers,changes=Array.isArray(a.changes)?a.changes:(a.changes?[a.changes]:[]),productChanges=Array.isArray(a.productChanges)?a.productChanges:(a.productChanges?[a.productChanges]:[]),concerns=Array.isArray(a.concerns)?a.concerns:[],area=a.productChanges!==undefined?'여러 부위':(a.area||'얼굴');
  let scores={barrier:0,sensitive:0,acne:0,pigment:0,aging:0,scalp:0,bodyitch:0,cosmetic:0,lifestyle:0,hormone:0};
+ let detailHints={};
+ let contextFlags=[];
  if(a.productChanges!==undefined){
-   scores.barrier=lumiScore(['dry','bodyDry']);
-   scores.sensitive=lumiScore(['redness']);
-   scores.acne=lumiScore(['oil','pores','acne']);
+   scores.barrier=lumiScreenSignal(['dry','bodyDry']);
+   scores.sensitive=lumiScreenSignal(['redness']);
+   scores.acne=lumiScreenSignal(['oil','acne']);
    scores.pigment=Math.round(Number(a.pigment||0)/3*100);
-   scores.aging=lumiScore(['aging','eye']);
-   scores.scalp=lumiScore(['scalpFlake','scalpOil','scalpHairloss']);
-   scores.bodyitch=lumiScore(['bodyDry','bodyRash']);
-   scores.cosmetic=Math.min(100,productChanges.filter(x=>x!=='특별히 없음').length*25);
-   scores.lifestyle=Math.min(100,changes.filter(x=>x!=='특별히 없음').length*22);
-   scores.hormone=changes.includes('호르몬 관련 변화')?85:0;
+   // 다크서클·눈가 변화는 노화와 완전히 같은 의미가 아니므로 노화 점수에서 분리합니다.
+   scores.aging=Math.round(Number(a.aging||0)/3*100);
+   scores.scalp=lumiScreenSignal(['scalpFlake','scalpOil','scalpHairloss']);
+   scores.bodyitch=lumiScreenSignal(['bodyDry','bodyRash']);
+   scores.cosmetic=lumiContextSignal(productChanges,55,75);
+   scores.lifestyle=lumiContextSignal(changes,45,65);
+   scores.hormone=changes.includes('호르몬 관련 변화')?65:0;
+   if(changes.includes('새 약·건강보조제')){
+     scores.lifestyle=Math.max(scores.lifestyle,70);
+     contextFlags.push('새 약·건강보조제 시작');
+   }
+   detailHints={
+     oil:Math.round(Number(a.oil||0)/3*100),
+     pores:Math.round(Number(a.pores||0)/3*100),
+     eye:Math.round(Number(a.eye||0)/3*100)
+   };
  }else if(area==='두피'){
    scores.barrier=lumiScore(['scalpFlake','scalpItch']);
    scores.sensitive=lumiScore(['scalpRed','scalpItch','scalpPain']);
@@ -6890,7 +6934,7 @@ function buildLumiAnalysis(){
  }
  concerns.forEach(c=>{if(c.includes('건조'))scores.barrier=Math.max(scores.barrier,70);if(c.includes('민감')||c.includes('홍조'))scores.sensitive=Math.max(scores.sensitive,70);if(c.includes('여드름'))scores.acne=Math.max(scores.acne,70);if(c.includes('색소'))scores.pigment=Math.max(scores.pigment,70);if(c.includes('탄력'))scores.aging=Math.max(scores.aging,70);if(c.includes('두피'))scores.scalp=Math.max(scores.scalp,80);if(c.includes('가려움'))scores.bodyitch=Math.max(scores.bodyitch,70)});
  const rec={};Object.keys(scores).forEach(k=>rec[k]=scores[k]>=75?'priority':scores[k]>=50?'recommend':'');
- return{scores,rec,changes,concerns,area};
+ return{scores,rec,changes,concerns,area,detailHints,contextFlags,scoreVersion:'basic-v90'};
 }
 function lumiSummaryKeysForArea(area){if(lumiBasicAnswers.productChanges!==undefined)return ['barrier','sensitive','acne','pigment','aging','scalp','bodyitch','cosmetic','lifestyle','hormone'];return area==='두피'?['scalp','sensitive','barrier','cosmetic','lifestyle','hormone']:(area&&area!=='얼굴'?['bodyitch','barrier','sensitive','cosmetic','lifestyle','hormone']:['barrier','sensitive','acne','pigment','aging','lifestyle']);}
 
@@ -7083,16 +7127,21 @@ function renderLumiResult(){
  // V42/V43 · 기본 17문항 결과에서 구체적인 정밀체크 추천 1~3순위를 항상 표시
  const rankedForPrecision=summaryKeys
    .filter(k=>LUMI_PRECISION_META[k])
-   .sort((a,b)=>(an.scores[b]||0)-(an.scores[a]||0));
- rankedForPrecision.forEach(k=>{
-   if(recommend.length<3&&!recommend.includes(k))recommend.push(k);
+   .map(k=>({k,score:Number(an.scores[k]||0)}));
+ Object.entries(an.detailHints||{}).forEach(([k,score])=>{
+   if(LUMI_PRECISION_META[k]&&Number(score||0)>=34)rankedForPrecision.push({k,score:Number(score||0)});
  });
+ rankedForPrecision
+   .sort((a,b)=>b.score-a.score)
+   .forEach(x=>{
+     if(recommend.length<3&&!recommend.includes(x.k))recommend.push(x.k);
+   });
  recommend=recommend.slice(0,3);
  const topKey=recommend[0]||null;
  const note=$('lumiRecommendNote');
  if(note){
    note.innerHTML=recommend.length
-     ? '<b>안내:</b> 기본 분석에서 여러 신호가 함께 보일 수 있습니다. 그래도 한 번에 모두 볼 필요는 없습니다. <b>먼저 루미가 권하는 1개 분야부터 정밀체크</b>해 보시고, 필요하면 다음 추천 분야를 이어서 보시면 됩니다.'
+     ? '<b>안내:</b> 아래 기본 신호는 질병의 확률이나 중증도 점수가 아니라 <b>어떤 분야를 먼저 정밀체크할지 정하는 선별 지표</b>입니다. 여러 신호가 함께 보여도 한 번에 모두 볼 필요는 없습니다. <b>먼저 루미가 권하는 1개 분야부터 정밀체크</b>해 보세요.'
      : '현재 기본 체크에서는 강한 한쪽 신호가 두드러지지 않습니다. 그래도 궁금한 분야를 자유롭게 선택해 정밀체크할 수 있습니다.';
  }
 
@@ -7114,11 +7163,11 @@ function renderLumiResult(){
      const topType=an.rec[topKey]==='priority'?'루미 우선추천':(an.rec[topKey]==='recommend'?'루미 추천':'루미 확인추천');
      const rankedTitles=recommend.map((k,idx)=>{
        const title=(an.area==='손·발'&&k==='bodyitch')?'손·발 피부 · 가려움/각질':LUMI_PRECISION_META[k].title;
-       const score=Math.round(an.scores[k]||0);
-       const reason=an.rec[k]==='priority'?'우선 확인 신호':(an.rec[k]==='recommend'?'추가 확인 신호':'현재 항목 중 상대적으로 높은 신호');
-       return '<li><b>'+(idx+1)+'순위 · '+lumiEsc(title)+'</b><span>'+reason+' · '+score+'점</span></li>';
+       const score=Math.round((an.scores[k]!==undefined?an.scores[k]:(an.detailHints?.[k]||0)));
+       const reason=an.rec[k]==='priority'?'우선 확인 신호':(an.rec[k]==='recommend'?'추가 확인 신호':'세부 확인 신호');
+       return '<li><b>'+(idx+1)+'순위 · '+lumiEsc(title)+'</b><span>'+reason+' · 기본 신호 '+score+'/100</span></li>';
      }).join('');
-     let subText='기본 17문항 결과를 기준으로 지금 어떤 정밀체크를 먼저 하면 좋은지 순서대로 정리했습니다.';
+     let subText='기본 17문항의 선별 신호를 기준으로 어떤 정밀체크를 먼저 하면 좋은지 순서대로 정리했습니다.';
 
      body.innerHTML=
        '<span class="kicker">'+topType+'</span>'+
