@@ -6070,6 +6070,7 @@ function importConfigFromQuery(){
 function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 /* AI */
 function buildSkinContext(){
+ // V85 · 정밀체크 실제 문항/답변을 AI 상담 문맥에 전달
  const x=storeGet('latestResult');
  const legacy=x?{
    age:x.basic?.age||'',gender:x.basic?.gender||'',selfConcern:LABEL[x.basic?.concern]||x.basic?.concern||'',
@@ -6084,10 +6085,21 @@ function buildSkinContext(){
    precision=Object.keys(precisionRaw).map(k=>{
      const r=precisionRaw[k]||{};
      const meta=(typeof LUMI_PRECISION_META!=='undefined'&&LUMI_PRECISION_META[k])?LUMI_PRECISION_META[k]:{};
+     const qlist=(typeof LUMI_PRECISION_QUESTIONS!=='undefined'&&Array.isArray(LUMI_PRECISION_QUESTIONS[k]))?LUMI_PRECISION_QUESTIONS[k]:[];
+     const savedAnswers=(r.answers&&typeof r.answers==='object')?r.answers:{};
+     const answers=qlist.map((q,i)=>{
+       const rawIndex=savedAnswers[i];
+       if(rawIndex===undefined||rawIndex===null||rawIndex==='')return null;
+       const optionIndex=Number(rawIndex);
+       const option=Array.isArray(q?.[1])?q[1][optionIndex]:null;
+       if(!option)return null;
+       return{question:String(q?.[0]||''),answer:String(option?.[0]??''),value:Number(option?.[1]||0),tag:String(q?.[2]||'')};
+     }).filter(Boolean);
      return{
        key:k,title:meta.title||k,score:Number(r.score||0),
        risks:Array.isArray(r.risks)?r.risks.slice(0,5):[],
        urgentRisks:Array.isArray(r.urgentRisks)?r.urgentRisks.slice(0,5):[],
+       answers,
        completedAt:r.completedAt||''
      };
    });
