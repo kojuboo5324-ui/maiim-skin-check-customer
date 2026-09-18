@@ -5767,14 +5767,9 @@ function sendProtectedCentral(action,data){
  const cfg=getGoogleConfig();
  if(!cfg.url||!cfg.key)return Promise.resolve(false);
  const payload=JSON.stringify({key:cfg.key,action,data});
- // 공개 콘텐츠(영상/이미지/삭제)는 Apps Script까지 실제 POST가 도달하도록
- // text/plain + no-cors fetch 경로를 통일합니다. hidden iframe form은 일부 Chrome 환경에서
- // 전송이 누락될 수 있어 콘텐츠 저장에는 사용하지 않습니다.
- if(action==='content_image_upload'||action==='content_upsert'||action==='content_delete'){
-  return fetch(cfg.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:payload,cache:'no-store'})
-   .then(()=>true)
-   .catch(err=>{console.warn('MAIIM content central fetch failed',err);return false});
- }
+ // 공개 콘텐츠도 상담/카운셀러와 동일한 hidden iframe form POST 경로를 사용합니다.
+ // 현재 Chrome 환경에서 no-cors fetch는 doPost까지 도달하지 않는 것이 확인되어
+ // 아래 공통 form 제출 경로로 통일합니다.
  try{
   const stamp=Date.now()+'_'+Math.floor(Math.random()*100000);
   const frameName='maiimProtectedCentralPost_'+stamp;
