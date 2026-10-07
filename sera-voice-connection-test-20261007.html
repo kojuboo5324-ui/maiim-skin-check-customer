@@ -41,7 +41,10 @@ document.getElementById('mic').onclick=async()=>{
 
 let pc=null,localStream=null,audioEl=null,dc=null;
 document.getElementById('talk').onclick=async()=>{
- try{
+ try{if(dc){try{dc.close();}catch(e){} dc=null;}
+if(pc){try{pc.close();}catch(e){} pc=null;}
+if(localStream){try{localStream.getTracks().forEach(t=>t.stop());}catch(e){} localStream=null;}
+if(audioEl){try{audioEl.pause();audioEl.srcObject=null;audioEl.remove();}catch(e){} audioEl=null;}
   st.textContent='세라 실시간 음성 연결 중...'; add('실시간 연결 시작');
   localStream=await navigator.mediaDevices.getUserMedia({audio:true});
   pc=new RTCPeerConnection();
