@@ -70,6 +70,9 @@ document.getElementById('talk').onclick=async()=>{
   if(!r.ok)throw new Error(answer.slice(0,500));
   await pc.setRemoteDescription({type:'answer',sdp:answer});
   st.textContent='✅ 세라 실시간 음성 연결 완료 · 세라에게 말씀해 보세요';
+  document.getElementById('talk').disabled=true;
+document.getElementById('stop').disabled=false;
+  
  }catch(e){
   st.textContent='❌ 세라 실시간 음성 연결 실패';
   add((e&&e.message)||String(e));
