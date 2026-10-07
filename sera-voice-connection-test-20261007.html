@@ -39,7 +39,7 @@ document.getElementById('mic').onclick=async()=>{
  }catch(e){st.textContent='❌ 마이크 권한 확인 필요';add(e.name+': '+e.message)}
 };
 
-let pc=null,localStream=null,audioEl=null;
+let pc=null,localStream=null,audioEl=null,dc=null;
 document.getElementById('talk').onclick=async()=>{
  try{
   st.textContent='세라 실시간 음성 연결 중...'; add('실시간 연결 시작');
@@ -48,7 +48,7 @@ document.getElementById('talk').onclick=async()=>{
   audioEl=document.createElement('audio'); audioEl.autoplay=true; document.body.appendChild(audioEl);
   pc.ontrack=e=>{audioEl.srcObject=e.streams[0]; add('세라 원격 음성 트랙 연결됨');};
   localStream.getTracks().forEach(t=>pc.addTrack(t,localStream));
-  const dc=pc.createDataChannel('oai-events');
+ dc=pc.createDataChannel('oai-events');
   dc.onopen=()=>{
     add('실시간 데이터 채널 연결됨');
     try{dc.send(JSON.stringify({type:'response.create',response:{instructions:'한국어로 따뜻하게 인사하고, 저는 AI 피부 척척박사 세라입니다. 무엇이 가장 궁금하신가요? 라고 짧게 말해 주세요.'}}))}catch(e){}
@@ -76,9 +76,40 @@ document.getElementById('talk').onclick=async()=>{
  }
 };
 document.getElementById('stop').onclick=()=>{
- try{pc&&pc.close()}catch(e){}; pc=null;
- try{localStream&&localStream.getTracks().forEach(t=>t.stop())}catch(e){}; localStream=null;
- try{audioEl&&audioEl.remove()}catch(e){}; audioEl=null;
- st.textContent='통화를 종료했습니다.'; add('통화 종료');
+  try{
+    if(dc && dc.readyState !== 'closed') dc.close();
+  }catch(e){}
+
+  try{
+    if(pc){
+      pc.getSenders().forEach(sender=>{
+        try{ if(sender.track) sender.track.stop(); }catch(e){}
+      });
+      pc.close();
+    }
+  }catch(e){}
+  pc=null;
+
+  try{
+    if(localStream){
+      localStream.getTracks().forEach(track=>track.stop());
+    }
+  }catch(e){}
+  localStream=null;
+
+  try{
+    if(audioEl){
+      audioEl.pause();
+      audioEl.srcObject=null;
+      audioEl.remove();
+    }
+  }catch(e){}
+  audioEl=null;
+
+  document.getElementById('talk').disabled=false;
+  document.getElementById('stop').disabled=true;
+
+  st.textContent='✅ 통화를 정상적으로 종료했습니다.';
+  add('통화 종료 · 마이크와 세라 음성 연결 해제 완료');
 };
 </script></body></html>
